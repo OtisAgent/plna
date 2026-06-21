@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+  <meta name="robots" content="noindex,nofollow" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HAF PLNA — Logistics & Network Admin</title>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+
+<!-- ============ LANDING / LOGIN ============ -->
+<section class="hero" id="landing">
+  <div class="logo">HAF <span>PLNA</span></div>
+  <div class="tag">Pricing • Logistics • Network • Admin</div>
+  <h1>The operating system behind every HAF delivery.</h1>
+  <p class="sub">One secure platform connecting dispatch, drivers, customers and live pricing — built on the HAF KNECT network. Sign in to your workspace.</p>
+  <div class="roles" id="roleRow"></div>
+  <div class="hint">Demo prototype — pick a role to preview that workspace. No password needed in this preview.</div>
+</section>
+
+<!-- ============ APP SHELL ============ -->
+<div class="app" id="app">
+  <aside class="side">
+    <div class="logo">HAF <span style="color:var(--orange)">PLNA</span></div>
+    <nav class="nav" id="nav"></nav>
+    <div class="foot">Signed in as<br><b id="whoName">—</b><br><span id="whoRole" style="color:var(--orange)">—</span>
+      <div class="logout" id="logout">↩ Switch role / sign out</div>
+    </div>
+  </aside>
+  <main class="main">
+    <div class="topbar">
+      <h2 id="pageTitle">Dashboard</h2>
+      <div class="pill" id="datePill">HAF KNECT network · live preview</div>
+    </div>
+    <div id="view"></div>
+  </main>
+</div>
+
+<script src="/app.js"></script>
+</body>
+</html>
