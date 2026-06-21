@@ -212,7 +212,12 @@
   }
 
   // ---------------------------------------------------------------------------
+  // VERSION — single source of truth for the build badge (one-line bump later).
+  var VERSION = "HAF X V2.0.0";
+
+  // ---------------------------------------------------------------------------
   root.HAFModel = {
+    VERSION: VERSION,
     AREAS: AREAS,
     COMPLIANCE: COMPLIANCE,
     MEMBERSHIP: MEMBERSHIP,

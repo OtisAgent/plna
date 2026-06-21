@@ -185,6 +185,60 @@ body.dark .theme-dot .ico-moon{display:block}
 .manual-flag.on{border-color:rgba(180,72,63,.5);background:rgba(180,72,63,.08);color:var(--red)}
 .manual-flag.off{border-color:rgba(79,127,88,.45);background:rgba(79,127,88,.08);color:var(--green)}
 .manual-flag .mf-dot{width:9px;height:9px;border-radius:99px;background:currentColor;flex:none}
+
+/* ===== Topbar controls: version badge, compliance + plan switchers ===== */
+.topbar-r{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end}
+.ver-badge{display:inline-flex;align-items:center;gap:6px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;color:var(--brand-orange);background:rgba(241,142,0,.10);border:1px solid rgba(241,142,0,.34);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.ver-badge::before{content:"";width:7px;height:7px;border-radius:99px;background:var(--brand-orange);flex:none}
+.tb-ctrl{display:flex;flex-direction:column;gap:3px}
+.tb-ctrl label{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:800}
+.tb-ctrl select{font-family:inherit;font-size:12.5px;font-weight:600;color:var(--text);background:var(--panel-2);border:1px solid var(--line);border-radius:11px;padding:7px 10px;-webkit-appearance:none;appearance:none;cursor:pointer}
+.tb-ctrl select:focus{outline:2px solid rgba(241,142,0,.35);outline-offset:1px;border-color:var(--brand-orange)}
+.plan-badge{display:inline-flex;align-items:center;gap:6px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:var(--text);background:var(--panel-2);border:1px solid var(--line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.plan-badge .pb-dot{width:8px;height:8px;border-radius:99px;background:var(--muted);flex:none}
+.plan-badge.lite .pb-dot{background:var(--muted)}
+.plan-badge.plus .pb-dot{background:var(--amber)}
+.plan-badge.pro .pb-dot{background:var(--brand-orange)}
+.plan-badge.pro{border-color:rgba(241,142,0,.34);color:var(--brand-orange)}
+@media (max-width:920px){.topbar{flex-direction:column;align-items:stretch;gap:12px}.topbar-r{justify-content:flex-start}}
+
+/* ===== Compliance warning + lock panels (driven by HAFModel.gate) ===== */
+.gate-banner{width:100%;max-width:1040px;margin:0 auto 18px;display:flex;align-items:center;gap:12px;padding:13px 18px;border-radius:var(--radius-sm);font-size:13.5px;font-weight:600;line-height:1.45;border:1px solid var(--line);background:var(--panel-2);box-shadow:var(--soft-shadow);text-align:left}
+.gate-banner .gb-ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none;font-weight:900;font-size:15px}
+.gate-banner.warn{border-color:rgba(185,133,48,.5);background:rgba(185,133,48,.10);color:var(--amber)}
+.gate-banner.warn .gb-ic{background:rgba(185,133,48,.18);color:var(--amber)}
+.gate-banner .gb-cta{margin-left:auto;flex:none;font-size:11px;letter-spacing:.04em;text-transform:uppercase;font-weight:800;color:var(--brand-orange);background:rgba(241,142,0,.10);border:1px solid rgba(241,142,0,.34);border-radius:999px;padding:7px 13px;cursor:pointer}
+.gate-banner .gb-cta:hover{background:rgba(241,142,0,.18)}
+.lock-panel{width:100%;max-width:560px;margin:0 auto;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:34px 30px;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel-2);box-shadow:var(--soft-shadow)}
+.lock-panel .lp-ic{width:60px;height:60px;border-radius:18px;border:1px solid rgba(180,72,63,.4);background:rgba(180,72,63,.08);display:grid;place-items:center;color:var(--red)}
+.lock-panel .lp-ic svg{width:28px;height:28px;stroke:currentColor;stroke-width:1.7;fill:none}
+.lock-panel h2{margin:0;font-family:'Montserrat','Inter',sans-serif;font-weight:800;font-size:21px;letter-spacing:-.02em}
+.lock-panel .lp-state{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;border-radius:999px;padding:6px 13px;border:1px solid var(--line)}
+.lock-panel .lp-state.s-warn{color:var(--amber);border-color:rgba(185,133,48,.5);background:rgba(185,133,48,.1)}
+.lock-panel .lp-state.s-bad{color:var(--red);border-color:rgba(180,72,63,.5);background:rgba(180,72,63,.08)}
+.lock-panel p{margin:0;color:var(--muted);font-size:14px;line-height:1.6;max-width:420px}
+.lock-panel .lp-cta{font-size:12.5px;font-weight:800;letter-spacing:.02em;color:#fff;background:var(--brand-orange);border:0;border-radius:13px;padding:12px 22px;cursor:pointer;box-shadow:var(--soft-shadow)}
+.lock-panel .lp-cta:hover{filter:brightness(1.05)}
+.is-locked{display:none!important}
+
+/* ===== Plan-gated upgrade teaser ===== */
+.upsell{width:100%;max-width:560px;margin:0 auto;display:flex;flex-direction:column;align-items:center;text-align:center;gap:13px;padding:30px;border:1px dashed rgba(241,142,0,.45);border-radius:var(--radius);background:rgba(241,142,0,.05)}
+.upsell .us-ic{width:54px;height:54px;border-radius:16px;border:1px solid rgba(241,142,0,.4);background:var(--panel-2);display:grid;place-items:center;color:var(--brand-orange)}
+.upsell .us-ic svg{width:26px;height:26px;stroke:currentColor;stroke-width:1.7;fill:none}
+.upsell h2{margin:0;font-family:'Montserrat','Inter',sans-serif;font-weight:800;font-size:20px;letter-spacing:-.02em}
+.upsell .us-need{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--brand-orange);background:rgba(241,142,0,.1);border:1px solid rgba(241,142,0,.34);border-radius:999px;padding:6px 13px}
+.upsell p{margin:0;color:var(--muted);font-size:14px;line-height:1.6;max-width:420px}
+.upsell .us-feats{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:2px}
+
+/* ===== Pro Driver Landing Page section (§12.9) ===== */
+.lp-status{width:100%;max-width:880px;margin:0 auto 16px;display:flex;align-items:center;gap:13px;padding:15px 20px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--panel-2);box-shadow:var(--soft-shadow);text-align:left;flex-wrap:wrap}
+.lp-status .lps-dot{width:11px;height:11px;border-radius:99px;background:var(--green);flex:none}
+.lp-status .lps-t{font-weight:700;font-size:14px}
+.lp-status .lps-d{font-size:12.5px;color:var(--muted)}
+.lp-status .lps-pill{margin-left:auto}
+.funnel-note{width:100%;max-width:880px;margin:4px auto 0;display:flex;align-items:flex-start;gap:11px;padding:14px 18px;border:1px solid var(--line);border-radius:var(--radius-sm);background:rgba(241,142,0,.05);text-align:left;font-size:13px;line-height:1.55;color:var(--text)}
+.funnel-note b{color:var(--brand-orange)}
+.funnel-note .fn-ic{width:26px;height:26px;border-radius:8px;background:rgba(241,142,0,.12);color:var(--brand-orange);display:grid;place-items:center;flex:none;font-weight:900}
 </style>
 </head>
 <body>
@@ -223,6 +277,11 @@ body.dark .theme-dot .ico-moon{display:block}
       <button class="nav-btn" data-page="suggested-rate"><svg viewBox="0 0 24 24"><path d="M12 3v18M16 7a4 4 0 0 0-4-2c-2 0-4 1-4 3s2 3 4 3 4 1 4 3-2 3-4 3a4 4 0 0 1-4-2"/></svg>Suggested Rate</button>
 
       <div class="nav-sep"></div>
+      <div class="nav-label">Pro</div>
+      <button class="nav-btn" data-page="haffee"><svg viewBox="0 0 24 24"><path d="M12 3a4 4 0 0 1 4 4c0 1.5-1 2.5-2 3.2V12H10v-1.8C9 9.5 8 8.5 8 7a4 4 0 0 1 4-4ZM9 16h6M10 20h4"/></svg>HAFFEE AI</button>
+      <button class="nav-btn" data-page="landing-page"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 9h18M7 7h.01M9.5 7h.01"/></svg>Driver Landing Page</button>
+
+      <div class="nav-sep"></div>
       <div class="nav-label">Network</div>
       <button class="nav-btn" data-page="rewards"><svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M5 4h14v4a7 7 0 0 1-14 0V4ZM5 6H3v1a3 3 0 0 0 3 3M19 6h2v1a3 3 0 0 1-3 3"/></svg>My Rewards</button>
       <button class="nav-btn" data-page="network-pass"><svg viewBox="0 0 24 24"><path d="M3 6h18v12H3z"/><path d="M3 10h18M7 15h4"/></svg>Network Pass</button>
@@ -238,10 +297,33 @@ body.dark .theme-dot .ico-moon{display:block}
   <main class="workspace">
     <div class="topbar">
       <div class="crumb">HAF PLNA &nbsp;/&nbsp; <b id="crumbPage">Today</b></div>
+      <div class="topbar-r">
+        <span class="plan-badge pro" id="planBadge"><span class="pb-dot"></span><span id="planBadgeText">PLNA Pro</span></span>
+        <span class="ver-badge" id="verBadge">HAF X V2.0.0</span>
+        <div class="tb-ctrl">
+          <label for="planSelect">PLNA plan</label>
+          <select id="planSelect">
+            <option value="LITE">Lite · £0/mo</option>
+            <option value="PLUS">Plus · £10/mo</option>
+            <option value="PRO" selected>Pro · £50/mo</option>
+          </select>
+        </div>
+        <div class="tb-ctrl">
+          <label for="stateSelect">View as compliance state</label>
+          <select id="stateSelect">
+            <option value="PENDING">Pending</option>
+            <option value="ACTIVE" selected>Active</option>
+            <option value="EXPIRING_SOON">Expiring Soon</option>
+            <option value="EXPIRED">Expired</option>
+            <option value="FAILED">Failed</option>
+            <option value="SUSPENDED">Suspended</option>
+          </select>
+        </div>
+      </div>
     </div>
     <div class="canvas">
 
-      <section class="page active" id="today" data-title="Today">
+      <section class="page active" id="today" data-gate="plnaPlanner" data-title="Today">
         <div class="plna-head">
           <div class="glyph"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
           <h1>Today's Availability</h1>
@@ -266,15 +348,15 @@ body.dark .theme-dot .ico-moon{display:block}
         <p class="preview-note">Framework preview — static placeholder data, no live integrations yet.</p>
       </section>
 
-      <section class="page" id="empty-days" data-title="Empty Days"><div class="glyph"><svg viewBox="0 0 24 24"><path d="M7 3v3M17 3v3M4 8h16M5 5h14v15H5zM9 14h6M9 18h3"/></svg></div><h1>Empty Days</h1><p>Flag the days you've nothing booked so the network can fill your diary with collections heading your way.</p><span class="tag">Framework preview · placeholder</span></section>
+      <section class="page" id="empty-days" data-gate="plnaPlanner" data-title="Empty Days"><div class="glyph"><svg viewBox="0 0 24 24"><path d="M7 3v3M17 3v3M4 8h16M5 5h14v15H5zM9 14h6M9 18h3"/></svg></div><h1>Empty Days</h1><p>Flag the days you've nothing booked so the network can fill your diary with collections heading your way.</p><span class="tag">Framework preview · placeholder</span></section>
 
-      <section class="page" id="route-direction" data-title="Route Direction"><div class="glyph"><svg viewBox="0 0 24 24"><path d="M12 2l4 4-4 4M16 6H8a4 4 0 0 0-4 4v8"/></svg></div><h1>Route Direction</h1><p>Tell PLNA the way you're already travelling so it only offers jobs that sit along your line, not against it.</p><span class="tag">Framework preview · placeholder</span></section>
+      <section class="page" id="route-direction" data-gate="plnaPlanner" data-title="Route Direction"><div class="glyph"><svg viewBox="0 0 24 24"><path d="M12 2l4 4-4 4M16 6H8a4 4 0 0 0-4 4v8"/></svg></div><h1>Route Direction</h1><p>Tell PLNA the way you're already travelling so it only offers jobs that sit along your line, not against it.</p><span class="tag">Framework preview · placeholder</span></section>
 
-      <section class="page" id="home-base" data-title="Home Base &amp; Radius"><div class="glyph"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h14V10"/><circle cx="12" cy="13" r="2.5"/></svg></div><h1>Home Base &amp; Radius</h1><p>Set where you start and finish each day, and how far from base you're happy to range.</p><span class="tag">Framework preview · placeholder</span></section>
+      <section class="page" id="home-base" data-gate="plnaPlanner" data-title="Home Base &amp; Radius"><div class="glyph"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h14V10"/><circle cx="12" cy="13" r="2.5"/></svg></div><h1>Home Base &amp; Radius</h1><p>Set where you start and finish each day, and how far from base you're happy to range.</p><span class="tag">Framework preview · placeholder</span></section>
 
-      <section class="page" id="working-radius" data-title="Working Radius"><div class="glyph"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2"/><path d="M12 12l6-3"/></svg></div><h1>Working Radius</h1><p>The live travel distance you'll accept right now — widen it for a quiet day, tighten it when you're full.</p><span class="tag">Framework preview · placeholder</span></section>
+      <section class="page" id="working-radius" data-gate="plnaPlanner" data-title="Working Radius"><div class="glyph"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2"/><path d="M12 12l6-3"/></svg></div><h1>Working Radius</h1><p>The live travel distance you'll accept right now — widen it for a quiet day, tighten it when you're full.</p><span class="tag">Framework preview · placeholder</span></section>
 
-      <section class="page" id="planned-jobs" data-title="Planned Jobs">
+      <section class="page" id="planned-jobs" data-gate="jobBoard" data-title="Planned Jobs">
         <div class="plna-head">
           <div class="glyph"><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4zM8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M4 12h16"/></svg></div>
           <h1>Planned Jobs</h1>
@@ -294,15 +376,41 @@ body.dark .theme-dot .ico-moon{display:block}
         <p class="preview-note">Framework preview — static placeholder data, no live integrations yet.</p>
       </section>
 
-      <section class="page" id="return-route" data-title="Return-Route"><div class="glyph"><svg viewBox="0 0 24 24"><path d="M9 14l-4-4 4-4M5 10h9a5 5 0 0 1 5 5v3"/></svg></div><h1>Return-Route</h1><p>Fill the empty leg home. PLNA looks for collections that point back toward your base around your finish time.</p><span class="tag">Framework preview · placeholder</span></section>
+      <section class="page" id="return-route" data-gate="plnaPlanner" data-title="Return-Route">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M9 14l-4-4 4-4M5 10h9a5 5 0 0 1 5 5v3"/></svg></div>
+          <h1>Return-Route</h1>
+          <p>Fill the empty leg home. PLNA looks for collections that point back toward your base around your finish time.</p>
+        </div>
+        <div data-plan-min="PLUS" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
+          <div class="plan-real" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
+            <div class="stat-grid">
+              <div class="stat-card"><span class="sl">Return-route alerts</span><span class="sv"><span class="pill pill-status">On</span></span></div>
+              <div class="stat-card"><span class="sl">Watching lane</span><span class="sv">S1 <small>→ B1 home</small></span></div>
+              <div class="stat-card"><span class="sl">Alert window</span><span class="sv">15:00–17:30</span></div>
+              <div class="stat-card"><span class="sl">Matches today</span><span class="sv">3 <small>pointing home</small></span></div>
+            </div>
+            <p class="preview-note">Return-route alerts ping you when a collection appears that points back toward base around your finish time. Eligibility/opportunity only — never a guaranteed return load.</p>
+          </div>
+          <div class="plan-tease is-locked" style="width:100%">
+            <div class="upsell">
+              <div class="us-ic"><svg viewBox="0 0 24 24"><path d="M9 14l-4-4 4-4M5 10h9a5 5 0 0 1 5 5v3"/></svg></div>
+              <span class="us-need">Plus feature</span>
+              <h2>Return-route alerts</h2>
+              <p>Get pinged when a collection appears that points back toward your base around your finish time, so you can chase the empty leg home. Available on PLNA Plus and Pro.</p>
+              <div class="us-feats"><span class="pill">PLNA Plus · £10/mo</span><span class="pill">PLNA Pro · £50/mo</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-      <section class="page" id="driver-diary" data-title="Driver Diary"><div class="glyph"><svg viewBox="0 0 24 24"><path d="M7 3v3M17 3v3M4 8h16M5 5h14v15H5zM8 12h8M8 16h5"/></svg></div><h1>Driver Diary</h1><p>Your week at a glance — booked jobs, empty days and planned routes laid out day by day.</p><span class="tag">Framework preview · placeholder</span></section>
+      <section class="page" id="driver-diary" data-gate="plnaPlanner" data-title="Driver Diary"><div class="glyph"><svg viewBox="0 0 24 24"><path d="M7 3v3M17 3v3M4 8h16M5 5h14v15H5zM8 12h8M8 16h5"/></svg></div><h1>Driver Diary</h1><p>Your week at a glance — booked jobs, empty days and planned routes laid out day by day.</p><span class="tag">Framework preview · placeholder</span></section>
 
-      <section class="page" id="notes" data-title="Notes"><div class="glyph"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5zM9 9h6M9 13h6M9 17h3"/></svg></div><h1>Notes</h1><p>Quick reminders for yourself — access codes, parking, kit and anything worth remembering for a regular route.</p><span class="tag">Framework preview · placeholder</span></section>
+      <section class="page" id="notes" data-gate="plnaPlanner" data-title="Notes"><div class="glyph"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5zM9 9h6M9 13h6M9 17h3"/></svg></div><h1>Notes</h1><p>Quick reminders for yourself — access codes, parking, kit and anything worth remembering for a regular route.</p><span class="tag">Framework preview · placeholder</span></section>
 
-      <section class="page" id="pod" data-title="Proof of Delivery"><div class="glyph"><svg viewBox="0 0 24 24"><path d="M9 11l2 2 4-4M5 5h14v14H5z"/></svg></div><h1>Proof of Delivery</h1><p>Capture a signature, a photo and a timestamp at drop-off so every job closes clean.</p><span class="tag">Framework preview · placeholder</span></section>
+      <section class="page" id="pod" data-gate="plnaPlanner" data-title="Proof of Delivery"><div class="glyph"><svg viewBox="0 0 24 24"><path d="M9 11l2 2 4-4M5 5h14v14H5z"/></svg></div><h1>Proof of Delivery</h1><p>Capture a signature, a photo and a timestamp at drop-off so every job closes clean.</p><span class="tag">Framework preview · placeholder</span></section>
 
-      <section class="page" id="job-feedback" data-title="Job Feedback">
+      <section class="page" id="job-feedback" data-gate="plnaPlanner" data-title="Job Feedback">
         <div class="plna-head">
           <div class="glyph"><svg viewBox="0 0 24 24"><path d="M12 3l2.5 5 5.5.8-4 3.9 1 5.5L12 16l-5 2.7 1-5.5-4-3.9 5.5-.8Z"/></svg></div>
           <h1>Job Feedback</h1>
@@ -323,7 +431,7 @@ body.dark .theme-dot .ico-moon{display:block}
         <p class="preview-note">Framework preview — static placeholder data, no live integrations yet.</p>
       </section>
 
-      <section class="page" id="suggested-rate" data-title="Suggested Rate">
+      <section class="page" id="suggested-rate" data-gate="plnaPlanner" data-title="Suggested Rate">
         <div class="plna-head">
           <div class="glyph"><svg viewBox="0 0 24 24"><path d="M12 3v18M16 7a4 4 0 0 0-4-2c-2 0-4 1-4 3s2 3 4 3 4 1 4 3-2 3-4 3a4 4 0 0 1-4-2"/></svg></div>
           <h1>Suggested Rate</h1>
@@ -407,9 +515,93 @@ body.dark .theme-dot .ico-moon{display:block}
         <p class="preview-note">Framework preview — static placeholder data, no live integrations yet.</p>
       </section>
 
+      <section class="page" id="haffee" data-gate="plnaPlanner" data-title="HAFFEE AI">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M12 3a4 4 0 0 1 4 4c0 1.5-1 2.5-2 3.2V12H10v-1.8C9 9.5 8 8.5 8 7a4 4 0 0 1 4-4ZM9 16h6M10 20h4"/></svg></div>
+          <h1>HAFFEE AI</h1>
+          <p>Your planning co-pilot — reads your week, your lanes and live network demand to suggest where to be, what to price and which empty legs to fill.</p>
+        </div>
+        <div data-plan-min="PRO" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
+          <div class="plan-real" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
+            <div class="stat-grid">
+              <div class="stat-card"><span class="sl">AI status</span><span class="sv"><span class="pill pill-status">Active · Pro</span></span></div>
+              <div class="stat-card"><span class="sl">Suggestions today</span><span class="sv">5 <small>planning tips</small></span></div>
+              <div class="stat-card"><span class="sl">Best lane to chase</span><span class="sv">S1 → M1 <small>high demand</small></span></div>
+              <div class="stat-card"><span class="sl">Empty leg risk</span><span class="sv">Low <small>return likely</small></span></div>
+            </div>
+            <div class="form-card">
+              <div class="qa-row"><span class="qa-q">“Where should I head after my Sheffield drop?”</span></div>
+              <div class="qa-row"><span class="qa-q" style="font-weight:500;color:var(--muted)">M1 Manchester is running hot this afternoon and points back toward your base — worth lining up a return collection there. Opportunity only, not a guaranteed load.</span></div>
+            </div>
+            <p class="preview-note">Framework preview — HAFFEE AI guidance is advisory. Suggestions are eligibility/opportunity, never guaranteed work or returns.</p>
+          </div>
+          <div class="plan-tease is-locked" style="width:100%">
+            <div class="upsell">
+              <div class="us-ic"><svg viewBox="0 0 24 24"><path d="M12 3a4 4 0 0 1 4 4c0 1.5-1 2.5-2 3.2V12H10v-1.8C9 9.5 8 8.5 8 7a4 4 0 0 1 4-4ZM9 16h6M10 20h4"/></svg></div>
+              <span class="us-need">Pro feature</span>
+              <h2>Unlock HAFFEE AI</h2>
+              <p>Full HAFFEE AI planning support — live lane reads, pricing prompts and empty-leg guidance — comes with PLNA Pro. Plus members get a basic AI teaser; Pro gets the full assistant.</p>
+              <div class="us-feats"><span class="pill">PLNA Pro · £50/mo</span><span class="pill">Requires your own domain</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="landing-page" data-gate="plnaPlanner" data-title="Driver Landing Page">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 9h18M7 7h.01M9.5 7h.01"/></svg></div>
+          <h1>Driver Landing Page</h1>
+          <p>Your own local courier brand, with HAF behind the funnel. You own the domain, HAF supports the page, and work you can't take overflows to KNECT.</p>
+        </div>
+        <div data-plan-min="PRO" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
+          <div class="plan-real" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
+            <div class="lp-status">
+              <span class="lps-dot"></span>
+              <div><div class="lps-t">okafor-couriers.co.uk</div><div class="lps-d">Domain connected · you own this domain · HAF supports the funnel</div></div>
+              <span class="pill pill-status lps-pill">Live</span>
+            </div>
+            <div class="stat-grid">
+              <div class="stat-card"><span class="sl">Enquiries received</span><span class="sv">28 <small>this month</small></span></div>
+              <div class="stat-card"><span class="sl">Jobs accepted by you</span><span class="sv">17 <small>kept direct</small></span></div>
+              <div class="stat-card"><span class="sl">Passed to KNECT</span><span class="sv">11 <small>overflow</small></span></div>
+              <div class="stat-card"><span class="sl">Overflow conversion</span><span class="sv">9 <small>covered by network</small></span></div>
+            </div>
+            <div class="crm-wrap">
+              <table class="crm" style="min-width:560px">
+                <thead><tr><th>Enquiry</th><th>Lane</th><th>Outcome</th><th>Routed to</th></tr></thead>
+                <tbody>
+                  <tr><td>ENQ-2207</td><td>B1 → S1</td><td><span class="pill pill-status">Accepted</span></td><td>You</td></tr>
+                  <tr><td>ENQ-2206</td><td>B1 → M1</td><td><span class="pill pill-status">Accepted</span></td><td>You</td></tr>
+                  <tr><td>ENQ-2204</td><td>LS1 → NE1</td><td><span class="pill pill-status busy">Passed</span></td><td>HAF KNECT</td></tr>
+                  <tr><td>ENQ-2201</td><td>B1 → BS1</td><td><span class="pill pill-status busy">Passed</span></td><td>HAF KNECT</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="funnel-note">
+              <span class="fn-ic">i</span>
+              <span><b>You own the domain. HAF supports the funnel. KNECT receives overflow.</b> Enquiries land on your branded page first — you accept the work you want, and anything you can't take (§11 overflow rule) is passed to the HAF KNECT network so the customer is still covered. Overflow routing is an opportunity for the network — never a guaranteed job for any driver.</span>
+            </div>
+            <p class="preview-note">Framework preview — static placeholder data, no live integrations yet.</p>
+          </div>
+          <div class="plan-tease is-locked" style="width:100%">
+            <div class="upsell">
+              <div class="us-ic"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 9h18M7 7h.01M9.5 7h.01"/></svg></div>
+              <span class="us-need">Pro feature</span>
+              <h2>Build your local courier brand</h2>
+              <p>The PLNA Pro Driver Landing Page gives you a branded page on your own domain, with HAF behind the funnel and overflow you can't cover passed to KNECT. Pro only — and you'll need to own your own domain (§11).</p>
+              <div class="us-feats"><span class="pill">PLNA Pro · £50/mo</span><span class="pill">Requires your own domain</span><span class="pill">KNECT overflow funnel</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section class="page" id="network-pass" data-title="Network Pass"><div class="glyph"><svg viewBox="0 0 24 24"><path d="M3 6h18v12H3z"/><path d="M3 10h18M7 15h4"/></svg></div><h1>Network Pass</h1><p>Your membership across the HAF driver network — status, benefits and the routes it unlocks.</p><span class="tag">Framework preview · placeholder</span></section>
 
     </div>
+    <footer style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:16px 30px;border-top:1px solid var(--line);font-size:11px;letter-spacing:.04em;color:var(--muted);font-weight:600">
+      <span>HAF PLNA — driver planning</span>
+      <span id="verFooter">HAF X V2.0.0</span>
+    </footer>
   </main>
 </div>
 
@@ -468,14 +660,27 @@ if(localStorage.getItem('otis-theme')==='dark') document.body.classList.add('dar
     return '<div class="price-row'+(cls?' '+cls:'')+'"><span class="pr-l"><span class="pr-op">'+op+'</span>'+label+'</span><span class="pr-v">'+val+'</span></div>';
   }
   function render(){
+    var drv=(window.HAFDriver||{});
     var q=P.quote({
       pickup:v('sr_pickup'), delivery:v('sr_delivery'),
       loadedMiles:v('sr_miles'), vehicleCode:v('sr_veh'), jobTypeCode:v('sr_job'),
       demand:{urgent:v('sr_d_urg'),sameday:v('sr_d_same'),flexible:v('sr_d_flex'),liveQuotes:v('sr_d_q')},
       supply:{available:v('sr_s_av'),returnRoute:v('sr_s_rr'),coload:v('sr_s_co'),nearby:v('sr_s_nb')},
-      recoveryCode:v('sr_rec'), directionCode:v('sr_dir')
+      recoveryCode:v('sr_rec'), directionCode:v('sr_dir'),
+      membership: drv.membership || 'FREE',
+      plnaPlan: drv.plnaPlan || 'LITE'
     });
     var m=P.money;
+    // Tier benefit line — paid plan keeps more on base pay + reduced network fee.
+    var tierStrip='';
+    if(q.tierRateUpliftPct>0 || q.tierFeeReductionPts>0){
+      var bits=[];
+      if(q.tierRateUpliftPct>0) bits.push('<span class="lane-chip">Tier uplift <b>+'+q.tierRateUpliftPct+'%</b> kept on base pay</span>');
+      if(q.tierFeeReductionPts>0) bits.push('<span class="lane-chip">Network fee <b>-'+q.tierFeeReductionPts+' pts</b> → '+q.networkFeePct+'%</span>');
+      tierStrip='<div class="lane-mini" style="margin-top:-4px">'+bits.join('')+'</div>';
+    } else {
+      tierStrip='<div class="lane-mini" style="margin-top:-4px"><span class="lane-chip">Lite plan · standard base pay &amp; fee — <b>upgrade</b> to keep more</span></div>';
+    }
     var score=(q.lanePressureScore===Infinity?'∞':q.lanePressureScore);
     var mileSub=m(q.loadedMiles*q.vehicle.baseRate);
     var perMile=q.loadedMiles>0?m(q.driverTargetPay/q.loadedMiles):m(0);
@@ -497,6 +702,7 @@ if(localStorage.getItem('otis-theme')==='dark') document.body.classList.add('dar
         '<span class="lane-chip">Pressure <b>'+score+'</b> · '+q.lanePressureStatus+'</span>'+
         '<span class="lane-chip">Lane ×<b>'+q.laneMultiplier+'</b>'+(q.laneCapped?' (capped)':'')+'</span>'+
       '</div>'+
+      tierStrip+
       '<div class="price-stack">'+
         row('=','Loaded miles × base rate',q.loadedMiles+' mi × '+m(q.vehicle.baseRate)+' = '+mileSub)+
         row('×','Job type · '+q.jobType.name,'×'+q.jobTypeFactor)+
@@ -510,7 +716,145 @@ if(localStorage.getItem('otis-theme')==='dark') document.body.classList.add('dar
    'sr_s_av','sr_s_rr','sr_s_co','sr_s_nb','sr_rec','sr_dir'].forEach(function(id){
     var e=$(id); if(e){e.addEventListener('input',render); e.addEventListener('change',render);}
   });
+  // Expose so the plan switcher can re-price live when the tier changes.
+  window.HAFRenderRate=render;
   render();
+})();
+
+// =============================================================================
+// PLNA SPINE — version badge, compliance gate (§3) + plan tiers (§10).
+// Everything is driven by window.HAFModel — nothing is hard-coded here.
+// =============================================================================
+(function(){
+  var M=window.HAFModel;
+  if(!M) return;
+  var $=function(id){return document.getElementById(id);};
+
+  // ---- Shared driver identity (one account across KNECT + PLNA) -------------
+  // membership comes from the KNECT side; plnaPlan + complianceState are demoable.
+  window.HAFDriver=window.HAFDriver||{ membership:'FREE', plnaPlan:'PRO', complianceState:'ACTIVE' };
+  var driver=window.HAFDriver;
+
+  // ---- P1: version badge + footer, rendered from HAFModel.VERSION ----------
+  var ver=M.VERSION||'HAF X V2.0.0';
+  if($('verBadge')) $('verBadge').textContent=ver;
+  if($('verFooter')) $('verFooter').textContent=ver;
+
+  // ---- P2: COMPLIANCE GATE --------------------------------------------------
+  // Inject a renewal-only lock panel into every gated section; show/hide it
+  // and the section's real content purely from gate.allow[area].
+  function lockPanelHTML(g){
+    var stateCls=g.tone==='s-warn'?'s-warn':'s-bad';
+    return '<div class="lock-panel">'+
+      '<div class="lp-ic"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>'+
+      '<span class="lp-state '+stateCls+'">'+g.label+'</span>'+
+      '<h2>Planning tools locked</h2>'+
+      '<p>'+g.message+'</p>'+
+      '<button class="lp-cta" data-go-compliance>Go to compliance</button>'+
+    '</div>';
+  }
+  var gatedSections=[].slice.call(document.querySelectorAll('.page[data-gate]'));
+  gatedSections.forEach(function(sec){
+    // wrap existing children so we can hide them as one unit
+    var inner=document.createElement('div');
+    inner.className='gate-inner';
+    inner.style.width='100%';
+    inner.style.display='flex';
+    inner.style.flexDirection='column';
+    inner.style.alignItems='center';
+    inner.style.gap='14px';
+    while(sec.firstChild){ inner.appendChild(sec.firstChild); }
+    sec.appendChild(inner);
+    var lock=document.createElement('div');
+    lock.className='gate-lock';
+    lock.style.width='100%';
+    sec.appendChild(lock);
+  });
+
+  function applyGate(){
+    var g=M.gate(driver.complianceState);
+    gatedSections.forEach(function(sec){
+      var area=sec.getAttribute('data-gate');
+      var allowed=!!g.allow[area];
+      var inner=sec.querySelector('.gate-inner');
+      var lock=sec.querySelector('.gate-lock');
+      if(allowed){
+        if(inner) inner.classList.remove('is-locked');
+        if(lock){ lock.classList.add('is-locked'); lock.innerHTML=''; }
+      } else {
+        if(inner) inner.classList.add('is-locked');
+        if(lock){ lock.classList.remove('is-locked'); lock.innerHTML=lockPanelHTML(g); }
+      }
+    });
+    // EXPIRING_SOON (or any warn state that still allows work) = warning banner
+    // injected at the top of each still-usable gated section.
+    document.querySelectorAll('.gate-warn-banner').forEach(function(b){b.remove();});
+    if(g.warn){
+      gatedSections.forEach(function(sec){
+        var inner=sec.querySelector('.gate-inner');
+        if(inner && !inner.classList.contains('is-locked')){
+          var b=document.createElement('div');
+          b.className='gate-banner warn gate-warn-banner';
+          b.innerHTML='<span class="gb-ic">!</span><span>'+g.message+'</span>'+
+            '<button class="gb-cta" data-go-compliance>Renew</button>';
+          inner.insertBefore(b,inner.firstChild);
+        }
+      });
+    }
+    applyPlan(); // plan teasers live inside still-unlocked sections
+  }
+
+  // ---- P3: PLAN TIERS -------------------------------------------------------
+  // HAFFEE AI + Driver Landing Page = Pro only. Return-route alerts = Plus+.
+  var PLAN=M.PLAN;
+  function planRank(code){return {LITE:0,PLUS:1,PRO:2}[code]||0;}
+  function applyPlan(){
+    var plan=driver.plnaPlan;
+    var p=PLAN[plan]||PLAN.LITE;
+    // plan badge in header
+    var badge=$('planBadge'), badgeTxt=$('planBadgeText');
+    if(badge){
+      badge.classList.remove('lite','plus','pro');
+      badge.classList.add(plan.toLowerCase());
+    }
+    if(badgeTxt) badgeTxt.textContent=p.name;
+    if($('planSelect') && $('planSelect').value!==plan) $('planSelect').value=plan;
+
+    // Each plan-gated section has a real block + a teaser block; toggle by rank.
+    document.querySelectorAll('[data-plan-min]').forEach(function(el){
+      var min=el.getAttribute('data-plan-min');
+      var real=el.querySelector('.plan-real');
+      var tease=el.querySelector('.plan-tease');
+      var meets=planRank(plan)>=planRank(min);
+      // only meaningful when the section itself is not compliance-locked
+      if(real) real.classList.toggle('is-locked',!meets);
+      if(tease) tease.classList.toggle('is-locked',meets);
+    });
+
+    // Re-price the Suggested Rate with the new tier.
+    if(typeof window.HAFRenderRate==='function') window.HAFRenderRate();
+  }
+
+  // ---- Wiring: switchers + compliance CTA ----------------------------------
+  if($('stateSelect')){
+    $('stateSelect').value=driver.complianceState;
+    $('stateSelect').addEventListener('change',function(){
+      driver.complianceState=this.value; applyGate();
+    });
+  }
+  if($('planSelect')){
+    $('planSelect').value=driver.plnaPlan;
+    $('planSelect').addEventListener('change',function(){
+      driver.plnaPlan=this.value; applyPlan();
+    });
+  }
+  // "Go to compliance" CTAs jump to the compliance/profile area.
+  document.addEventListener('click',function(e){
+    var t=e.target.closest('[data-go-compliance]');
+    if(t){ if(typeof goToPage==='function') goToPage('network-pass'); }
+  });
+
+  applyGate();
 })();
 </script>
 </body>
