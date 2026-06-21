@@ -104,6 +104,8 @@ window.HAFPricing = (function () {
     MANUAL_SURGE:     "Manual surge — above the auto limit",
     MIN_CHARGE:       "Minimum customer charge applied",
     LANE_CAPPED:      "Lane uplift capped at the auto ceiling",
+    TIER_RATE_UPLIFT: "Member/plan uplift — driver keeps a better base-rate %",
+    TIER_FEE_REDUCTION: "Member/plan benefit — reduced HAF network fee",
   };
 
   // ===========================================================================
@@ -207,18 +209,43 @@ window.HAFPricing = (function () {
     if (pressureScore >= g.manualPressureScore) manualApproval = true;
     if (vehicle.manual) manualApproval = true;
 
+    // --- Tier benefits: KNECT membership + PLNA plan (Master Spec §7.5) ---
+    // Resolved from the shared HAFModel so KNECT and PLNA price identically.
+    // Free + Lite => zero deltas => numbers are unchanged (backward compatible).
+    const HM = (typeof HAFModel !== "undefined") ? HAFModel
+             : (typeof window !== "undefined" && window.HAFModel) ? window.HAFModel
+             : null;
+    let benefits = input.benefits || null;
+    if (!benefits && HM && (input.membership || input.plnaPlan)) {
+      benefits = HM.resolveBenefits(input.membership, input.plnaPlan);
+    }
+    const rateUpliftPct   = benefits ? num(benefits.rateUpliftPct, 0)   : 0;
+    const feeReductionPts = benefits ? num(benefits.feeReductionPts, 0) : 0;
+    const feeFloorPct     = benefits ? num(benefits.feeFloorPct, 0)     : 0;
+
     // --- Driver Target Pay (doc §1.1) ---
     let driverTargetPay = miles * vehicle.baseRate * jobFactor * laneMult;
     // Return-route floor: never below £0.80+VAT-equivalent per mile (doc §4)
     if (jobType.returnRoute && jobType.minPerMileExVat) {
       driverTargetPay = Math.max(driverTargetPay, miles * jobType.minPerMileExVat);
     }
+    // Tier uplift: paid members/plans keep a better % on base rate (§7.5).
+    const driverBasePay = round2(driverTargetPay);
+    if (rateUpliftPct > 0) driverTargetPay = driverTargetPay * (1 + rateUpliftPct / 100);
     driverTargetPay = round2(driverTargetPay);
+    if (rateUpliftPct > 0) reasons.push("TIER_RATE_UPLIFT");
 
     // --- Customer price via the CORRECT margin method: ÷ (1 - fee%) (doc §2) ---
-    const feePct = input.networkFeePctOverride != null
+    const baseFeePct = input.networkFeePctOverride != null
       ? num(input.networkFeePctOverride, jobType.feePct)
       : jobType.feePct;
+    // Tier benefit: paid members/plans pay a LOWER network fee (§7.5),
+    // never trimmed below the floor.
+    let feePct = baseFeePct;
+    if (feeReductionPts > 0) {
+      feePct = Math.max(feeFloorPct, baseFeePct - feeReductionPts);
+      reasons.push("TIER_FEE_REDUCTION");
+    }
     const feeFraction = Math.min(0.95, Math.max(0, feePct / 100));
 
     let customerExVat = feeFraction < 1 ? driverTargetPay / (1 - feeFraction) : driverTargetPay;
@@ -252,6 +279,11 @@ window.HAFPricing = (function () {
       laneMultiplierRaw: round2(laneMultRaw), laneMultiplier: round2(laneMult), laneCapped,
       // money
       driverTargetPay,
+      driverBasePay,                                  // pay before tier uplift
+      tierRateUpliftPct: rateUpliftPct,
+      tierFeeReductionPts: feeReductionPts,
+      baseNetworkFeePct: baseFeePct,
+      tierBenefits: benefits || null,
       networkFeePct: feePct,
       customerPriceExVat: customerExVat, minChargeApplied: minApplied,
       vatAmount, customerPriceIncVat: customerIncVat,
