@@ -471,31 +471,41 @@ body.plna-locked .plna-gate{
 </head>
 <body class="plna-locked">
 
-<!-- ===== Login gate (shown until sign-in) ===== -->
+<!-- ===== Access gate (temporary password wall — swap for Supabase Auth when logins are ready) ===== -->
 <div class="plna-gate" id="plnaGate">
   <form class="plna-gate__card" id="plnaGateForm" autocomplete="on">
     <p class="plna-gate__brand">HAF PLNA</p>
-    <h1 class="plna-gate__title">Sign in to your driver dashboard</h1>
-    <label for="gate-email">Email</label>
-    <input type="email" id="gate-email" name="email" placeholder="you@example.com" autocomplete="email" required />
-    <label for="gate-password">Password</label>
-    <input type="password" id="gate-password" name="password" placeholder="••••••••" autocomplete="current-password" required />
-    <button type="submit" class="plna-gate__btn">Sign in</button>
-    <a class="plna-gate__back" href="/">Back to PLNA</a>
+    <h1 class="plna-gate__title">Driver access</h1>
+    <label for="gate-code">Access code</label>
+    <input type="password" id="gate-code" name="code" placeholder="••••••••" autocomplete="current-password" required />
+    <p id="gate-err" style="color:var(--red);font-size:13px;margin:-10px 0 14px;display:none">Incorrect code — try again.</p>
+    <button type="submit" class="plna-gate__btn">Enter</button>
   </form>
 </div>
 
 <script>
-  // <!-- TODO: wire real Supabase Auth session check here -->
-  (function(){
-    var form = document.getElementById('plnaGateForm');
-    if(!form) return;
-    form.addEventListener('submit', function(e){
-      e.preventDefault();
-      // TODO: replace with real Supabase Auth sign-in + session validation
-      document.body.classList.remove('plna-locked');
-    });
-  })();
+(function(){
+  var KEY = 'T3RpczI0Nw=='; // btoa('Otis247')
+  var STORE = 'plna_access';
+  function unlock(){ document.body.classList.remove('plna-locked'); }
+  // persist through the session
+  if(sessionStorage.getItem(STORE) === KEY){ unlock(); return; }
+  var form = document.getElementById('plnaGateForm');
+  var err  = document.getElementById('gate-err');
+  if(!form) return;
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var v = document.getElementById('gate-code').value;
+    if(btoa(v) === KEY){
+      sessionStorage.setItem(STORE, KEY);
+      unlock();
+    } else {
+      err.style.display = 'block';
+      document.getElementById('gate-code').value = '';
+      document.getElementById('gate-code').focus();
+    }
+  });
+})();
 </script>
 
 <div class="app">
