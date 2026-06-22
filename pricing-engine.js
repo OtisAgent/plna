@@ -34,11 +34,13 @@ window.HAFPricing = (function () {
 
     // --- Vehicle base rate card, £/loaded mile (doc §3). Editable in admin. ---
     vehicles: [
-      { code: "SMALL_VAN", name: "Small Van",          baseRate: 1.20, manual: false },
-      { code: "SWB_VAN",   name: "SWB Van",            baseRate: 1.30, manual: false },
-      { code: "MWB_VAN",   name: "MWB Van",            baseRate: 1.40, manual: false },
-      { code: "LWB_VAN",   name: "LWB Van",            baseRate: 1.50, manual: false },
-      { code: "LUTON",     name: "Luton / Specialist", baseRate: 1.60, manual: true  },
+      { code: "SMALL_VAN", name: "Small Van",  baseRate: 1.20, manual: false },
+      { code: "SWB_VAN",   name: "SWB Van",    baseRate: 1.30, manual: false },
+      { code: "LWB_VAN",   name: "LWB Van",    baseRate: 1.50, manual: false },
+      { code: "XLWB_VAN",  name: "XLWB Van",   baseRate: 1.55, manual: false },
+      // Luton = specialist, on request only: always routes to manual so the
+      // customer is connected directly with the courier (never auto-booked).
+      { code: "LUTON",     name: "Luton (specialist — on request)", baseRate: 1.60, manual: true },
     ],
 
     // --- Job types: urgency factor (min/default/max) + its own HAF fee (doc §4) ---
