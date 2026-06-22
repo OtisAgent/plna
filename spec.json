@@ -1,5 +1,6 @@
 {
   "files": [
+    {"path": "/index.html", "local": "/agent/workspace/plna/index.html", "ctype": "text/html"},
     {"path": "/app.html", "local": "/agent/workspace/plna/app.html", "ctype": "text/html"},
     {"path": "/pricing-engine.js", "local": "/agent/workspace/plna/pricing-engine.js", "ctype": "application/javascript"},
     {"path": "/haf-model.js", "local": "/agent/workspace/plna/haf-model.js", "ctype": "application/javascript"}

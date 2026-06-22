@@ -99,11 +99,15 @@ button{font-family:inherit;cursor:pointer}
 .field label{display:block;font-size:14px;font-weight:600;color:var(--text);margin-bottom:8px}
 .field .helper{font-size:13px;color:var(--muted);margin-top:7px}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
-input[type=text],input[type=email],input[type=tel],select{
+.formgroup{margin-bottom:30px;padding-bottom:28px;border-bottom:1px solid var(--line)}
+.formgroup:last-of-type{border-bottom:0}
+.formgroup__head{font-family:"Montserrat",sans-serif;font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--brand-orange);margin-bottom:18px}
+.form-error{margin-top:18px;padding:14px 18px;border-radius:14px;background:rgba(180,72,63,.08);border:1px solid rgba(180,72,63,.3);color:#b4483f;font-size:14px;font-weight:600;text-align:center}
+input[type=text],input[type=email],input[type=tel],input[type=number],input[type=time],select{
   width:100%;padding:14px 16px;border:1px solid var(--line);border-radius:14px;
   background:var(--panel-2);color:var(--text);font-size:15px;font-family:inherit;
 }
-input:focus,select:focus{outline:none;border-color:var(--brand-orange);box-shadow:0 0 0 3px rgba(241,142,0,.16)}
+input[type=text]:focus,input[type=email]:focus,input[type=tel]:focus,input[type=number]:focus,input[type=time]:focus,select:focus{outline:none;border-color:var(--brand-orange);box-shadow:0 0 0 3px rgba(241,142,0,.16)}
 .postcode-result{margin-top:10px;font-size:14px;font-weight:600;display:flex;align-items:center;gap:9px}
 .postcode-result .pc-dot{width:10px;height:10px;border-radius:50%;flex:none}
 .postcode-result.is-ok{color:var(--green)}
@@ -248,77 +252,165 @@ input:focus,select:focus{outline:none;border-color:var(--brand-orange);box-shado
         <h2>Join the HAF driver network</h2>
         <p class="signup__lead">Real onboarding — set your plan and we'll match you to work on your lanes.</p>
 
-        <div class="grid-2">
-          <div class="field">
-            <label for="full-name">Full name</label>
-            <input type="text" id="full-name" name="full-name" autocomplete="name" required />
+        <!-- Driver -->
+        <div class="formgroup">
+          <div class="formgroup__head">Your details</div>
+          <div class="grid-2">
+            <div class="field">
+              <label for="full-name">Full name</label>
+              <input type="text" id="full-name" name="full-name" autocomplete="name" required />
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" autocomplete="email" required />
+            </div>
           </div>
-          <div class="field">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" autocomplete="email" required />
-          </div>
-        </div>
-
-        <div class="grid-2">
-          <div class="field">
-            <label for="phone">Phone</label>
-            <input type="tel" id="phone" name="phone" autocomplete="tel" required />
-          </div>
-          <div class="field">
-            <label for="base-postcode">Base postcode</label>
-            <input type="text" id="base-postcode" name="base-postcode" autocomplete="postal-code" required />
-            <p class="helper">We use this to match you to jobs on your local lanes.</p>
-            <div id="postcode-result" class="postcode-result" style="display:none"></div>
-          </div>
-        </div>
-
-        <div class="field">
-          <label for="vehicle">Vehicle</label>
-          <select id="vehicle" name="vehicle" required>
-            <option value="" disabled selected>Select your vehicle</option>
-            <option value="small_van">Small Van</option>
-            <option value="swb_van">SWB Van</option>
-            <option value="mwb_van">MWB Van</option>
-            <option value="lwb_van">LWB Van</option>
-            <option value="luton_specialist">Luton / Specialist</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <label>Available days</label>
-          <div class="checks">
-            <label class="check"><input type="checkbox" name="days" value="Mon">Mon</label>
-            <label class="check"><input type="checkbox" name="days" value="Tue">Tue</label>
-            <label class="check"><input type="checkbox" name="days" value="Wed">Wed</label>
-            <label class="check"><input type="checkbox" name="days" value="Thu">Thu</label>
-            <label class="check"><input type="checkbox" name="days" value="Fri">Fri</label>
-            <label class="check"><input type="checkbox" name="days" value="Sat">Sat</label>
-            <label class="check"><input type="checkbox" name="days" value="Sun">Sun</label>
+          <div class="grid-2">
+            <div class="field">
+              <label for="phone">Phone</label>
+              <input type="tel" id="phone" name="phone" autocomplete="tel" required />
+            </div>
+            <div class="field">
+              <label for="base-postcode">Base postcode</label>
+              <input type="text" id="base-postcode" name="base-postcode" autocomplete="postal-code" required />
+              <p class="helper">We use this to match you to jobs on your local lanes.</p>
+              <div id="postcode-result" class="postcode-result" style="display:none"></div>
+            </div>
           </div>
         </div>
 
-        <div class="field">
-          <label>Plan</label>
-          <div class="plans-radio">
-            <label class="radio-card">
-              <input type="radio" name="plan" value="lite" checked />
-              <span>
-                <span class="rc-title">PLNA Lite — Free</span><br>
-                <span class="rc-sub">Plan availability and connect to KNECT.</span>
-              </span>
-            </label>
-            <label class="radio-card">
-              <input type="radio" name="plan" value="pro" />
-              <span>
-                <span class="rc-title">PLNA Pro — Early access</span><br>
-                <span class="rc-sub">Priority matching (pricing at launch).</span>
-              </span>
-            </label>
+        <!-- Vehicle -->
+        <div class="formgroup">
+          <div class="formgroup__head">Your vehicle</div>
+          <div class="grid-2">
+            <div class="field">
+              <label for="vehicle">Vehicle</label>
+              <select id="vehicle" name="vehicle" required>
+                <option value="" disabled selected>Select your vehicle</option>
+                <option value="small_van">Small Van</option>
+                <option value="swb_van">SWB Van</option>
+                <option value="mwb_van">MWB Van</option>
+                <option value="lwb_van">LWB Van</option>
+                <option value="luton_specialist">Luton / Specialist</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="payload-kg">Payload capacity (kg)</label>
+              <input type="number" id="payload-kg" name="payload-kg" min="0" step="50" placeholder="e.g. 1000" />
+            </div>
+          </div>
+          <div class="field">
+            <div class="checks">
+              <label class="check"><input type="checkbox" id="tail-lift" name="tail-lift">Tail lift fitted</label>
+            </div>
           </div>
         </div>
+
+        <!-- Experience & business -->
+        <div class="formgroup">
+          <div class="formgroup__head">Experience &amp; business</div>
+          <div class="grid-2">
+            <div class="field">
+              <label for="years-exp">Years of experience</label>
+              <input type="number" id="years-exp" name="years-exp" min="0" step="1" placeholder="e.g. 5" />
+            </div>
+            <div class="field">
+              <label for="company-type">I operate as</label>
+              <select id="company-type" name="company-type">
+                <option value="" disabled selected>Select</option>
+                <option value="sole_trader">Sole trader</option>
+                <option value="limited_company">Limited company</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <div class="checks">
+              <label class="check"><input type="checkbox" id="vat-registered" name="vat-registered">VAT registered</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Compliance -->
+        <div class="formgroup">
+          <div class="formgroup__head">Compliance declarations</div>
+          <p class="helper" style="margin:0 0 14px">Declare what you hold — document upload comes as a later step in onboarding.</p>
+          <div class="field">
+            <div class="checks">
+              <label class="check"><input type="checkbox" id="ins-git" name="ins-git">I hold Goods-in-transit cover</label>
+              <label class="check"><input type="checkbox" id="ins-hire" name="ins-hire">I hold Hire &amp; reward insurance</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Availability -->
+        <div class="formgroup">
+          <div class="formgroup__head">Availability &amp; lanes</div>
+          <div class="field">
+            <label>Available days</label>
+            <div class="checks">
+              <label class="check"><input type="checkbox" name="days" value="Mon">Mon</label>
+              <label class="check"><input type="checkbox" name="days" value="Tue">Tue</label>
+              <label class="check"><input type="checkbox" name="days" value="Wed">Wed</label>
+              <label class="check"><input type="checkbox" name="days" value="Thu">Thu</label>
+              <label class="check"><input type="checkbox" name="days" value="Fri">Fri</label>
+              <label class="check"><input type="checkbox" name="days" value="Sat">Sat</label>
+              <label class="check"><input type="checkbox" name="days" value="Sun">Sun</label>
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="field">
+              <label for="start-time">Typical start time</label>
+              <input type="time" id="start-time" name="start-time" />
+            </div>
+            <div class="field">
+              <label for="finish-time">Typical finish time</label>
+              <input type="time" id="finish-time" name="finish-time" />
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="field">
+              <label for="travel-miles">Willing to travel (miles)</label>
+              <input type="number" id="travel-miles" name="travel-miles" min="0" step="5" placeholder="e.g. 50" />
+            </div>
+            <div class="field">
+              <label for="preferred-lanes">Preferred lanes / directions</label>
+              <input type="text" id="preferred-lanes" name="preferred-lanes" placeholder="e.g. Sheffield → London, M1 corridor" />
+            </div>
+          </div>
+          <div class="field">
+            <div class="checks">
+              <label class="check"><input type="checkbox" id="return-route" name="return-route">Open to return-route jobs</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Plan -->
+        <div class="formgroup">
+          <div class="formgroup__head">Your plan</div>
+          <div class="field" style="margin-bottom:0">
+            <div class="plans-radio">
+              <label class="radio-card">
+                <input type="radio" name="plan" value="lite" checked />
+                <span>
+                  <span class="rc-title">PLNA Lite — Free</span><br>
+                  <span class="rc-sub">Plan availability and connect to KNECT.</span>
+                </span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="plan" value="pro" />
+                <span>
+                  <span class="rc-title">PLNA Pro — Early access</span><br>
+                  <span class="rc-sub">Priority matching (pricing at launch).</span>
+                </span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div id="formError" class="form-error" style="display:none"></div>
 
         <div class="signup__submit">
-          <button type="submit" class="btn btn--primary btn--lg btn--block">Join the driver network</button>
+          <button type="submit" id="submitBtn" class="btn btn--primary btn--lg btn--block">Join the driver network</button>
         </div>
       </form>
 
@@ -426,30 +518,158 @@ input:focus,select:focus{outline:none;border-color:var(--brand-orange);box-shado
     });
   }
 
+  // ===== Supabase (anon key — RLS allows anon INSERT on drivers + shop_leads) =====
+  var SB_URL = 'https://jsdwvogsxlnczzbefwgp.supabase.co';
+  var SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzZHd2b2dzeGxuY3p6YmVmd2dwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzODgyMzYsImV4cCI6MjA5Njk2NDIzNn0.pxqM-Oh4f_3PlqCbKIKvcKZnNRUZ1ASKqqdNg78M_4M';
+  function sbHeaders(){
+    return {
+      'apikey': SB_ANON,
+      'Authorization': 'Bearer ' + SB_ANON,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=representation'
+    };
+  }
+  // Map the form's vehicle <select> values to the canonical vehicle_code used across HAF X.
+  var VEHICLE_CODE = {
+    small_van: 'SMALL_VAN',
+    swb_van: 'SWB_VAN',
+    mwb_van: 'MWB_VAN',
+    lwb_van: 'LWB_VAN',
+    luton_specialist: 'LUTON'
+  };
+
   // ===== Form submit =====
   var form = document.getElementById('driverForm');
   var confirm = document.getElementById('driverConfirm');
+  var submitBtn = document.getElementById('submitBtn');
+  var formError = document.getElementById('formError');
+
+  function showError(msg){
+    formError.textContent = msg;
+    formError.style.display = 'block';
+    formError.scrollIntoView({behavior:'smooth', block:'center'});
+  }
+  function clearError(){ formError.style.display = 'none'; formError.textContent = ''; }
+  function val(id){ var el = form.querySelector(id); return el ? el.value.trim() : ''; }
+  function num(id){ var v = val(id); return v === '' ? null : Number(v); }
+  function checked(id){ var el = form.querySelector(id); return !!(el && el.checked); }
+
   if(form){
-    form.addEventListener('submit', function(e){
+    form.addEventListener('submit', async function(e){
       e.preventDefault();
+      clearError();
+
       var days = Array.prototype.map.call(
         form.querySelectorAll('input[name="days"]:checked'), function(c){ return c.value; });
-      var payload = {
-        fullName: form.querySelector('#full-name').value.trim(),
-        email: form.querySelector('#email').value.trim(),
-        phone: form.querySelector('#phone').value.trim(),
-        basePostcode: (baseLocation && baseLocation.postcode) || form.querySelector('#base-postcode').value.trim(),
-        baseLat: baseLocation ? baseLocation.lat : null,
-        baseLng: baseLocation ? baseLocation.lng : null,
-        vehicleCode: form.querySelector('#vehicle').value,
-        availableDays: days,
-        plnaPlan: (form.querySelector('input[name="plan"]:checked')||{}).value
+
+      var name = val('#full-name');
+      var email = val('#email');
+      var phone = val('#phone');
+      var basePostcode = (baseLocation && baseLocation.postcode) || val('#base-postcode');
+      var vehicleSel = form.querySelector('#vehicle').value;
+      var vehicleCode = VEHICLE_CODE[vehicleSel] || (vehicleSel ? vehicleSel.toUpperCase() : null);
+      var plan = (form.querySelector('input[name="plan"]:checked')||{}).value || 'lite';
+      var plnaPlan = plan === 'pro' ? 'PRO' : 'LITE';
+
+      var driverRow = {
+        name: name,
+        email: email,
+        phone: phone,
+        base_postcode: basePostcode,
+        base_lat: baseLocation ? baseLocation.lat : null,
+        base_lng: baseLocation ? baseLocation.lng : null,
+        vehicle_code: vehicleCode,
+        plna_plan: plnaPlan,
+        membership: 'FREE',
+        compliance_status: 'PENDING_DOCS',
+        is_available: false,
+        details: {
+          payload_kg: num('#payload-kg'),
+          tail_lift: checked('#tail-lift'),
+          years_experience: num('#years-exp'),
+          company_type: form.querySelector('#company-type').value || null,
+          vat_registered: checked('#vat-registered'),
+          insurance_git: checked('#ins-git'),
+          insurance_hire_reward: checked('#ins-hire'),
+          available_days: days,
+          typical_start: val('#start-time') || null,
+          typical_end: val('#finish-time') || null,
+          travel_radius_miles: num('#travel-miles'),
+          preferred_lanes: val('#preferred-lanes') || null,
+          return_route_open: checked('#return-route'),
+          base_town: baseLocation ? baseLocation.town : null,
+          base_w3w: null,
+          source: 'plna_front_door',
+          page_url: location.href,
+          user_agent: navigator.userAgent,
+          submitted_at: new Date().toISOString()
+        }
       };
-      // TODO: POST to KNECT driver onboarding endpoint; create driver record in Supabase (base_postcode, base_lat/lng, base_w3w, vehicle_code, plna_plan)
-      void payload;
-      form.style.display = 'none';
-      confirm.classList.add('is-on');
-      confirm.scrollIntoView({behavior:'smooth', block:'center'});
+
+      submitBtn.disabled = true;
+      var origLabel = submitBtn.textContent;
+      submitBtn.textContent = 'Joining…';
+
+      try {
+        var resp = await fetch(SB_URL + '/rest/v1/drivers', {
+          method: 'POST', headers: sbHeaders(), body: JSON.stringify(driverRow)
+        });
+
+        if(resp.status === 409){
+          // email UNIQUE constraint — already signed up
+          form.style.display = 'none';
+          confirm.querySelector('h3').textContent = "You're already with us.";
+          confirm.querySelector('p').textContent = "Looks like you're already signed up — we'll be in touch.";
+          confirm.classList.add('is-on');
+          confirm.scrollIntoView({behavior:'smooth', block:'center'});
+          return;
+        }
+
+        if(!resp.ok){
+          var errText = await resp.text();
+          console.error('PLNA drivers insert failed', resp.status, errText);
+          // Treat any duplicate-key signal as a graceful "already signed up"
+          if(/duplicate key|unique/i.test(errText)){
+            form.style.display = 'none';
+            confirm.querySelector('h3').textContent = "You're already with us.";
+            confirm.querySelector('p').textContent = "Looks like you're already signed up — we'll be in touch.";
+            confirm.classList.add('is-on');
+            confirm.scrollIntoView({behavior:'smooth', block:'center'});
+            return;
+          }
+          showError("We couldn't submit that just now — please try again.");
+          submitBtn.disabled = false; submitBtn.textContent = origLabel;
+          return;
+        }
+
+        // drivers insert OK — fire shop_leads (best-effort; don't block confirmation)
+        try {
+          await fetch(SB_URL + '/rest/v1/shop_leads', {
+            method: 'POST', headers: sbHeaders(), body: JSON.stringify({
+              source: 'driver_signup',
+              name: name,
+              email: email,
+              phone: phone,
+              lead_type: 'driver',
+              postcode: basePostcode,
+              plna_routed: true,
+              details: { vehicle_code: vehicleCode, plna_plan: plnaPlan }
+            })
+          });
+        } catch(leadErr){ console.error('PLNA shop_leads insert failed (non-fatal)', leadErr); }
+
+        // success confirmation
+        form.style.display = 'none';
+        confirm.querySelector('h3').textContent = "You're in.";
+        confirm.querySelector('p').textContent = "HAF will be in touch to get you set up on the network. Welcome to the network.";
+        confirm.classList.add('is-on');
+        confirm.scrollIntoView({behavior:'smooth', block:'center'});
+
+      } catch(err){
+        console.error('PLNA submit error', err);
+        showError("We couldn't submit that just now — please try again.");
+        submitBtn.disabled = false; submitBtn.textContent = origLabel;
+      }
     });
   }
 
