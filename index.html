@@ -1082,11 +1082,15 @@ body.plna-locked .plna-gate{
             <h3>Your route</h3>
             <p class="ch-sub">Set the lane and the job — the lane's live demand and supply do the rest.</p>
             <div class="cgrid">
-              <div class="cfield"><label>From</label><input id="sr_pickup" value="Sheffield"></div>
-              <div class="cfield"><label>To</label><input id="sr_delivery" value="Manchester"></div>
+              <div class="cfield"><label>From postcode</label><input id="sr_pickup" value="S1 2HE" placeholder="e.g. S1 2HE" autocomplete="off" style="text-transform:uppercase"></div>
+              <div class="cfield"><label>To postcode</label><input id="sr_delivery" value="M1 1AE" placeholder="e.g. M1 1AE" autocomplete="off" style="text-transform:uppercase"></div>
             </div>
+            <div id="sr_route_intel" style="display:none;margin:10px 0 0;padding:13px 15px;border:1px solid var(--line);border-radius:14px;background:var(--panel-2);text-align:left;font-size:13px;line-height:1.5"></div>
             <div class="cgrid" style="margin-top:10px">
-              <div class="cfield"><label>Loaded miles</label><input id="sr_miles" type="number" min="0" value="80"></div>
+              <div class="cfield">
+                <label style="display:flex;align-items:center;gap:6px">Driver miles <span id="sr_miles_note" style="font-size:10px;color:var(--brand-orange);font-weight:700;letter-spacing:.02em"></span></label>
+                <input id="sr_miles" type="number" min="0" value="80">
+              </div>
               <div class="cfield"><label>Your vehicle</label><select id="sr_veh"></select></div>
             </div>
             <div class="cgrid one" style="margin-top:10px">
@@ -1651,6 +1655,155 @@ if(localStorage.getItem('otis-theme')==='dark') document.body.classList.add('dar
   });
 
   applyGate();
+})();
+
+// ===== PLNA Distance Intelligence ================================================
+// Postcodes.io (public, keyless) for home base lookup.
+// Supabase Edge Function /enrich for route: Google Maps miles+minutes + what3words.
+// driverMiles(): always rounds up + 4% detour buffer — extra miles count for the driver.
+// trafficMins(): adds 22% above Google base to give a realistic allow-time.
+(function(){
+  var ENRICH_URL  = 'https://jsdwvogsxlnczzbefwgp.supabase.co/functions/v1/enrich';
+  var ENRICH_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzZHd2b2dzeGxuY3p6YmVmd2dwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzODgyMzYsImV4cCI6MjA5Njk2NDIzNn0.pxqM-Oh4f_3PlqCbKIKvcKZnNRUZ1ASKqqdNg78M_4M';
+
+  // Round raw miles up to next whole mile, then add 4% detour buffer (loading bays, parking, access roads).
+  function driverMiles(raw) { return Math.ceil(Math.ceil(raw) * 1.04); }
+
+  // Format minutes → "1h 47m" or "47m"
+  function fmtTime(mins) {
+    var h = Math.floor(mins / 60), m = Math.round(mins % 60);
+    return h > 0 ? (h + 'h' + (m > 0 ? ' ' + m + 'm' : '')) : (m + 'm');
+  }
+
+  // Traffic-allow time: Google typical-traffic base + 22% for peak/loading/access delays
+  function trafficMins(base) { return Math.ceil(base * 1.22); }
+
+  // Human-readable traffic note based on extra minutes
+  function trafficNote(base, allow) {
+    var extra = allow - base;
+    if (extra < 10) return 'Allow a few extra minutes for traffic and loading access.';
+    if (extra < 25) return 'Budget around ' + extra + ' extra minutes — traffic and loading bay access add up.';
+    return 'Budget an extra ' + fmtTime(extra) + ' for traffic and loading bay access. Motorways and city centres can slow significantly at peak times.';
+  }
+
+  // ---- Home Base postcode lookup (postcodes.io) ----
+  var homeIn  = document.getElementById('homePostcode');
+  var homeMsg = document.getElementById('homePostStatus');
+  var homeSub = document.getElementById('homePostSub');
+
+  if (homeIn) {
+    homeIn.addEventListener('focus', function(){ homeIn.style.borderColor = 'var(--brand-orange)'; });
+    homeIn.addEventListener('blur', function(){ homeIn.style.borderColor = ''; plnaHomeCheck(); });
+  }
+
+  async function plnaHomeCheck() {
+    if (!homeIn) return;
+    var pc = homeIn.value.trim().toUpperCase();
+    if (pc.length < 3) return;
+    homeMsg.style.color = 'var(--muted)';
+    homeMsg.textContent = 'Checking…';
+    try {
+      var r = await fetch('https://api.postcodes.io/postcodes/' + encodeURIComponent(pc));
+      var d = await r.json();
+      if (d.status === 200 && d.result) {
+        homeIn.value = d.result.postcode;
+        homeMsg.style.color = 'var(--green)';
+        homeMsg.textContent = '✓ ' + (d.result.admin_district || d.result.region || d.result.postcode);
+        if (homeSub) homeSub.textContent = 'Base confirmed: ' + d.result.postcode + ' · ' + (d.result.admin_district || '') + (d.result.region ? ', ' + d.result.region : '');
+      } else {
+        homeMsg.style.color = 'var(--red)';
+        homeMsg.textContent = 'Postcode not found';
+      }
+    } catch(e) {
+      homeMsg.style.color = 'var(--muted)';
+      homeMsg.textContent = 'Lookup unavailable';
+    }
+  }
+
+  // ---- Suggested Rate: postcode → enrich → driver miles + traffic card ----
+  var srPickup  = document.getElementById('sr_pickup');
+  var srDeliv   = document.getElementById('sr_delivery');
+  var srMiles   = document.getElementById('sr_miles');
+  var srIntel   = document.getElementById('sr_route_intel');
+  var srNote    = document.getElementById('sr_miles_note');
+
+  async function srEnrich() {
+    var from = srPickup ? srPickup.value.trim() : '';
+    var to   = srDeliv  ? srDeliv.value.trim()  : '';
+    if (!from || !to || from.length < 3 || to.length < 3) return;
+
+    if (srIntel) {
+      srIntel.style.display = 'block';
+      srIntel.innerHTML = '<span style="color:var(--muted)">Calculating route…</span>';
+    }
+
+    try {
+      var resp = await fetch(ENRICH_URL + '?from=' + encodeURIComponent(from) + '&to=' + encodeURIComponent(to), {
+        headers: { 'apikey': ENRICH_ANON, 'Authorization': 'Bearer ' + ENRICH_ANON }
+      });
+      if (!resp.ok) throw new Error('enrich ' + resp.status);
+      var d = await resp.json();
+      if (!d.miles) throw new Error('no miles');
+
+      var rawMi   = d.miles;
+      var drvMi   = driverMiles(rawMi);
+      var baseMn  = d.minutes || 0;
+      var allowMn = trafficMins(baseMn);
+
+      // Auto-fill miles field with driver-rounded value
+      if (srMiles) {
+        srMiles.value = drvMi;
+        srMiles.dispatchEvent(new Event('input'));
+      }
+      if (srNote) srNote.textContent = '(auto · driver-rounded)';
+
+      // Route intelligence card
+      var pickTown = (d.pickup  && d.pickup.town)    ? d.pickup.town    : from.toUpperCase();
+      var delTown  = (d.delivery && d.delivery.town) ? d.delivery.town  : to.toUpperCase();
+      var pickW3w  = (d.pickup  && d.pickup.w3w)     ? '///' + d.pickup.w3w    : null;
+      var delW3w   = (d.delivery && d.delivery.w3w)  ? '///' + d.delivery.w3w  : null;
+      var note     = trafficNote(baseMn, allowMn);
+      var extraMi  = drvMi - Math.ceil(rawMi);
+
+      if (srIntel) {
+        srIntel.innerHTML =
+          '<div style="display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start">' +
+            // Block 1 — road distance
+            '<div style="min-width:90px">' +
+              '<div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-bottom:4px">Road distance</div>' +
+              '<div style="font-family:Montserrat,Inter,sans-serif;font-weight:900;font-size:19px;color:var(--brand-orange);line-height:1">' + rawMi.toFixed(1) + ' mi</div>' +
+              '<div style="font-size:10.5px;color:var(--muted);margin-top:3px">Google Maps route</div>' +
+            '</div>' +
+            // Block 2 — driver miles (rounded up)
+            '<div style="min-width:90px">' +
+              '<div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-bottom:4px">Your driver miles</div>' +
+              '<div style="font-family:Montserrat,Inter,sans-serif;font-weight:900;font-size:19px;color:var(--text);line-height:1">' + drvMi + ' mi</div>' +
+              '<div style="font-size:10.5px;color:var(--muted);margin-top:3px">+' + extraMi + ' mi detour buffer</div>' +
+            '</div>' +
+            // Block 3 — time
+            '<div style="min-width:120px">' +
+              '<div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-bottom:4px">Drive time</div>' +
+              '<div style="font-weight:700;font-size:14px;color:var(--text)">' + fmtTime(baseMn) + ' <span style="font-size:11px;color:var(--muted);font-weight:600">base</span></div>' +
+              '<div style="font-weight:800;font-size:14px;color:var(--amber)">Allow ' + fmtTime(allowMn) + ' <span style="font-size:11px;color:var(--muted);font-weight:600">in traffic</span></div>' +
+            '</div>' +
+            // Block 4 — route note + w3w
+            '<div style="flex:1;min-width:180px;font-size:12px;color:var(--muted);line-height:1.55;border-left:2px solid var(--line);padding-left:12px">' +
+              '<span style="font-weight:700;color:var(--text)">' + pickTown + ' → ' + delTown + '</span><br>' +
+              note +
+              (pickW3w ? '<br><span style="display:inline-block;margin-top:6px;font-size:11px;font-weight:700;color:var(--brand-orange);background:rgba(241,142,0,.08);border:1px solid rgba(241,142,0,.3);border-radius:7px;padding:3px 8px">Collection: ' + pickW3w + '</span>' : '') +
+              (delW3w  ? ' <span style="display:inline-block;margin-top:6px;font-size:11px;font-weight:700;color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:7px;padding:3px 8px">Delivery: ' + delW3w + '</span>' : '') +
+            '</div>' +
+          '</div>';
+      }
+    } catch(e) {
+      if (srIntel) srIntel.style.display = 'none';
+      if (srNote) srNote.textContent = '';
+    }
+  }
+
+  if (srPickup) srPickup.addEventListener('blur', srEnrich);
+  if (srDeliv)  srDeliv.addEventListener('blur', srEnrich);
+  window.PLNAEnrich = srEnrich; // manual trigger from console if needed
 })();
 
 // Working radius preset toggle
