@@ -137,7 +137,7 @@
       ai: "full", landingPage: true, requiresOwnDomain: true,
       features: [
         "Everything in Free", "Full route planner", "Return-route alerts",
-        "Full HAFFEE AI support", "Higher base-rate % + lower network fee",
+        "Full JUDD AI support", "Higher base-rate % + lower network fee",
         "Driver landing page", "Priority KNECT visibility"
       ]
     }
@@ -177,7 +177,7 @@
     if (feeCut > 0) n.push("-" + feeCut + " pts network fee");
     if (m.relay) n.push("Relay access");
     if (m.profitShare) n.push("Profit-share eligible");
-    if (p.ai === "full") n.push("Full HAFFEE AI");
+    if (p.ai === "full") n.push("Full JUDD AI");
     else if (p.ai === "basic") n.push("Basic AI support");
     return n;
   }

@@ -552,7 +552,7 @@ body.plna-locked .plna-gate{
 
       <div class="nav-sep" data-mob="hide"></div>
       <div class="nav-label" data-mob="hide">Pro</div>
-      <button class="nav-btn" data-page="haffee" data-mob="hide"><svg viewBox="0 0 24 24"><path d="M12 3a4 4 0 0 1 4 4c0 1.5-1 2.5-2 3.2V12H10v-1.8C9 9.5 8 8.5 8 7a4 4 0 0 1 4-4ZM9 16h6M10 20h4"/></svg>HAFFEE AI</button>
+      <button class="nav-btn" data-page="judd" data-mob="hide"><svg viewBox="0 0 24 24"><path d="M12 3a4 4 0 0 1 4 4c0 1.5-1 2.5-2 3.2V12H10v-1.8C9 9.5 8 8.5 8 7a4 4 0 0 1 4-4ZM9 16h6M10 20h4"/></svg>JUDD AI</button>
       <button class="nav-btn" data-page="landing-page" data-mob="hide"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 9h18M7 7h.01M9.5 7h.01"/></svg>Driver Landing Page</button>
 
       <div class="nav-sep" data-mob="hide"></div>
@@ -1164,10 +1164,10 @@ body.plna-locked .plna-gate{
         <p class="preview-note">Framework preview — static placeholder data, no live integrations yet.</p>
       </section>
 
-      <section class="page" id="haffee" data-gate="plnaPlanner" data-title="HAFFEE AI">
+      <section class="page" id="judd" data-gate="plnaPlanner" data-title="JUDD AI">
         <div class="plna-head">
           <div class="glyph"><svg viewBox="0 0 24 24"><path d="M12 3a4 4 0 0 1 4 4c0 1.5-1 2.5-2 3.2V12H10v-1.8C9 9.5 8 8.5 8 7a4 4 0 0 1 4-4ZM9 16h6M10 20h4"/></svg></div>
-          <h1>HAFFEE AI</h1>
+          <h1>JUDD AI</h1>
           <p>Your planning co-pilot — reads your week, your lanes and live network demand to suggest where to be, what to price and which empty legs to fill.</p>
         </div>
         <div data-plan-min="PAID" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
@@ -1182,14 +1182,14 @@ body.plna-locked .plna-gate{
               <div class="qa-row"><span class="qa-q">“Where should I head after my Sheffield drop?”</span></div>
               <div class="qa-row"><span class="qa-q" style="font-weight:500;color:var(--muted)">M1 Manchester is running hot this afternoon and points back toward your base — worth lining up a return collection there. Opportunity only, not a guaranteed load.</span></div>
             </div>
-            <p class="preview-note">Framework preview — HAFFEE AI guidance is advisory. Suggestions are eligibility/opportunity, never guaranteed work or returns.</p>
+            <p class="preview-note">Framework preview — JUDD AI guidance is advisory. Suggestions are eligibility/opportunity, never guaranteed work or returns.</p>
           </div>
           <div class="plan-tease is-locked" style="width:100%">
             <div class="upsell">
               <div class="us-ic"><svg viewBox="0 0 24 24"><path d="M12 3a4 4 0 0 1 4 4c0 1.5-1 2.5-2 3.2V12H10v-1.8C9 9.5 8 8.5 8 7a4 4 0 0 1 4-4ZM9 16h6M10 20h4"/></svg></div>
               <span class="us-need">Pro feature</span>
-              <h2>Unlock HAFFEE AI</h2>
-              <p>Full HAFFEE AI planning support — live lane reads, pricing prompts and empty-leg guidance — comes with PLNA Pro.</p>
+              <h2>Unlock JUDD AI</h2>
+              <p>Full JUDD AI planning support — live lane reads, pricing prompts and empty-leg guidance — comes with PLNA Pro.</p>
               <div class="us-feats"><span class="pill">PLNA Pro · £19/mo</span><span class="pill">or £190/year</span></div>
             </div>
           </div>
@@ -1383,7 +1383,7 @@ body.plna-locked .plna-gate{
               <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>Everything in Free</li>
               <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>Full route planner</li>
               <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>Return-route alerts</li>
-              <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>Full HAFFEE AI support</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>Full JUDD AI support</li>
               <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>Higher base-rate % + lower fee</li>
               <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>Driver landing page</li>
               <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>Priority KNECT visibility</li>
@@ -1610,7 +1610,7 @@ if(localStorage.getItem('otis-theme')==='dark') document.body.classList.add('dar
   }
 
   // ---- P3: PLAN TIERS -------------------------------------------------------
-  // HAFFEE AI + Driver Landing Page = Pro only. Return-route alerts = Plus+.
+  // JUDD AI + Driver Landing Page = Pro only. Return-route alerts = Plus+.
   var PLAN=M.PLAN;
   // Two-tier: Free vs Paid. Old codes tolerated so nothing breaks (LITE→free, PLUS/PRO→paid).
   function planRank(code){return {FREE:0,LITE:0,PLUS:1,PRO:1,PAID:1}[code]||0;}
