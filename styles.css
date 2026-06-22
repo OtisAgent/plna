@@ -2,9 +2,9 @@
    Grey #2f373e base · Orange #f18e00 accent only · clean, calm, command-centre.
    Palette + feel kept identical to otis-hub & knect for one consistent HAF system. */
 :root{
-  --grey:#2f373e; --grey2:#262c32; --orange:#f18e00; --orange-dark:#c87600;
-  --ink:#e8edf1; --soft:#9aa6b1; --line:rgba(255,255,255,.10);
-  --card:#333b43; --card2:#3a434c; --good:#34c759; --warn:#f18e00; --bad:#ff5d5d; --blue:#4aa3ff;
+  --grey:#2f373e; --grey2:#202428; --orange:#f18e00; --orange-dark:#c87600;
+  --ink:#e8edf1; --soft:#a9b0b4; --line:rgba(255,255,255,.10);
+  --card:#202428; --card2:#202428; --good:#4f7f58; --warn:#f18e00; --bad:#b4483f; --blue:#f18e00;
   --radius:15px;
 }
 *{box-sizing:border-box}
@@ -72,9 +72,9 @@ tbody tr:hover{background:rgba(255,255,255,.035)}
 td b{font-weight:700}
 .badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:10.5px;font-weight:700;white-space:nowrap}
 .b-new{background:rgba(241,142,0,.18);color:#ffc06a}
-.b-prog{background:rgba(74,163,255,.16);color:#9ecbff}
-.b-done{background:rgba(52,199,89,.20);color:#8af0a6}
-.b-hold{background:rgba(255,93,93,.16);color:#ff9b9b}
+.b-prog{background:rgba(241,142,0,.16);color:#ffb347}
+.b-done{background:rgba(79,127,88,.20);color:#4f7f58}
+.b-hold{background:rgba(180,72,63,.16);color:#b4483f}
 
 /* ---------- PRICING ENGINE ---------- */
 .grid2{display:grid;grid-template-columns:1fr 360px;gap:20px}
@@ -84,7 +84,7 @@ input,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-ra
 input:focus,select:focus{outline:none;border-color:var(--orange)}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 input[type=range]{padding:0;accent-color:var(--orange)}
-.quote{background:linear-gradient(150deg,var(--orange),var(--orange-dark));color:#1d2227;border-radius:var(--radius);padding:22px}
+.quote{background:linear-gradient(150deg,var(--orange),var(--orange-dark));color:#171a1d;border-radius:var(--radius);padding:22px}
 .quote .lbl{font-size:11px;opacity:.8;text-transform:uppercase;letter-spacing:.6px;font-weight:700}
 .quote .big{font-size:42px;font-weight:800;margin:4px 0 2px}
 .quote .line{display:flex;justify-content:space-between;font-size:13px;padding:7px 0;border-top:1px solid rgba(0,0,0,.16)}
@@ -92,7 +92,7 @@ input[type=range]{padding:0;accent-color:var(--orange)}
 .dash-toggle{display:flex;gap:8px;margin-top:8px}
 .dash-toggle button{flex:1;padding:10px;border:1px solid var(--line);background:var(--card2);color:var(--ink);
   border-radius:9px;cursor:pointer;font-weight:700;font-size:13px}
-.dash-toggle button.on{background:var(--orange);color:#1d2227;border-color:transparent}
+.dash-toggle button.on{background:var(--orange);color:#171a1d;border-color:transparent}
 .note{font-size:12px;color:var(--soft);margin-top:8px;line-height:1.55}
 
 @media(max-width:820px){
@@ -110,16 +110,16 @@ body{background:
   radial-gradient(circle at top left,rgba(241,142,0,.16),transparent 34%),
   radial-gradient(circle at 84% 12%,rgba(47,55,62,.55),transparent 36%),
   radial-gradient(circle at 55% 95%,rgba(241,142,0,.08),transparent 38%),
-  linear-gradient(135deg,#111416 0%,#2f373e 44%,#111416 100%) fixed;}
+  linear-gradient(135deg,#0e1113 0%,#2f373e 44%,#0e1113 100%) fixed;}
 .hero{background:
   radial-gradient(900px 540px at 50% -8%,rgba(241,142,0,.14),transparent 60%),
-  linear-gradient(135deg,#111416,#2f373e 50%,#111416);}
+  linear-gradient(135deg,#0e1113,#2f373e 50%,#0e1113);}
 .stat,.panel,.role-card{
   background:linear-gradient(150deg,rgba(255,255,255,.09),rgba(255,255,255,.035));
   border:1px solid rgba(255,255,255,.10);
   backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.07);}
 .stat,.panel{border-radius:20px}.role-card{border-radius:16px}
-.side{background:linear-gradient(180deg,rgba(47,55,62,.96),rgba(17,20,22,.74));backdrop-filter:blur(18px)}
+.side{background:linear-gradient(180deg,rgba(47,55,62,.96),rgba(14,17,19,.74));backdrop-filter:blur(18px)}
 .nav a.active{box-shadow:inset 4px 0 0 var(--orange),inset 0 1px 0 rgba(255,255,255,.06);border:1px solid rgba(241,142,0,.24)}
 input,select{background:rgba(255,255,255,.05);color:var(--ink)}
