@@ -4,7 +4,7 @@
  * Single source of truth for the connective spine of the Master Build Spec:
  *   §3  Compliance gate (6 states -> what a driver may access)
  *   §6  KNECT membership (Free vs Activated Member)
- *   §10 PLNA plans (Lite £0 / Plus £10 / Pro £50) + their rate/fee benefits
+ *   §10 PLNA plans (Free vs Pro — monthly or annual) + their rate/fee benefits
  *
  * BOTH KNECT and PLNA load this file, so the two "separate but connected"
  * systems share ONE identity, ONE compliance gate and ONE benefit table.
@@ -115,40 +115,30 @@
   };
 
   // ---------------------------------------------------------------------------
-  // 3. PLNA PLANS  (§10) — Lite £0 / Plus £10 / Pro £50
+  // 3. PLNA PLANS  (§10) — simple two-tier: Free vs Pro (monthly OR annual)
+  // NOTE: prices below are PLACEHOLDERS pending Brent's confirmation. Annual is
+  // pitched ~2 months free vs paying monthly. One-line bump when prices are set.
   // ---------------------------------------------------------------------------
   var PLAN = {
-    LITE: {
-      code: "LITE", name: "PLNA Lite", priceGbpMonth: 0, price: "£0/month",
-      tagline: "Plan your courier work.",
+    FREE: {
+      code: "FREE", name: "PLNA Free", priceGbpMonth: 0, priceGbpYear: 0,
+      price: "£0", tagline: "Plan your own courier work.",
       rateUpliftPct: 0, feeReductionPts: 0,
       ai: "none", landingPage: false,
       features: [
-        "Driver + vehicle profile", "Availability", "Basic route planner",
-        "Compliance view", "KNECT connection", "Basic area preferences"
+        "Driver + vehicle profile", "Availability & calendar",
+        "See the job board", "Basic area preferences", "KNECT connection"
       ]
     },
-    PLUS: {
-      code: "PLUS", name: "PLNA Plus", priceGbpMonth: 10, price: "£10/month",
-      tagline: "Plan better. Earn better.",
-      rateUpliftPct: 2, feeReductionPts: 2,
-      ai: "basic", landingPage: false,
-      features: [
-        "Everything in Lite", "Better route planning", "Return-route alerts",
-        "Area demand hints", "Basic AI teaser", "Weekly planning view",
-        "Basic earnings estimate"
-      ]
-    },
-    PRO: {
-      code: "PRO", name: "PLNA Pro", priceGbpMonth: 50, price: "£50/month",
-      tagline: "Build your local courier brand with HAF behind you.",
+    PAID: {
+      code: "PAID", name: "PLNA Pro", priceGbpMonth: 19, priceGbpYear: 190,
+      price: "£19/month or £190/year", tagline: "Plan smarter. Earn better.",
       rateUpliftPct: 5, feeReductionPts: 5,
       ai: "full", landingPage: true, requiresOwnDomain: true,
       features: [
-        "Everything in Plus", "Full HAFFEE AI support", "Higher base-rate %",
-        "Best network fee reduction", "Landing page support",
-        "Local marketing support", "Missed-job funnel into HAF KNECT",
-        "Priority KNECT visibility"
+        "Everything in Free", "Full route planner", "Return-route alerts",
+        "Full HAFFEE AI support", "Higher base-rate % + lower network fee",
+        "Driver landing page", "Priority KNECT visibility"
       ]
     }
   };
@@ -163,7 +153,7 @@
 
   function resolveBenefits(membershipCode, planCode) {
     var m = MEMBERSHIP[(membershipCode || "FREE").toUpperCase()] || MEMBERSHIP.FREE;
-    var p = PLAN[(planCode || "LITE").toUpperCase()] || PLAN.LITE;
+    var p = PLAN[(planCode || "FREE").toUpperCase()] || PLAN.FREE;
     var rateUpliftPct = Math.min(MAX_RATE_UPLIFT_PCT, m.rateUpliftPct + p.rateUpliftPct);
     var feeReductionPts = m.feeReductionPts + p.feeReductionPts;
     return {
@@ -174,7 +164,7 @@
       relay: m.relay,                     // relay is a MEMBERSHIP benefit
       profitShare: m.profitShare,
       containerCollective: m.containerCollective,
-      priorityVisibility: m.priorityVisibility || p.code === "PRO",
+      priorityVisibility: m.priorityVisibility || p.code === "PAID",
       ai: p.ai, landingPage: p.landingPage,
       // human-readable benefit lines for UI
       notes: buildBenefitNotes(m, p, rateUpliftPct, feeReductionPts)

@@ -7,686 +7,1650 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet" />
-<title>HAF PLNA — Driver planning for the HAF KNECT network</title>
+<title>HAF PLNA</title>
 <style>
 :root{
   --brand-orange:#f18e00; --brand-grey:#2f373e;
   --bg:#f4f1eb; --panel:#fbfaf7; --panel-2:#ffffff; --text:#1e252b; --muted:#6f777d;
-  --line:rgba(47,55,62,.12); --radius:28px;
-  --radius-sm:18px;
-  --shadow:0 28px 80px rgba(22,25,27,.12);
-  --soft-shadow:0 14px 35px rgba(22,25,27,.08);
-  --green:#4f7f58;
+  --line:rgba(47,55,62,.12); --shadow:0 28px 80px rgba(22,25,27,.12);
+  --soft-shadow:0 14px 35px rgba(22,25,27,.08); --radius:28px; --radius-sm:18px;
+  --red:#b4483f; --amber:#b98530; --green:#4f7f58;
 }
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;
-  font-family:"Inter","Avenir Next",Arial,sans-serif;
-  background:radial-gradient(circle at top left,rgba(241,142,0,.12),transparent 34%),var(--bg);
-  color:var(--text);
-  -webkit-font-smoothing:antialiased;
-  line-height:1.5;
+body.dark{
+  --bg:#0e1113; --panel:#171a1d; --panel-2:#202428; --text:#f4f1eb; --muted:#a9b0b4;
+  --line:rgba(244,241,235,.12); --shadow:0 32px 90px rgba(0,0,0,.45); --soft-shadow:0 18px 45px rgba(0,0,0,.3);
 }
-h1,h2,h3,h4{font-family:"Montserrat","Inter",sans-serif;margin:0;color:var(--text);letter-spacing:-.01em}
-p{margin:0}
-a{color:inherit}
-button{font-family:inherit;cursor:pointer}
-.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+*{box-sizing:border-box} body{margin:0;font-family:"Gotham Book","Inter","Avenir Next",Arial,sans-serif;background:radial-gradient(circle at top left,rgba(241,142,0,.12),transparent 32%),var(--bg);color:var(--text);transition:.25s ease}
+button{font-family:inherit}
+.app{min-height:100vh;display:grid;grid-template-columns:268px 1fr;gap:22px;padding:22px}
+.sidebar,.workspace{background:linear-gradient(180deg,var(--panel),var(--panel-2));border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.sidebar{padding:22px 16px;display:flex;flex-direction:column;gap:18px;position:sticky;top:22px;height:calc(100vh - 44px)}
+.brand{display:flex;align-items:center;gap:12px;padding:4px 6px 16px;border-bottom:1px solid var(--line)}
+.brand .otis-logo{width:46px;height:46px;flex:none;display:block;border-radius:13px;box-shadow:var(--soft-shadow)}
+.brand .otis-logo svg{width:100%;height:100%;display:block;border-radius:13px}
+.brand-meta{display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-width:0}.brand-meta small{display:block;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;font-size:9.5px;font-weight:700}
+.brand-top{display:flex;align-items:center;gap:9px}.otis-word{font-weight:800;font-size:15px;letter-spacing:.02em;color:var(--text)}.brand-pipe{color:var(--line);font-weight:400;font-size:17px;line-height:1}
+.brand .home-btn{width:auto;height:30px;padding:0 13px 0 11px;gap:8px;border-radius:10px;font-size:12.5px;font-weight:700;background:rgba(127,127,127,.07);color:var(--text)}.brand .home-btn svg{width:15px;height:15px}.brand .home-btn:hover{background:rgba(241,142,0,.10);color:var(--text)}.brand .home-btn.active{background:rgba(241,142,0,.14);color:var(--brand-orange)}
+.nav{display:flex;flex-direction:column;gap:4px;overflow-y:auto;flex:1;margin:0 -4px;padding:2px 4px;scrollbar-width:thin}
+.nav::-webkit-scrollbar{width:6px}.nav::-webkit-scrollbar-thumb{background:var(--line);border-radius:99px}
+.nav-btn{width:100%;height:44px;border:0;border-radius:14px;background:transparent;color:var(--muted);display:flex;align-items:center;gap:13px;padding:0 14px;cursor:pointer;transition:.18s ease;font-size:14px;font-weight:600;text-align:left}
+.nav-btn svg{width:19px;height:19px;stroke:currentColor;stroke-width:1.8;fill:none;flex:none}
+.nav-btn:hover{background:rgba(241,142,0,.08);color:var(--text)}
+.nav-btn.active{background:rgba(241,142,0,.13);color:var(--brand-orange)}
+.nav-sep{height:1px;background:var(--line);margin:10px 8px}
+.nav-label{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:800;padding:6px 14px 2px;opacity:.75}
+.group-btn{justify-content:space-between}
+.group-btn .gb-left{display:flex;align-items:center;gap:13px}
+.group-btn .chev{width:16px;height:16px;transition:transform .2s ease}
+.group.open .group-btn .chev{transform:rotate(90deg)}
+.group.open .group-btn{color:var(--text)}
+.sub{display:none;flex-direction:column;gap:3px;margin:4px 0 4px 0;padding-left:10px;border-left:2px solid var(--line);margin-left:20px}
+.group.open .sub{display:flex}
+.sub .nav-btn{height:38px;font-size:13px;font-weight:500;border-radius:11px}
+.sub .nav-btn .dot{width:6px;height:6px;border-radius:99px;background:currentColor;opacity:.55;flex:none}
+.side-foot{margin-top:auto;padding-top:14px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.foot-row{display:flex;gap:8px}
+.foot-row .nav-btn{flex:1;flex-direction:column;height:auto;gap:5px;padding:9px 6px;justify-content:center;text-align:center;font-size:10px;letter-spacing:.04em;text-transform:uppercase;font-weight:700;border-radius:13px;background:rgba(127,127,127,.06)}
+.foot-row .nav-btn:hover{background:rgba(241,142,0,.10)}
+.foot-toggle{flex:1;display:flex;align-items:center;justify-content:center;background:rgba(127,127,127,.06);border-radius:13px;padding:9px 6px}
+.theme-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:2px 8px}
+.theme-row span{font-size:12px;color:var(--muted);font-weight:600;display:flex;align-items:center;gap:9px}
+.theme-row span svg{width:17px;height:17px;stroke:currentColor;stroke-width:1.8;fill:none}
+.theme-wrap{width:56px;height:30px;background:var(--panel-2);border:1px solid var(--line);border-radius:999px;position:relative;cursor:pointer;box-shadow:var(--soft-shadow);flex:none}
+.theme-dot{position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:999px;background:var(--brand-grey);transition:.25s ease;display:flex;align-items:center;justify-content:center}
+.theme-dot svg{width:13px;height:13px;stroke:#fff;stroke-width:2;fill:none}
+.theme-dot .ico-moon{display:none}
+body.dark .theme-dot{left:31px;background:var(--brand-orange)}
+body.dark .theme-dot .ico-sun{display:none}
+body.dark .theme-dot .ico-moon{display:block}
+.workspace{padding:0;min-width:0;display:flex;flex-direction:column;overflow:hidden}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:24px 30px;border-bottom:1px solid var(--line)}
+.topbar img{width:128px;height:auto;background:#fff;border-radius:12px;padding:8px 11px;object-fit:contain;border:1px solid var(--line)}
+.crumb{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:800}
+.crumb b{color:var(--brand-orange)}
+.canvas{flex:1;display:flex;align-items:center;justify-content:center;padding:40px;min-height:0}
+.page{display:none;width:100%}
+.page.active{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px}
+.page .glyph{width:64px;height:64px;border-radius:20px;border:1px solid var(--line);background:var(--panel-2);display:grid;place-items:center;color:var(--brand-orange);box-shadow:var(--soft-shadow)}
+.page .glyph svg{width:28px;height:28px;stroke:currentColor;stroke-width:1.7;fill:none}
+.page h1{margin:0;font-family:"Gotham Bold","Montserrat","Inter","Avenir Next",Arial,sans-serif;letter-spacing:-.04em;font-size:30px}
+.page p{margin:0;color:var(--muted);font-size:14px;line-height:1.6;max-width:440px}
+.page .tag{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-weight:800}
+.haf-grid{width:100%;max-width:none;display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:0 0 30px;padding-bottom:24px;border-bottom:1px solid var(--line)}
+.haf-tile{display:flex;flex-direction:column;align-items:center;gap:9px;text-align:center;padding:14px;min-width:104px;flex:0 1 132px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--panel-2);box-shadow:var(--soft-shadow);cursor:pointer;color:var(--text);transition:.18s ease}
+.haf-tile:hover{border-color:rgba(241,142,0,.4);transform:translateY(-2px)}
+.haf-tile .ht-ico{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--panel);display:grid;place-items:center;color:var(--brand-orange);flex:none}
+.haf-tile .ht-ico svg{width:20px;height:20px;stroke:currentColor;stroke-width:1.7;fill:none}
+.haf-tile .ht-tt{font-weight:700;font-size:13.5px;letter-spacing:-.01em}
+.haf-tile .ht-sub{display:none}
+@media (max-width:920px){
+  .app{grid-template-columns:1fr;padding:14px}
+  .topbar{padding:18px 20px}
+  .sidebar{position:relative;top:0;height:auto;padding:12px 14px;gap:12px}
+  .brand{display:none}
+  .nav{flex-direction:row;flex-wrap:wrap;justify-content:center;gap:8px;overflow:visible;margin:0;padding:0}
+  .nav-sep,.nav-label{display:none}
+  .nav-btn{flex-direction:column;width:auto;min-width:52px;max-width:72px;height:auto;padding:7px 6px;gap:4px;justify-content:center;font-size:8px;font-weight:700;letter-spacing:.02em;line-height:1.15;text-align:center;border-radius:13px}
+  .nav-btn svg{width:21px;height:21px}
+  .sub .nav-btn{font-size:8px;height:auto}
+  .group{display:contents}
+  .group-btn{flex-direction:column;width:auto;min-width:52px;max-width:72px;height:auto;padding:7px 6px;gap:4px;justify-content:center;font-size:8px;font-weight:700;letter-spacing:.02em;line-height:1.15;text-align:center;border-radius:13px}
+  .group-btn .gb-left{flex-direction:column;gap:4px}
+  .group-btn .chev{display:none}
+  .group .sub{display:none!important}
+  .side-foot{margin-top:0;padding-top:12px;flex-direction:row;flex-wrap:wrap;align-items:flex-start;justify-content:center;gap:12px}
+  .foot-toggle{flex:none;background:none;padding:0;border-radius:0;align-items:flex-start}
+  .theme-row{padding:0;flex-direction:row;align-items:center;justify-content:center;gap:8px}
+  .theme-row span{font-size:8px;font-weight:700;letter-spacing:.02em;flex-direction:column;align-items:center;gap:4px;text-align:center}
+  .theme-row span svg{width:21px;height:21px}
+}
+.crm-wrap{width:100%;max-width:1000px;margin:0 auto 14px;overflow-x:auto;border:1px solid var(--line);border-radius:14px;box-shadow:var(--soft-shadow)}
+.crm{width:100%;border-collapse:collapse;font-size:12.5px;min-width:760px}
+.crm th{text-align:left;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:800;padding:12px 14px;background:var(--panel-2);border-bottom:1px solid var(--line);white-space:nowrap}
+.crm td{padding:13px 14px;border-bottom:1px solid var(--line);color:var(--text)}
+.crm tr:last-child td{border-bottom:none}
+.crm-ah{font-size:11.5px;color:var(--muted);font-weight:700;margin-right:4px}
+.pill{font-size:11.5px;font-weight:700;background:var(--panel-2);border:1px solid var(--line);border-radius:999px;padding:7px 13px;color:var(--text)}
+.switch{width:48px;height:27px;background:var(--panel);border:1px solid var(--line);border-radius:999px;position:relative;cursor:pointer;flex:none;transition:.2s ease}
+.switch .knob{position:absolute;top:2px;left:2px;width:21px;height:21px;border-radius:999px;background:var(--brand-grey);transition:.22s ease}
+.switch.on{background:rgba(241,142,0,.16);border-color:rgba(241,142,0,.45)}
+.switch.on .knob{left:23px;background:var(--brand-orange)}
+</style>
+<style id="plna-css">
+#today.page.active,#planned-jobs.page.active,#job-feedback.page.active,#rewards.page.active{align-self:flex-start;align-items:center;text-align:center;width:100%;gap:0}
+.plna-head{display:flex;flex-direction:column;align-items:center;text-align:center;gap:12px;margin-bottom:24px}
+.plna-head .glyph{width:56px;height:56px}
+.plna-head p{max-width:480px}
+.stat-grid{width:100%;max-width:880px;margin:0 auto 18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+.stat-card{display:flex;flex-direction:column;align-items:flex-start;gap:7px;text-align:left;padding:16px 18px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--panel-2);box-shadow:var(--soft-shadow)}
+.stat-card .sl{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:800}
+.stat-card .sv{font-size:19px;font-weight:800;letter-spacing:-.02em;color:var(--text)}
+.stat-card .sv small{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:0}
+.pill-status{display:inline-flex;align-items:center;gap:7px}
+.pill-status::before{content:"";width:8px;height:8px;border-radius:99px;background:var(--green);flex:none}
+.pill-status.off::before{background:var(--muted)}
+.pill-status.busy::before{background:var(--amber)}
+.plna-actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;max-width:880px;margin:6px auto 0}
+.form-card{width:100%;max-width:640px;margin:0 auto;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--panel-2);box-shadow:var(--soft-shadow);overflow:hidden;text-align:left}
+.qa-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 18px;border-top:1px solid var(--line)}
+.qa-row:first-child{border-top:0}
+.qa-q{font-weight:600;font-size:14px;color:var(--text)}
+.qa-a{display:flex;gap:6px;flex-wrap:wrap;flex:none}
+.plna-notes{width:100%;max-width:640px;margin:14px auto 0;display:flex;flex-direction:column;gap:8px;text-align:left}
+.plna-notes label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:800}
+.plna-notes textarea{width:100%;min-height:92px;resize:vertical;border:1px solid var(--line);background:var(--panel-2);color:var(--text);border-radius:14px;padding:12px 15px;font-size:14px;font-family:inherit;line-height:1.5;outline:none}
+.plna-notes textarea:focus{border-color:rgba(241,142,0,.5)}
+.tier-grid{width:100%;max-width:760px;margin:0 auto 18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px}
+.tier{display:flex;flex-direction:column;align-items:center;gap:5px;padding:14px 10px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--panel-2);box-shadow:var(--soft-shadow);text-align:center}
+.tier.cur{border-color:rgba(241,142,0,.5)}
+.tier .tn{font-weight:800;font-size:13px;letter-spacing:-.01em}
+.tier .tp{font-size:11px;color:var(--muted)}
+.tier .tdot{width:12px;height:12px;border-radius:99px;background:var(--muted)}
+.tier.cur .tdot{background:var(--brand-orange)}
+.points-card{width:100%;max-width:760px;margin:0 auto 18px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:18px 22px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--panel-2);box-shadow:var(--soft-shadow);text-align:left}
+.points-card .pc-big{font-family:'Montserrat','Inter',sans-serif;font-weight:900;font-size:34px;letter-spacing:-.03em;color:var(--brand-orange);line-height:1}
+.points-card .pc-l{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-top:6px}
+.preview-note{margin:8px auto 0;font-size:11px;color:var(--muted);opacity:.85;max-width:560px}
+/* Suggested-rate calculator (shared HAFPricing engine) */
+.calc{width:100%;max-width:1040px;margin:0 auto 16px;display:grid;grid-template-columns:1fr 1.05fr;gap:16px;text-align:left}
+@media(max-width:920px){.calc{grid-template-columns:1fr}}
+.calc-card{border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--panel-2);box-shadow:var(--soft-shadow);padding:18px 18px 20px}
+.calc-card h3{margin:0 0 3px;font-family:'Montserrat','Inter',sans-serif;font-weight:800;font-size:15px;letter-spacing:-.01em}
+.calc-card .ch-sub{font-size:12px;color:var(--muted);margin:0 0 14px;line-height:1.5}
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.cgrid.one{grid-template-columns:1fr}.cgrid.four{grid-template-columns:1fr 1fr}
+.cfield{display:flex;flex-direction:column;gap:5px}
+.cfield label{font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:800}
+.cfield input,.cfield select{font-family:inherit;font-size:13.5px;color:var(--text);background:var(--panel-2);border:1px solid var(--line);border-radius:11px;padding:9px 11px;width:100%;-webkit-appearance:none;appearance:none}
+.cfield input:focus,.cfield select:focus{outline:2px solid rgba(241,142,0,.35);outline-offset:1px;border-color:var(--brand-orange)}
+.csub{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:800;margin:16px 0 9px;opacity:.85}
+.cheads{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 14px}
+@media(max-width:560px){.cheads{grid-template-columns:1fr}}
+.chead{border:1px solid var(--line);border-radius:14px;background:var(--panel-2);padding:13px 14px;text-align:left}
+.chead .ch-n{font-family:'Montserrat','Inter',sans-serif;font-size:23px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.chead.drv{border-color:rgba(79,127,88,.5);background:rgba(79,127,88,.07)}.chead.drv .ch-n{color:var(--green)}
+.chead.cust .ch-n{color:var(--brand-orange)}
+.chead .ch-l{font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-top:6px}
+.lane-mini{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 14px}
+.lane-chip{font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:6px 10px;color:var(--text)}
+.lane-chip b{color:var(--brand-orange)}
+.price-stack{width:100%;display:flex;flex-direction:column;gap:8px;text-align:left}
+.price-row{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);border-radius:14px;background:var(--panel-2);padding:11px 15px}
+.price-row .pr-l{display:flex;align-items:center;gap:10px;font-size:13.5px;font-weight:600;color:var(--text)}
+.price-row .pr-op{width:22px;height:22px;flex:none;display:grid;place-items:center;border-radius:7px;border:1px solid var(--line);background:var(--panel);color:var(--brand-orange);font-weight:800;font-size:13px}
+.price-row .pr-v{font-family:'Montserrat','Inter',sans-serif;font-weight:800;font-size:15px;letter-spacing:-.01em;color:var(--text)}
+.price-row.total{border-color:rgba(79,127,88,.5);background:rgba(79,127,88,.07)}.price-row.total .pr-v{color:var(--green);font-size:18px}
+.pill{font-size:11.5px;background:var(--panel-2);border:1px solid var(--line);border-radius:999px;padding:6px 11px;color:var(--text)}
+.reason-wrap{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 0}.reason-wrap .pill.warn{border-color:rgba(180,72,63,.5);color:var(--red)}
+.manual-flag{display:flex;align-items:center;gap:9px;margin:12px 0 0;padding:11px 14px;border-radius:12px;font-size:12.5px;font-weight:700;border:1px solid var(--line)}
+.manual-flag.on{border-color:rgba(180,72,63,.5);background:rgba(180,72,63,.08);color:var(--red)}
+.manual-flag.off{border-color:rgba(79,127,88,.45);background:rgba(79,127,88,.08);color:var(--green)}
+.manual-flag .mf-dot{width:9px;height:9px;border-radius:99px;background:currentColor;flex:none}
 
-/* ===== Top bar ===== */
-.topbar{position:sticky;top:0;z-index:20;background:rgba(244,241,235,.82);backdrop-filter:saturate(140%) blur(14px);border-bottom:1px solid var(--line)}
-.topbar__inner{display:flex;align-items:center;justify-content:space-between;height:70px}
-.wordmark{font-family:"Montserrat",sans-serif;font-weight:800;font-size:20px;letter-spacing:.02em;color:var(--text)}
-.wordmark .haf{color:var(--brand-orange)}
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  padding:12px 22px;border-radius:999px;border:1px solid transparent;
-  font-weight:700;font-size:15px;text-decoration:none;transition:.18s ease;
-}
-.btn--primary{background:var(--brand-orange);color:#fff;box-shadow:0 12px 30px rgba(241,142,0,.28)}
-.btn--primary:hover{filter:brightness(.96);transform:translateY(-1px)}
-.btn--ghost{background:var(--panel-2);color:var(--text);border-color:var(--line)}
-.btn--ghost:hover{border-color:var(--brand-orange);color:var(--brand-orange)}
-.btn--lg{padding:15px 30px;font-size:16px}
-.btn--block{width:100%}
+/* ===== Topbar controls: version badge, compliance + plan switchers ===== */
+.topbar-r{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:flex-end}
+.ver-badge{display:inline-flex;align-items:center;gap:6px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;color:var(--brand-orange);background:rgba(241,142,0,.10);border:1px solid rgba(241,142,0,.34);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.ver-badge::before{content:"";width:7px;height:7px;border-radius:99px;background:var(--brand-orange);flex:none}
+.tb-ctrl{display:flex;flex-direction:column;gap:3px}
+.tb-ctrl label{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:800}
+.tb-ctrl select{font-family:inherit;font-size:12.5px;font-weight:600;color:var(--text);background:var(--panel-2);border:1px solid var(--line);border-radius:11px;padding:7px 10px;-webkit-appearance:none;appearance:none;cursor:pointer}
+.tb-ctrl select:focus{outline:2px solid rgba(241,142,0,.35);outline-offset:1px;border-color:var(--brand-orange)}
+.plan-badge{display:inline-flex;align-items:center;gap:6px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:var(--text);background:var(--panel-2);border:1px solid var(--line);border-radius:999px;padding:5px 11px;white-space:nowrap}
+.plan-badge .pb-dot{width:8px;height:8px;border-radius:99px;background:var(--muted);flex:none}
+.plan-badge.lite .pb-dot,.plan-badge.free .pb-dot{background:var(--muted)}
+.plan-badge.plus .pb-dot{background:var(--amber)}
+.plan-badge.pro .pb-dot,.plan-badge.paid .pb-dot{background:var(--brand-orange)}
+.plan-badge.pro,.plan-badge.paid{border-color:rgba(241,142,0,.34);color:var(--brand-orange)}
+@media (max-width:920px){.topbar{flex-direction:column;align-items:stretch;gap:12px}.topbar-r{justify-content:flex-start}}
 
-/* ===== Hero ===== */
-.hero{padding:84px 0 64px;text-align:center}
-.hero h1{font-size:54px;font-weight:900;line-height:1.04;max-width:780px;margin:0 auto 22px}
-.hero__sub{font-size:19px;color:var(--muted);max-width:620px;margin:0 auto 30px}
-.pills{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
-.pill{
-  display:inline-flex;align-items:center;gap:9px;
-  padding:11px 20px;border-radius:999px;background:var(--panel-2);
-  border:1px solid var(--line);font-weight:600;font-size:15px;color:var(--text);
-  box-shadow:var(--soft-shadow);
-}
-.pill .dot{width:8px;height:8px;border-radius:50%;background:var(--brand-orange);flex:none}
-.hero__cta{margin-top:36px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+/* ===== Compliance warning + lock panels (driven by HAFModel.gate) ===== */
+.gate-banner{width:100%;max-width:1040px;margin:0 auto 18px;display:flex;align-items:center;gap:12px;padding:13px 18px;border-radius:var(--radius-sm);font-size:13.5px;font-weight:600;line-height:1.45;border:1px solid var(--line);background:var(--panel-2);box-shadow:var(--soft-shadow);text-align:left}
+.gate-banner .gb-ic{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;flex:none;font-weight:900;font-size:15px}
+.gate-banner.warn{border-color:rgba(185,133,48,.5);background:rgba(185,133,48,.10);color:var(--amber)}
+.gate-banner.warn .gb-ic{background:rgba(185,133,48,.18);color:var(--amber)}
+.gate-banner .gb-cta{margin-left:auto;flex:none;font-size:11px;letter-spacing:.04em;text-transform:uppercase;font-weight:800;color:var(--brand-orange);background:rgba(241,142,0,.10);border:1px solid rgba(241,142,0,.34);border-radius:999px;padding:7px 13px;cursor:pointer}
+.gate-banner .gb-cta:hover{background:rgba(241,142,0,.18)}
+.lock-panel{width:100%;max-width:560px;margin:0 auto;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:34px 30px;border:1px solid var(--line);border-radius:var(--radius);background:var(--panel-2);box-shadow:var(--soft-shadow)}
+.lock-panel .lp-ic{width:60px;height:60px;border-radius:18px;border:1px solid rgba(180,72,63,.4);background:rgba(180,72,63,.08);display:grid;place-items:center;color:var(--red)}
+.lock-panel .lp-ic svg{width:28px;height:28px;stroke:currentColor;stroke-width:1.7;fill:none}
+.lock-panel h2{margin:0;font-family:'Montserrat','Inter',sans-serif;font-weight:800;font-size:21px;letter-spacing:-.02em}
+.lock-panel .lp-state{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;border-radius:999px;padding:6px 13px;border:1px solid var(--line)}
+.lock-panel .lp-state.s-warn{color:var(--amber);border-color:rgba(185,133,48,.5);background:rgba(185,133,48,.1)}
+.lock-panel .lp-state.s-bad{color:var(--red);border-color:rgba(180,72,63,.5);background:rgba(180,72,63,.08)}
+.lock-panel p{margin:0;color:var(--muted);font-size:14px;line-height:1.6;max-width:420px}
+.lock-panel .lp-cta{font-size:12.5px;font-weight:800;letter-spacing:.02em;color:#fff;background:var(--brand-orange);border:0;border-radius:13px;padding:12px 22px;cursor:pointer;box-shadow:var(--soft-shadow)}
+.lock-panel .lp-cta:hover{filter:brightness(1.05)}
+.is-locked{display:none!important}
 
-/* ===== Section shell ===== */
-.section{padding:64px 0}
-.section__head{text-align:center;max-width:640px;margin:0 auto 44px}
-.section__kicker{display:inline-block;font-weight:700;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--brand-orange);margin-bottom:12px}
-.section__head h2{font-size:36px;font-weight:800;margin-bottom:14px}
-.section__head p{font-size:17px;color:var(--muted)}
+/* ===== Plan-gated upgrade teaser ===== */
+.upsell{width:100%;max-width:560px;margin:0 auto;display:flex;flex-direction:column;align-items:center;text-align:center;gap:13px;padding:30px;border:1px dashed rgba(241,142,0,.45);border-radius:var(--radius);background:rgba(241,142,0,.05)}
+.upsell .us-ic{width:54px;height:54px;border-radius:16px;border:1px solid rgba(241,142,0,.4);background:var(--panel-2);display:grid;place-items:center;color:var(--brand-orange)}
+.upsell .us-ic svg{width:26px;height:26px;stroke:currentColor;stroke-width:1.7;fill:none}
+.upsell h2{margin:0;font-family:'Montserrat','Inter',sans-serif;font-weight:800;font-size:20px;letter-spacing:-.02em}
+.upsell .us-need{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--brand-orange);background:rgba(241,142,0,.1);border:1px solid rgba(241,142,0,.34);border-radius:999px;padding:6px 13px}
+.upsell p{margin:0;color:var(--muted);font-size:14px;line-height:1.6;max-width:420px}
+.upsell .us-feats{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-top:2px}
 
-/* ===== How it works ===== */
-.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
-.step{
-  background:linear-gradient(180deg,var(--panel),var(--panel-2));
-  border:1px solid var(--line);border-radius:var(--radius);padding:28px 24px;
-  box-shadow:var(--soft-shadow);
-}
-.step__n{
-  width:40px;height:40px;border-radius:12px;display:grid;place-items:center;
-  background:rgba(241,142,0,.12);color:var(--brand-orange);
-  font-family:"Montserrat",sans-serif;font-weight:800;font-size:18px;margin-bottom:18px;
-}
-.step h3{font-size:18px;font-weight:700;margin-bottom:8px}
-.step p{font-size:14px;color:var(--muted)}
+/* ===== Pro Driver Landing Page section (§12.9) ===== */
+.lp-status{width:100%;max-width:880px;margin:0 auto 16px;display:flex;align-items:center;gap:13px;padding:15px 20px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--panel-2);box-shadow:var(--soft-shadow);text-align:left;flex-wrap:wrap}
+.lp-status .lps-dot{width:11px;height:11px;border-radius:99px;background:var(--green);flex:none}
+.lp-status .lps-t{font-weight:700;font-size:14px}
+.lp-status .lps-d{font-size:12.5px;color:var(--muted)}
+.lp-status .lps-pill{margin-left:auto}
+.funnel-note{width:100%;max-width:880px;margin:4px auto 0;display:flex;align-items:flex-start;gap:11px;padding:14px 18px;border:1px solid var(--line);border-radius:var(--radius-sm);background:rgba(241,142,0,.05);text-align:left;font-size:13px;line-height:1.55;color:var(--text)}
+.funnel-note b{color:var(--brand-orange)}
+.funnel-note .fn-ic{width:26px;height:26px;border-radius:8px;background:rgba(241,142,0,.12);color:var(--brand-orange);display:grid;place-items:center;flex:none;font-weight:900}
 
-/* ===== Form ===== */
-.signup{
-  background:linear-gradient(180deg,var(--panel),var(--panel-2));
+/* ===== Week grid (shared by empty-days and driver-diary) ===== */
+.week-grid{width:100%;max-width:880px;margin:0 auto 18px;display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
+@media(max-width:720px){.week-grid{grid-template-columns:repeat(4,1fr)}}
+.day-card{border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--panel-2);box-shadow:var(--soft-shadow);padding:14px 10px;text-align:center;cursor:pointer;transition:.18s ease;display:flex;flex-direction:column;gap:8px;align-items:center}
+.day-card .dc-dow{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:800}
+.day-card .dc-date{font-size:20px;font-weight:800;letter-spacing:-.02em}
+.day-card .dc-badge{font-size:10px;font-weight:700;border-radius:999px;padding:5px 10px;border:1px solid var(--line);background:var(--panel);color:var(--muted)}
+.day-card.dc-empty .dc-badge{color:var(--amber);border-color:rgba(185,133,48,.5);background:rgba(185,133,48,.08)}
+.day-card.dc-booked .dc-badge{color:var(--green);border-color:rgba(79,127,88,.5);background:rgba(79,127,88,.08)}
+.day-card.dc-today .dc-date{color:var(--brand-orange)}
+.day-card.dc-today{border-color:rgba(241,142,0,.4)}
+.day-card:hover{border-color:rgba(241,142,0,.35);transform:translateY(-2px)}
+/* ===== Route chain ===== */
+.route-chain{width:100%;max-width:640px;margin:0 auto 18px;display:flex;flex-direction:column;gap:8px}
+.route-leg{display:flex;align-items:center;gap:12px;padding:14px 18px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--panel-2);box-shadow:var(--soft-shadow);text-align:left}
+.route-leg .rl-areas{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.route-leg .rl-from,.route-leg .rl-to{font-weight:800;font-size:14px}
+.route-leg .rl-arr{color:var(--brand-orange);font-weight:900;font-size:16px}
+.route-leg .rl-tag{font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;border-radius:999px;padding:5px 11px;border:1px solid var(--line);background:var(--panel);color:var(--muted);flex:none}
+.route-leg .rl-tag.strong{color:var(--green);border-color:rgba(79,127,88,.5);background:rgba(79,127,88,.08)}
+.route-leg .rl-tag.weak{color:var(--amber);border-color:rgba(185,133,48,.5);background:rgba(185,133,48,.08)}
+/* ===== Notes ===== */
+.notes-list{width:100%;max-width:640px;margin:0 auto 14px;display:flex;flex-direction:column;gap:10px}
+.note-card{border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--panel-2);box-shadow:var(--soft-shadow);padding:15px 18px;text-align:left;display:flex;flex-direction:column;gap:7px}
+.note-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.note-tag{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;border-radius:999px;padding:5px 11px;border:1px solid var(--line)}
+.note-tag.nt-access{color:var(--amber);border-color:rgba(185,133,48,.5);background:rgba(185,133,48,.08)}
+.note-tag.nt-parking{color:var(--green);border-color:rgba(79,127,88,.5);background:rgba(79,127,88,.08)}
+.note-tag.nt-kit{color:var(--brand-orange);border-color:rgba(241,142,0,.4);background:rgba(241,142,0,.07)}
+.note-tag.nt-route{color:var(--muted);border-color:var(--line);background:var(--panel)}
+.note-area{font-size:11px;font-weight:700;color:var(--muted);margin-left:auto}
+.note-title{font-weight:700;font-size:14px}
+.note-body{font-size:13px;color:var(--muted);line-height:1.55}
+/* ===== POD ===== */
+.pod-form{width:100%;max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:14px;text-align:left}
+.pod-form .pf-label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-bottom:5px;display:block}
+.pod-form input,.pod-form select,.pod-form textarea{font-family:inherit;font-size:14px;color:var(--text);background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:11px 14px;width:100%;-webkit-appearance:none;appearance:none;outline:none}
+.pod-form input:focus,.pod-form select:focus,.pod-form textarea:focus{outline:2px solid rgba(241,142,0,.35);outline-offset:1px;border-color:var(--brand-orange)}
+.pod-form textarea{min-height:80px;resize:vertical}
+.sig-area{width:100%;min-height:112px;border:2px dashed var(--line);border-radius:var(--radius-sm);background:var(--panel);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;transition:.18s ease}
+.sig-area svg{width:28px;height:28px;stroke:currentColor;stroke-width:1.6;fill:none;opacity:.55}
+.sig-area:hover{border-color:rgba(241,142,0,.4);color:var(--brand-orange)}
+.photo-area{width:100%;min-height:90px;border:2px dashed var(--line);border-radius:var(--radius-sm);background:var(--panel);display:flex;align-items:center;justify-content:center;gap:12px;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;transition:.18s ease}
+.photo-area svg{width:26px;height:26px;stroke:currentColor;stroke-width:1.6;fill:none;opacity:.55}
+.photo-area:hover{border-color:rgba(241,142,0,.4);color:var(--brand-orange)}
+.ts-display{display:flex;align-items:center;gap:10px;padding:12px 16px;border:1px solid var(--line);border-radius:12px;background:var(--panel-2);font-size:13.5px;font-weight:600}
+.ts-display svg{width:18px;height:18px;stroke:var(--muted);stroke-width:1.8;fill:none;flex:none}
+.ts-live{margin-left:auto;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--green);font-weight:800;border:1px solid rgba(79,127,88,.4);border-radius:999px;padding:4px 10px;background:rgba(79,127,88,.08)}
+/* ===== Network Pass ===== */
+.pass-card{width:100%;max-width:480px;margin:0 auto 22px;background:linear-gradient(135deg,#2f373e 0%,#1a2127 100%);border-radius:var(--radius);padding:28px 30px 24px;color:#fff;box-shadow:var(--shadow);position:relative;overflow:hidden;text-align:left}
+.pass-card::before{content:"HAF";position:absolute;right:12px;top:50%;transform:translateY(-50%);font-family:'Montserrat',sans-serif;font-weight:900;font-size:88px;color:rgba(255,255,255,.05);letter-spacing:-.04em;pointer-events:none;line-height:1;user-select:none}
+.pass-card .pc-eyebrow{font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:800;opacity:.6;margin-bottom:10px}
+.pass-card .pc-name{font-family:'Montserrat',sans-serif;font-weight:900;font-size:24px;letter-spacing:-.02em;line-height:1.1}
+.pass-card .pc-row{display:flex;align-items:center;gap:10px;margin-top:16px}
+.pass-card .pc-badge{font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;background:rgba(241,142,0,.2);color:var(--brand-orange);border:1px solid rgba(241,142,0,.35);border-radius:999px;padding:6px 13px}
+.pass-card .pc-expiry{font-size:12px;opacity:.6;margin-left:auto}
+.pass-card .pc-num{font-size:12px;opacity:.45;margin-top:14px;letter-spacing:.12em}
+.benefit-table{width:100%;max-width:560px;margin:0 auto 18px;border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden;box-shadow:var(--soft-shadow)}
+.bt-head{display:grid;grid-template-columns:1fr auto auto;background:var(--panel-2);border-bottom:2px solid var(--line)}
+.bt-head span{padding:11px 14px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.bt-row{display:grid;grid-template-columns:1fr auto auto;border-bottom:1px solid var(--line)}
+.bt-row:last-child{border-bottom:none}
+.bt-row span{padding:12px 14px;font-size:13px;font-weight:600;color:var(--muted)}
+.bt-row span:first-child{color:var(--text)}
+.bt-yes{color:var(--green)!important;font-weight:800!important}
+.bt-no{opacity:.45!important}
+.btn-cta{display:inline-flex;align-items:center;gap:9px;font-family:inherit;font-size:13.5px;font-weight:800;color:#fff;background:var(--brand-orange);border:0;border-radius:14px;padding:13px 24px;cursor:pointer;box-shadow:var(--soft-shadow);transition:.15s ease}
+.btn-cta:hover{filter:brightness(1.07)}
+.btn-cta.green{background:var(--green)}
+/* ===== Working radius ===== */
+.radius-wrap{width:100%;max-width:600px;margin:0 auto 20px;display:flex;flex-direction:column;align-items:center;gap:16px;padding:28px 28px 24px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--panel-2);box-shadow:var(--soft-shadow)}
+.radius-hero{display:flex;align-items:baseline;gap:6px}
+.radius-hero .rh-val{font-family:'Montserrat','Inter',sans-serif;font-weight:900;font-size:76px;letter-spacing:-.04em;color:var(--brand-orange);line-height:1}
+.radius-hero .rh-unit{font-size:22px;font-weight:700;color:var(--muted)}
+.radius-sublabel{font-size:11px;color:var(--muted);font-weight:600}
+.radius-presets{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.rp-btn{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;color:var(--text);transition:.18s ease;font-family:inherit}
+.rp-btn:hover{border-color:rgba(241,142,0,.45);color:var(--brand-orange)}
+.rp-btn.active{border-color:rgba(241,142,0,.55);background:rgba(241,142,0,.1);color:var(--brand-orange)}
+/* ===== Home base settings ===== */
+.settings-card{width:100%;max-width:560px;margin:0 auto 16px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--panel-2);box-shadow:var(--soft-shadow);overflow:hidden;text-align:left}
+.sc-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 18px;border-top:1px solid var(--line)}
+.sc-row:first-child{border-top:none}
+.sc-label{font-weight:600;font-size:14px}
+.sc-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.sc-ctrl{font-size:14px;font-weight:700;color:var(--brand-orange);flex:none}
+.sc-ctrl select{font-family:inherit;font-size:13.5px;color:var(--text);background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:7px 10px;-webkit-appearance:none;appearance:none;cursor:pointer}
+.sc-ctrl select:focus{outline:2px solid rgba(241,142,0,.35);border-color:var(--brand-orange)}
+/* ===== Driver diary nav ===== */
+.diary-nav{width:100%;max-width:880px;margin:0 auto 14px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.diary-nav .dn-week{font-weight:700;font-size:15px}
+.diary-nav button{border:1px solid var(--line);background:var(--panel-2);border-radius:11px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;color:var(--text);font-family:inherit;transition:.18s ease}
+.diary-nav button:hover{border-color:rgba(241,142,0,.45);color:var(--brand-orange)}
+
+/* ===== Integration connect strips (Calendar / Comms) ===== */
+.connect-strip{width:100%;max-width:640px;margin:0 auto 14px;display:flex;align-items:center;gap:14px;padding:16px 20px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--panel-2);box-shadow:var(--soft-shadow);text-align:left;flex-wrap:wrap}
+.connect-strip .cs-ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;flex:none;background:var(--panel);border:1px solid var(--line)}
+.connect-strip .cs-ic svg{width:24px;height:24px;stroke:currentColor;stroke-width:1.7;fill:none}
+.connect-strip .cs-ic.g{color:#4285F4}
+.connect-strip .cs-ic.wa{color:#25D366}
+.connect-strip .cs-meta{flex:1;min-width:140px}
+.connect-strip .cs-t{font-weight:700;font-size:14.5px}
+.connect-strip .cs-d{font-size:12.5px;color:var(--muted);margin-top:2px}
+.connect-strip .cs-status{display:inline-flex;align-items:center;gap:6px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;border-radius:999px;padding:5px 11px;border:1px solid var(--line);flex:none}
+.connect-strip .cs-status::before{content:"";width:7px;height:7px;border-radius:99px;background:var(--muted);flex:none}
+.connect-strip .cs-status.on{color:var(--green);border-color:rgba(79,127,88,.5);background:rgba(79,127,88,.08)}
+.connect-strip .cs-status.on::before{background:var(--green)}
+.connect-strip .cs-status.off{color:var(--amber);border-color:rgba(185,133,48,.5);background:rgba(185,133,48,.08)}
+.connect-strip .cs-status.off::before{background:var(--amber)}
+.connect-strip .cs-btn{font-family:inherit;font-size:12.5px;font-weight:800;color:#fff;background:var(--brand-orange);border:0;border-radius:11px;padding:10px 16px;cursor:pointer;flex:none;box-shadow:var(--soft-shadow)}
+.connect-strip .cs-btn:hover{filter:brightness(1.06)}
+.connect-strip .cs-btn.ghost{background:var(--panel);color:var(--text);border:1px solid var(--line);box-shadow:none}
+/* ===== Month calendar ===== */
+.cal-month{width:100%;max-width:760px;margin:0 auto 18px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--panel-2);box-shadow:var(--soft-shadow);overflow:hidden}
+.cal-month .cm-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--line)}
+.cal-month .cm-title{font-weight:800;font-size:15px}
+.cal-month .cm-nav{display:flex;gap:8px}
+.cal-month .cm-nav button{border:1px solid var(--line);background:var(--panel);border-radius:9px;padding:6px 11px;font-size:13px;font-weight:700;cursor:pointer;color:var(--text);font-family:inherit}
+.cal-month .cm-nav button:hover{border-color:rgba(241,142,0,.45);color:var(--brand-orange)}
+.cal-month .cm-dow{display:grid;grid-template-columns:repeat(7,1fr);background:var(--panel-2);border-bottom:1px solid var(--line)}
+.cal-month .cm-dow span{padding:9px 0;text-align:center;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:800}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr)}
+.cal-cell{min-height:74px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:7px 8px;display:flex;flex-direction:column;gap:5px;text-align:left;font-size:12px}
+.cal-cell:nth-child(7n){border-right:none}
+.cal-cell .cc-d{font-weight:700;color:var(--text)}
+.cal-cell.mute .cc-d{color:var(--muted);opacity:.5}
+.cal-cell.today{background:rgba(241,142,0,.07)}
+.cal-cell.today .cc-d{color:var(--brand-orange)}
+.cal-ev{font-size:10px;font-weight:700;border-radius:6px;padding:3px 6px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-ev.done{background:rgba(79,127,88,.12);color:var(--green)}
+.cal-ev.booked{background:rgba(241,142,0,.12);color:var(--brand-orange)}
+.cal-ev.empty{background:rgba(185,133,48,.12);color:var(--amber)}
+/* ===== Book-by-time slots ===== */
+.slot-col{width:100%;max-width:520px;margin:0 auto 16px;display:flex;flex-direction:column;gap:8px;text-align:left}
+.slot{display:flex;align-items:center;gap:14px;padding:13px 18px;border:1px solid var(--line);border-radius:14px;background:var(--panel-2);box-shadow:var(--soft-shadow)}
+.slot .sl-time{font-weight:800;font-size:14px;width:64px;flex:none}
+.slot .sl-body{flex:1;min-width:0;font-size:13px;color:var(--muted)}
+.slot .sl-tag{font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;border-radius:999px;padding:5px 11px;border:1px solid var(--line);flex:none}
+.slot.taken .sl-tag{color:var(--green);border-color:rgba(79,127,88,.5);background:rgba(79,127,88,.08)}
+.slot.free{border-style:dashed;cursor:pointer;transition:.18s ease}
+.slot.free:hover{border-color:rgba(241,142,0,.5);transform:translateY(-1px)}
+.slot.free .sl-tag{color:var(--brand-orange);border-color:rgba(241,142,0,.4);background:rgba(241,142,0,.07)}
+/* ===== Comms preferences ===== */
+.pref-card{width:100%;max-width:560px;margin:0 auto 16px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--panel-2);box-shadow:var(--soft-shadow);overflow:hidden;text-align:left}
+.pref-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 18px;border-top:1px solid var(--line)}
+.pref-row:first-child{border-top:none}
+.pref-row .pr-t{font-weight:600;font-size:14px}
+.pref-row .pr-s{font-size:12px;color:var(--muted);margin-top:2px}
+
+/* ===== Route planner ===== */
+.rp-summary{width:100%;max-width:760px;margin:0 auto 14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;text-align:left}
+.rp-stat{border:1px solid var(--line);border-radius:14px;background:var(--panel-2);box-shadow:var(--soft-shadow);padding:13px 16px}
+.rp-stat .rs-l{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:800}
+.rp-stat .rs-v{font-family:'Montserrat','Inter',sans-serif;font-size:20px;font-weight:800;letter-spacing:-.02em;margin-top:4px}
+.rp-stat .rs-v.good{color:var(--green)}
+.stops{width:100%;max-width:760px;margin:0 auto 12px;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--panel-2);box-shadow:var(--soft-shadow);overflow:hidden;text-align:left}
+.stop-row{display:flex;align-items:center;gap:12px;padding:14px 16px;border-top:1px solid var(--line)}
+.stop-row:first-child{border-top:none}
+.stop-row .st-grip{color:var(--muted);cursor:grab;font-size:15px;flex:none;line-height:1}
+.stop-row .st-num{width:24px;height:24px;border-radius:99px;background:rgba(241,142,0,.12);color:var(--brand-orange);font-weight:800;font-size:12px;display:grid;place-items:center;flex:none}
+.stop-row .st-body{flex:1;min-width:0}
+.stop-row .st-t{font-weight:700;font-size:14px}
+.stop-row .st-d{font-size:12px;color:var(--muted);margin-top:2px}
+.stop-row .st-leg{font-size:11px;font-weight:700;color:var(--muted);flex:none;text-align:right;white-space:nowrap}
+.stop-row.terminus .st-num{background:rgba(79,127,88,.14);color:var(--green)}
+.rp-add{width:100%;max-width:760px;margin:0 auto 14px;display:flex;gap:8px;flex-wrap:wrap}
+.rp-add input{flex:1;min-width:160px;font-family:inherit;font-size:14px;color:var(--text);background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:11px 14px}
+.rp-add input:focus{outline:2px solid rgba(241,142,0,.35);border-color:var(--brand-orange)}
+/* ===== Plans & billing ===== */
+.bill-toggle{display:inline-flex;border:1px solid var(--line);border-radius:999px;background:var(--panel-2);padding:4px;margin:0 auto 20px;box-shadow:var(--soft-shadow)}
+.bill-toggle button{border:0;background:transparent;font-family:inherit;font-size:13px;font-weight:800;color:var(--muted);padding:9px 18px;border-radius:999px;cursor:pointer;transition:.18s ease}
+.bill-toggle button.active{background:var(--brand-orange);color:#fff}
+.bill-save{font-size:10px;font-weight:800;color:var(--green);margin-left:6px}
+.plan-cards{width:100%;max-width:720px;margin:0 auto 16px;display:grid;grid-template-columns:1fr 1fr;gap:16px;text-align:left}
+@media(max-width:620px){.plan-cards{grid-template-columns:1fr}}
+.plan-card{border:1px solid var(--line);border-radius:var(--radius);background:var(--panel-2);box-shadow:var(--soft-shadow);padding:24px 24px 26px;display:flex;flex-direction:column;gap:14px}
+.plan-card.feat{border-color:rgba(241,142,0,.45);box-shadow:0 20px 50px rgba(241,142,0,.12)}
+.plan-card .pc-name{font-family:'Montserrat','Inter',sans-serif;font-weight:800;font-size:18px}
+.plan-card .pc-price{display:flex;align-items:baseline;gap:6px;min-height:42px}
+.plan-card .pc-amt{font-family:'Montserrat','Inter',sans-serif;font-weight:900;font-size:38px;letter-spacing:-.03em;color:var(--brand-orange);line-height:1}
+.plan-card .pc-per{font-size:13px;color:var(--muted);font-weight:600}
+.plan-card .pc-tag{font-size:12.5px;color:var(--muted)}
+.plan-card ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.plan-card li{display:flex;align-items:flex-start;gap:9px;font-size:13.5px;color:var(--text)}
+.plan-card li svg{width:16px;height:16px;stroke:var(--green);stroke-width:2.2;fill:none;flex:none;margin-top:2px}
+.plan-card .pc-cta{margin-top:auto;font-family:inherit;font-weight:800;font-size:14px;border-radius:13px;padding:13px;cursor:pointer;border:0;text-align:center}
+.plan-card .pc-cta.primary{background:var(--brand-orange);color:#fff;box-shadow:var(--soft-shadow)}
+.plan-card .pc-cta.ghost{background:var(--panel);color:var(--text);border:1px solid var(--line)}
+.plan-card .pc-current{font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;color:var(--green);border:1px solid rgba(79,127,88,.5);background:rgba(79,127,88,.08);border-radius:999px;padding:5px 11px;align-self:flex-start}
+
+/* ===== Login gate ===== */
+body.plna-locked .app{display:none !important}
+body.plna-locked{overflow:hidden}
+.plna-gate{display:none}
+body.plna-locked .plna-gate{
+  display:grid;place-items:center;min-height:100vh;padding:24px;
+  background:radial-gradient(circle at top left,rgba(241,142,0,.14),transparent 36%),var(--bg);
+}
+.plna-gate__card{
+  width:100%;max-width:420px;background:linear-gradient(180deg,var(--panel),var(--panel-2));
   border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
-  padding:46px;max-width:780px;margin:0 auto;
+  padding:38px 34px;font-family:"Inter","Avenir Next",Arial,sans-serif;
 }
-.signup h2{font-size:30px;font-weight:800;text-align:center;margin-bottom:8px}
-.signup__lead{text-align:center;color:var(--muted);font-size:16px;margin-bottom:34px}
-.field{margin-bottom:22px}
-.field label{display:block;font-size:14px;font-weight:600;color:var(--text);margin-bottom:8px}
-.field .helper{font-size:13px;color:var(--muted);margin-top:7px}
-.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:22px}
-.formgroup{margin-bottom:30px;padding-bottom:28px;border-bottom:1px solid var(--line)}
-.formgroup:last-of-type{border-bottom:0}
-.formgroup__head{font-family:"Montserrat",sans-serif;font-weight:800;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--brand-orange);margin-bottom:18px}
-.form-error{margin-top:18px;padding:14px 18px;border-radius:14px;background:rgba(180,72,63,.08);border:1px solid rgba(180,72,63,.3);color:#b4483f;font-size:14px;font-weight:600;text-align:center}
-input[type=text],input[type=email],input[type=tel],input[type=number],input[type=time],select{
-  width:100%;padding:14px 16px;border:1px solid var(--line);border-radius:14px;
+.plna-gate__brand{font-family:"Montserrat","Inter",sans-serif;font-weight:800;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--brand-orange);margin:0 0 6px}
+.plna-gate__title{font-family:"Montserrat","Inter",sans-serif;font-weight:800;font-size:24px;color:var(--text);margin:0 0 24px}
+.plna-gate label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin:0 0 6px}
+.plna-gate input{
+  width:100%;padding:13px 15px;margin:0 0 18px;border:1px solid var(--line);border-radius:14px;
   background:var(--panel-2);color:var(--text);font-size:15px;font-family:inherit;
 }
-input[type=text]:focus,input[type=email]:focus,input[type=tel]:focus,input[type=number]:focus,input[type=time]:focus,select:focus{outline:none;border-color:var(--brand-orange);box-shadow:0 0 0 3px rgba(241,142,0,.16)}
-.postcode-result{margin-top:10px;font-size:14px;font-weight:600;display:flex;align-items:center;gap:9px}
-.postcode-result .pc-dot{width:10px;height:10px;border-radius:50%;flex:none}
-.postcode-result.is-ok{color:var(--green)}
-.postcode-result.is-ok .pc-dot{background:var(--green)}
-.postcode-result.is-loading{color:var(--muted)}
-.postcode-result.is-loading .pc-dot{background:var(--muted)}
-.postcode-result.is-error{color:#b4483f}
-.postcode-result.is-error .pc-dot{background:#b4483f}
-.checks{display:flex;flex-wrap:wrap;gap:10px}
-.check{
-  display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;
-  border:1px solid var(--line);background:var(--panel-2);font-size:14px;font-weight:600;cursor:pointer;user-select:none;
+.plna-gate input:focus{outline:none;border-color:var(--brand-orange);box-shadow:0 0 0 3px rgba(241,142,0,.16)}
+.plna-gate__btn{
+  width:100%;padding:14px 16px;border:0;border-radius:14px;background:var(--brand-orange);
+  color:#fff;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit;
+  box-shadow:0 12px 30px rgba(241,142,0,.28);
 }
-.check input{accent-color:var(--brand-orange);width:16px;height:16px}
-.plans-radio{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.radio-card{
-  display:flex;gap:12px;align-items:flex-start;padding:18px;border:1px solid var(--line);
-  border-radius:var(--radius-sm);background:var(--panel-2);cursor:pointer;transition:.15s ease;
-}
-.radio-card:hover{border-color:var(--brand-orange)}
-.radio-card input{accent-color:var(--brand-orange);margin-top:3px;width:18px;height:18px;flex:none}
-.radio-card .rc-title{font-weight:700;font-size:15px}
-.radio-card .rc-sub{font-size:13px;color:var(--muted)}
-.signup__submit{margin-top:30px}
-.confirm{
-  text-align:center;padding:40px 20px;display:none;
-}
-.confirm.is-on{display:block}
-.confirm__badge{
-  width:64px;height:64px;border-radius:50%;background:rgba(79,127,88,.14);
-  display:grid;place-items:center;margin:0 auto 20px;
-}
-.confirm__badge span{width:22px;height:22px;border-radius:50%;background:var(--green)}
-.confirm h3{font-size:24px;font-weight:800;margin-bottom:10px}
-.confirm p{font-size:16px;color:var(--muted);max-width:420px;margin:0 auto}
-
-/* ===== Plans comparison ===== */
-.plans{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:880px;margin:0 auto}
-.plan{
-  background:linear-gradient(180deg,var(--panel),var(--panel-2));
-  border:1px solid var(--line);border-radius:var(--radius);padding:34px;
-  box-shadow:var(--soft-shadow);display:flex;flex-direction:column;
-}
-.plan--pro{border-color:rgba(241,142,0,.4);box-shadow:0 24px 60px rgba(241,142,0,.14)}
-.plan__name{font-family:"Montserrat",sans-serif;font-weight:800;font-size:22px;margin-bottom:4px}
-.plan__price{font-size:15px;font-weight:600;color:var(--brand-orange);margin-bottom:24px}
-.plan ul{list-style:none;padding:0;margin:0 0 28px;flex:1}
-.plan li{display:flex;gap:11px;align-items:flex-start;padding:9px 0;font-size:15px;color:var(--text);border-bottom:1px solid var(--line)}
-.plan li:last-child{border-bottom:0}
-.plan li .tick{width:18px;height:18px;border-radius:50%;background:rgba(241,142,0,.14);color:var(--brand-orange);display:grid;place-items:center;font-size:11px;font-weight:900;flex:none;margin-top:1px}
-
-/* ===== Footer ===== */
-.footer{border-top:1px solid var(--line);padding:34px 0;text-align:center;color:var(--muted);font-size:14px}
-.footer a{color:var(--brand-orange);text-decoration:none;font-weight:600}
-.footer a:hover{text-decoration:underline}
-.footer .copy{display:block;margin-bottom:8px}
-
-/* ===== Responsive ===== */
-@media (max-width:860px){
-  .steps{grid-template-columns:1fr 1fr}
-  .plans{grid-template-columns:1fr}
-  .plans-radio{grid-template-columns:1fr}
-}
-@media (max-width:620px){
-  .hero{padding:56px 0 44px}
-  .hero h1{font-size:38px}
-  .hero__sub{font-size:17px}
-  .section{padding:48px 0}
-  .section__head h2{font-size:28px}
-  .steps{grid-template-columns:1fr}
-  .grid-2{grid-template-columns:1fr;gap:0}
-  .signup{padding:30px 22px}
-  .btn{padding:11px 18px}
-}
+.plna-gate__btn:hover{filter:brightness(.96)}
+.plna-gate__back{display:block;text-align:center;margin-top:18px;color:var(--muted);font-size:14px;text-decoration:none}
+.plna-gate__back:hover{color:var(--brand-orange)}
 </style>
 </head>
-<body>
+<body class="plna-locked">
 
-<!-- ===== Top bar ===== -->
-<header class="topbar">
-  <div class="wrap topbar__inner">
-    <div class="wordmark"><span class="haf">HAF</span> PLNA</div>
-    <a class="btn btn--ghost" href="./app.html">Sign in</a>
-  </div>
-</header>
+<!-- ===== Login gate (shown until sign-in) ===== -->
+<div class="plna-gate" id="plnaGate">
+  <form class="plna-gate__card" id="plnaGateForm" autocomplete="on">
+    <p class="plna-gate__brand">HAF PLNA</p>
+    <h1 class="plna-gate__title">Sign in to your driver dashboard</h1>
+    <label for="gate-email">Email</label>
+    <input type="email" id="gate-email" name="email" placeholder="you@example.com" autocomplete="email" required />
+    <label for="gate-password">Password</label>
+    <input type="password" id="gate-password" name="password" placeholder="••••••••" autocomplete="current-password" required />
+    <button type="submit" class="plna-gate__btn">Sign in</button>
+    <a class="plna-gate__back" href="/">Back to PLNA</a>
+  </form>
+</div>
 
-<!-- ===== Hero ===== -->
-<section class="hero">
-  <div class="wrap">
-    <h1>Plan your week. Fill your routes.</h1>
-    <p class="hero__sub">Connect your availability, route direction and van into the HAF KNECT network — and let the right work come to you.</p>
-    <div class="pills">
-      <span class="pill"><span class="dot"></span>Steady matched work</span>
-      <span class="pill"><span class="dot"></span>Return-route pay</span>
-      <span class="pill"><span class="dot"></span>Clear rates</span>
-    </div>
-    <div class="hero__cta">
-      <a class="btn btn--primary btn--lg" href="#signup">Join the driver network</a>
-      <a class="btn btn--ghost btn--lg" href="#how">How it works</a>
-    </div>
-  </div>
-</section>
-
-<!-- ===== How it works ===== -->
-<section class="section" id="how">
-  <div class="wrap">
-    <div class="section__head">
-      <span class="section__kicker">How it works</span>
-      <h2>Four steps to matched work</h2>
-      <p>Set your plan once. KNECT keeps the right jobs flowing your way.</p>
-    </div>
-    <div class="steps">
-      <div class="step">
-        <div class="step__n">1</div>
-        <h3>Set your availability</h3>
-        <p>Days, hours and base area — tell the network when and where you run.</p>
-      </div>
-      <div class="step">
-        <div class="step__n">2</div>
-        <h3>Add your routes</h3>
-        <p>Where you're heading. Your direction of travel shapes your matches.</p>
-      </div>
-      <div class="step">
-        <div class="step__n">3</div>
-        <h3>Connect to KNECT</h3>
-        <p>Your plan feeds the network so live demand can find you.</p>
-      </div>
-      <div class="step">
-        <div class="step__n">4</div>
-        <h3>Get matched work</h3>
-        <p>Accept the jobs that fit your week, your van and your lanes.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== Driver sign-up ===== -->
-<section class="section" id="signup">
-  <div class="wrap">
-    <div class="signup">
-      <form id="driverForm" autocomplete="on">
-        <h2>Join the HAF driver network</h2>
-        <p class="signup__lead">Real onboarding — set your plan and we'll match you to work on your lanes.</p>
-
-        <!-- Driver -->
-        <div class="formgroup">
-          <div class="formgroup__head">Your details</div>
-          <div class="grid-2">
-            <div class="field">
-              <label for="full-name">Full name</label>
-              <input type="text" id="full-name" name="full-name" autocomplete="name" required />
-            </div>
-            <div class="field">
-              <label for="email">Email</label>
-              <input type="email" id="email" name="email" autocomplete="email" required />
-            </div>
-          </div>
-          <div class="grid-2">
-            <div class="field">
-              <label for="phone">Phone</label>
-              <input type="tel" id="phone" name="phone" autocomplete="tel" required />
-            </div>
-            <div class="field">
-              <label for="base-postcode">Base postcode</label>
-              <input type="text" id="base-postcode" name="base-postcode" autocomplete="postal-code" required />
-              <p class="helper">We use this to match you to jobs on your local lanes.</p>
-              <div id="postcode-result" class="postcode-result" style="display:none"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Vehicle -->
-        <div class="formgroup">
-          <div class="formgroup__head">Your vehicle</div>
-          <div class="grid-2">
-            <div class="field">
-              <label for="vehicle">Vehicle</label>
-              <select id="vehicle" name="vehicle" required>
-                <option value="" disabled selected>Select your vehicle</option>
-                <option value="small_van">Small Van</option>
-                <option value="swb_van">SWB Van</option>
-                <option value="mwb_van">MWB Van</option>
-                <option value="lwb_van">LWB Van</option>
-                <option value="luton_specialist">Luton / Specialist</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="payload-kg">Payload capacity (kg)</label>
-              <input type="number" id="payload-kg" name="payload-kg" min="0" step="50" placeholder="e.g. 1000" />
-            </div>
-          </div>
-          <div class="field">
-            <div class="checks">
-              <label class="check"><input type="checkbox" id="tail-lift" name="tail-lift">Tail lift fitted</label>
-            </div>
-          </div>
-        </div>
-
-        <!-- Experience & business -->
-        <div class="formgroup">
-          <div class="formgroup__head">Experience &amp; business</div>
-          <div class="grid-2">
-            <div class="field">
-              <label for="years-exp">Years of experience</label>
-              <input type="number" id="years-exp" name="years-exp" min="0" step="1" placeholder="e.g. 5" />
-            </div>
-            <div class="field">
-              <label for="company-type">I operate as</label>
-              <select id="company-type" name="company-type">
-                <option value="" disabled selected>Select</option>
-                <option value="sole_trader">Sole trader</option>
-                <option value="limited_company">Limited company</option>
-              </select>
-            </div>
-          </div>
-          <div class="field">
-            <div class="checks">
-              <label class="check"><input type="checkbox" id="vat-registered" name="vat-registered">VAT registered</label>
-            </div>
-          </div>
-        </div>
-
-        <!-- Compliance -->
-        <div class="formgroup">
-          <div class="formgroup__head">Compliance declarations</div>
-          <p class="helper" style="margin:0 0 14px">Declare what you hold — document upload comes as a later step in onboarding.</p>
-          <div class="field">
-            <div class="checks">
-              <label class="check"><input type="checkbox" id="ins-git" name="ins-git">I hold Goods-in-transit cover</label>
-              <label class="check"><input type="checkbox" id="ins-hire" name="ins-hire">I hold Hire &amp; reward insurance</label>
-            </div>
-          </div>
-        </div>
-
-        <!-- Availability -->
-        <div class="formgroup">
-          <div class="formgroup__head">Availability &amp; lanes</div>
-          <div class="field">
-            <label>Available days</label>
-            <div class="checks">
-              <label class="check"><input type="checkbox" name="days" value="Mon">Mon</label>
-              <label class="check"><input type="checkbox" name="days" value="Tue">Tue</label>
-              <label class="check"><input type="checkbox" name="days" value="Wed">Wed</label>
-              <label class="check"><input type="checkbox" name="days" value="Thu">Thu</label>
-              <label class="check"><input type="checkbox" name="days" value="Fri">Fri</label>
-              <label class="check"><input type="checkbox" name="days" value="Sat">Sat</label>
-              <label class="check"><input type="checkbox" name="days" value="Sun">Sun</label>
-            </div>
-          </div>
-          <div class="grid-2">
-            <div class="field">
-              <label for="start-time">Typical start time</label>
-              <input type="time" id="start-time" name="start-time" />
-            </div>
-            <div class="field">
-              <label for="finish-time">Typical finish time</label>
-              <input type="time" id="finish-time" name="finish-time" />
-            </div>
-          </div>
-          <div class="grid-2">
-            <div class="field">
-              <label for="travel-miles">Willing to travel (miles)</label>
-              <input type="number" id="travel-miles" name="travel-miles" min="0" step="5" placeholder="e.g. 50" />
-            </div>
-            <div class="field">
-              <label for="preferred-lanes">Preferred lanes / directions</label>
-              <input type="text" id="preferred-lanes" name="preferred-lanes" placeholder="e.g. Sheffield → London, M1 corridor" />
-            </div>
-          </div>
-          <div class="field">
-            <div class="checks">
-              <label class="check"><input type="checkbox" id="return-route" name="return-route">Open to return-route jobs</label>
-            </div>
-          </div>
-        </div>
-
-        <!-- Plan -->
-        <div class="formgroup">
-          <div class="formgroup__head">Your plan</div>
-          <div class="field" style="margin-bottom:0">
-            <div class="plans-radio">
-              <label class="radio-card">
-                <input type="radio" name="plan" value="lite" checked />
-                <span>
-                  <span class="rc-title">PLNA Lite — Free</span><br>
-                  <span class="rc-sub">Plan availability and connect to KNECT.</span>
-                </span>
-              </label>
-              <label class="radio-card">
-                <input type="radio" name="plan" value="pro" />
-                <span>
-                  <span class="rc-title">PLNA Pro — Early access</span><br>
-                  <span class="rc-sub">Priority matching (pricing at launch).</span>
-                </span>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div id="formError" class="form-error" style="display:none"></div>
-
-        <div class="signup__submit">
-          <button type="submit" id="submitBtn" class="btn btn--primary btn--lg btn--block">Join the driver network</button>
-        </div>
-      </form>
-
-      <div class="confirm" id="driverConfirm">
-        <div class="confirm__badge"><span></span></div>
-        <h3>You're in.</h3>
-        <p>HAF will be in touch to get you set up on the network.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== Plans comparison ===== -->
-<section class="section">
-  <div class="wrap">
-    <div class="section__head">
-      <span class="section__kicker">Plans</span>
-      <h2>Start free. Step up when you're ready.</h2>
-    </div>
-    <div class="plans">
-      <div class="plan">
-        <div class="plan__name">PLNA Lite</div>
-        <div class="plan__price">Free</div>
-        <ul>
-          <li><span class="tick">+</span>Plan days &amp; availability</li>
-          <li><span class="tick">+</span>Set base area &amp; radius</li>
-          <li><span class="tick">+</span>Basic route direction</li>
-          <li><span class="tick">+</span>Connect to HAF KNECT</li>
-        </ul>
-        <button type="button" class="btn btn--ghost btn--block" data-scroll-signup>Start with Lite</button>
-      </div>
-      <div class="plan plan--pro">
-        <div class="plan__name">PLNA Pro</div>
-        <div class="plan__price">Early access · pricing at launch</div>
-        <ul>
-          <li><span class="tick">+</span>Everything in Lite</li>
-          <li><span class="tick">+</span>Priority job matching</li>
-          <li><span class="tick">+</span>Return-route optimisation</li>
-          <li><span class="tick">+</span>Driver profile &amp; rewards</li>
-          <li><span class="tick">+</span>Network priority access</li>
-        </ul>
-        <button type="button" class="btn btn--primary btn--block" data-scroll-signup>Get early access</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== Footer ===== -->
-<footer class="footer">
-  <div class="wrap">
-    <span class="copy">&copy; 2026 HAF Logistics Ltd.</span>
-    <a href="https://launch.usehaf.co.uk">Join the launch waiting list</a>
-  </div>
-</footer>
-
-<!-- External brand/engine deps (same dir) -->
-<script src="./haf-model.js"></script>
-<script src="./pricing-engine.js"></script>
 <script>
-(function(){
-  // ===== Postcode lookup (postcodes.io — keyless, safe client-side) =====
-  async function resolvePostcode(pc){
-    const clean = (pc||'').trim();
-    if(!clean) return null;
-    try{
-      const r = await fetch('https://api.postcodes.io/postcodes/'+encodeURIComponent(clean));
-      if(!r.ok) return null;
-      const j = await r.json();
-      if(j.status!==200||!j.result) return null;
-      const res = j.result;
-      return {
-        postcode: res.postcode,
-        lat: res.latitude, lng: res.longitude,
-        town: [res.admin_ward, res.admin_district].filter(Boolean).join(', ')
-      };
-    }catch(e){ return null; }
-  }
-
-  // resolved base location, stashed for the eventual submit
-  var baseLocation = null;
-  // TODO: distance (Google Maps) + what3words must be fetched server-side via a Pages Function — key must not ship to the browser.
-
-  var pcInput = document.getElementById('base-postcode');
-  var pcResult = document.getElementById('postcode-result');
-
-  function showPc(state, html){
-    pcResult.style.display = 'flex';
-    pcResult.className = 'postcode-result ' + state;
-    pcResult.innerHTML = '<span class="pc-dot"></span><span>'+html+'</span>';
-  }
-
-  if(pcInput){
-    pcInput.addEventListener('blur', async function(){
-      var val = pcInput.value.trim();
-      if(!val){ pcResult.style.display='none'; baseLocation=null; return; }
-      showPc('is-loading','Looking up…');
-      var loc = await resolvePostcode(val);
-      if(loc){
-        baseLocation = loc;
-        showPc('is-ok','Confirmed: '+loc.town+' ('+loc.postcode+')');
-      }else{
-        baseLocation = null;
-        showPc('is-error','Postcode not found — please check.');
-      }
-    });
-  }
-
-  // ===== Supabase (anon key — RLS allows anon INSERT on drivers + shop_leads) =====
-  var SB_URL = 'https://jsdwvogsxlnczzbefwgp.supabase.co';
-  var SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzZHd2b2dzeGxuY3p6YmVmd2dwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzODgyMzYsImV4cCI6MjA5Njk2NDIzNn0.pxqM-Oh4f_3PlqCbKIKvcKZnNRUZ1ASKqqdNg78M_4M';
-  // NOTE: use Prefer: return=minimal. The drivers/shop_leads SELECT policies are
-  // authenticated-only, so anon CAN insert but CANNOT read the row back — asking for
-  // return=representation forces a readback that RLS blocks (42501). We don't need the
-  // returned row, so minimal both works under RLS and is lighter.
-  function sbHeaders(){
-    return {
-      'apikey': SB_ANON,
-      'Authorization': 'Bearer ' + SB_ANON,
-      'Content-Type': 'application/json',
-      'Prefer': 'return=minimal'
-    };
-  }
-  // Map the form's vehicle <select> values to the canonical vehicle_code used across HAF X.
-  var VEHICLE_CODE = {
-    small_van: 'SMALL_VAN',
-    swb_van: 'SWB_VAN',
-    mwb_van: 'MWB_VAN',
-    lwb_van: 'LWB_VAN',
-    luton_specialist: 'LUTON'
-  };
-
-  // ===== Form submit =====
-  var form = document.getElementById('driverForm');
-  var confirm = document.getElementById('driverConfirm');
-  var submitBtn = document.getElementById('submitBtn');
-  var formError = document.getElementById('formError');
-
-  function showError(msg){
-    formError.textContent = msg;
-    formError.style.display = 'block';
-    formError.scrollIntoView({behavior:'smooth', block:'center'});
-  }
-  function clearError(){ formError.style.display = 'none'; formError.textContent = ''; }
-  function val(id){ var el = form.querySelector(id); return el ? el.value.trim() : ''; }
-  function num(id){ var v = val(id); return v === '' ? null : Number(v); }
-  function checked(id){ var el = form.querySelector(id); return !!(el && el.checked); }
-
-  if(form){
-    form.addEventListener('submit', async function(e){
+  // <!-- TODO: wire real Supabase Auth session check here -->
+  (function(){
+    var form = document.getElementById('plnaGateForm');
+    if(!form) return;
+    form.addEventListener('submit', function(e){
       e.preventDefault();
-      clearError();
+      // TODO: replace with real Supabase Auth sign-in + session validation
+      document.body.classList.remove('plna-locked');
+    });
+  })();
+</script>
 
-      var days = Array.prototype.map.call(
-        form.querySelectorAll('input[name="days"]:checked'), function(c){ return c.value; });
+<div class="app">
+  <aside class="sidebar">
+    <!-- TODO: swap in HAF PLNA logo/branding when supplied -->
+    <div class="brand">
+      <span class="otis-logo"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="PLNA"><defs><linearGradient id="plnaG" x1="6" y1="6" x2="42" y2="42" gradientUnits="userSpaceOnUse"><stop stop-color="#3b444d"/><stop offset="1" stop-color="#2f373e"/></linearGradient></defs><rect x="1.25" y="1.25" width="45.5" height="45.5" rx="13" fill="url(#plnaG)" stroke="rgba(255,255,255,.12)"/><circle cx="24" cy="24" r="11.4" fill="none" stroke="#fff" stroke-opacity=".94" stroke-width="3.3"/><path d="M24 12.6a11.4 11.4 0 0 1 9.87 5.7" fill="none" stroke="#f18e00" stroke-width="3.3" stroke-linecap="round"/></svg></span>
+      <div class="brand-meta">
+        <div class="brand-top">
+          <span class="otis-word">PLNA</span>
+        </div>
+        <small>Driver planning</small>
+      </div>
+    </div>
 
-      var name = val('#full-name');
-      var email = val('#email');
-      var phone = val('#phone');
-      var basePostcode = (baseLocation && baseLocation.postcode) || val('#base-postcode');
-      var vehicleSel = form.querySelector('#vehicle').value;
-      var vehicleCode = VEHICLE_CODE[vehicleSel] || (vehicleSel ? vehicleSel.toUpperCase() : null);
-      var plan = (form.querySelector('input[name="plan"]:checked')||{}).value || 'lite';
-      var plnaPlan = plan === 'pro' ? 'PRO' : 'LITE';
+    <nav class="nav">
+      <div class="nav-label">Driver workspace</div>
+      <button class="nav-btn active" data-page="today"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Today's Availability</button>
+      <button class="nav-btn" data-page="empty-days"><svg viewBox="0 0 24 24"><path d="M7 3v3M17 3v3M4 8h16M5 5h14v15H5zM9 14h6M9 18h3"/></svg>Empty Days</button>
+      <button class="nav-btn" data-page="route-direction"><svg viewBox="0 0 24 24"><path d="M12 2l4 4-4 4M16 6H8a4 4 0 0 0-4 4v8"/></svg>Route Direction</button>
+      <button class="nav-btn" data-page="home-base"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h14V10"/><circle cx="12" cy="13" r="2.5"/></svg>Home Base &amp; Radius</button>
+      <button class="nav-btn" data-page="working-radius"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2"/><path d="M12 12l6-3"/></svg>Working Radius</button>
+      <button class="nav-btn" data-page="calendar"><svg viewBox="0 0 24 24"><path d="M7 3v3M17 3v3M4 8h16M5 5h14v15H5z"/><path d="M8 12h3v3H8z"/></svg>Calendar</button>
 
-      var driverRow = {
-        name: name,
-        email: email,
-        phone: phone,
-        base_postcode: basePostcode,
-        base_lat: baseLocation ? baseLocation.lat : null,
-        base_lng: baseLocation ? baseLocation.lng : null,
-        vehicle_code: vehicleCode,
-        plna_plan: plnaPlan,
-        membership: 'FREE',
-        compliance_status: 'PENDING_DOCS',
-        is_available: false,
-        details: {
-          payload_kg: num('#payload-kg'),
-          tail_lift: checked('#tail-lift'),
-          years_experience: num('#years-exp'),
-          company_type: form.querySelector('#company-type').value || null,
-          vat_registered: checked('#vat-registered'),
-          insurance_git: checked('#ins-git'),
-          insurance_hire_reward: checked('#ins-hire'),
-          available_days: days,
-          typical_start: val('#start-time') || null,
-          typical_end: val('#finish-time') || null,
-          travel_radius_miles: num('#travel-miles'),
-          preferred_lanes: val('#preferred-lanes') || null,
-          return_route_open: checked('#return-route'),
-          base_town: baseLocation ? baseLocation.town : null,
-          base_w3w: null,
-          source: 'plna_front_door',
-          page_url: location.href,
-          user_agent: navigator.userAgent,
-          submitted_at: new Date().toISOString()
-        }
-      };
+      <div class="nav-sep"></div>
+      <div class="nav-label">Jobs &amp; routes</div>
+      <button class="nav-btn" data-page="planned-jobs"><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4zM8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M4 12h16"/></svg>Planned Jobs</button>
+      <button class="nav-btn" data-page="route-planner"><svg viewBox="0 0 24 24"><path d="M6 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM18 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM8 17h6a3 3 0 0 0 3-3V9M6 15V7a2 2 0 0 1 2-2h4"/></svg>Route Planner</button>
+      <button class="nav-btn" data-page="return-route"><svg viewBox="0 0 24 24"><path d="M9 14l-4-4 4-4M5 10h9a5 5 0 0 1 5 5v3"/></svg>Return-Route</button>
+      <button class="nav-btn" data-page="driver-diary"><svg viewBox="0 0 24 24"><path d="M7 3v3M17 3v3M4 8h16M5 5h14v15H5zM8 12h8M8 16h5"/></svg>Driver Diary</button>
+      <button class="nav-btn" data-page="notes"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5zM9 9h6M9 13h6M9 17h3"/></svg>Notes</button>
 
-      submitBtn.disabled = true;
-      var origLabel = submitBtn.textContent;
-      submitBtn.textContent = 'Joining…';
+      <div class="nav-sep"></div>
+      <div class="nav-label">After the job</div>
+      <button class="nav-btn" data-page="pod"><svg viewBox="0 0 24 24"><path d="M9 11l2 2 4-4M5 5h14v14H5z"/></svg>Proof of Delivery</button>
+      <button class="nav-btn" data-page="job-feedback"><svg viewBox="0 0 24 24"><path d="M12 3l2.5 5 5.5.8-4 3.9 1 5.5L12 16l-5 2.7 1-5.5-4-3.9 5.5-.8Z"/></svg>Job Feedback</button>
+      <button class="nav-btn" data-page="suggested-rate"><svg viewBox="0 0 24 24"><path d="M12 3v18M16 7a4 4 0 0 0-4-2c-2 0-4 1-4 3s2 3 4 3 4 1 4 3-2 3-4 3a4 4 0 0 1-4-2"/></svg>Suggested Rate</button>
 
-      try {
-        var resp = await fetch(SB_URL + '/rest/v1/drivers', {
-          method: 'POST', headers: sbHeaders(), body: JSON.stringify(driverRow)
-        });
+      <div class="nav-sep"></div>
+      <div class="nav-label">Pro</div>
+      <button class="nav-btn" data-page="haffee"><svg viewBox="0 0 24 24"><path d="M12 3a4 4 0 0 1 4 4c0 1.5-1 2.5-2 3.2V12H10v-1.8C9 9.5 8 8.5 8 7a4 4 0 0 1 4-4ZM9 16h6M10 20h4"/></svg>HAFFEE AI</button>
+      <button class="nav-btn" data-page="landing-page"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 9h18M7 7h.01M9.5 7h.01"/></svg>Driver Landing Page</button>
 
-        if(resp.status === 409){
-          // email UNIQUE constraint — already signed up
-          form.style.display = 'none';
-          confirm.querySelector('h3').textContent = "You're already with us.";
-          confirm.querySelector('p').textContent = "Looks like you're already signed up — we'll be in touch.";
-          confirm.classList.add('is-on');
-          confirm.scrollIntoView({behavior:'smooth', block:'center'});
-          return;
-        }
+      <div class="nav-sep"></div>
+      <div class="nav-label">Network</div>
+      <button class="nav-btn" data-page="rewards"><svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M5 4h14v4a7 7 0 0 1-14 0V4ZM5 6H3v1a3 3 0 0 0 3 3M19 6h2v1a3 3 0 0 1-3 3"/></svg>My Rewards</button>
+      <button class="nav-btn" data-page="network-pass"><svg viewBox="0 0 24 24"><path d="M3 6h18v12H3z"/><path d="M3 10h18M7 15h4"/></svg>Network Pass</button>
 
-        if(!resp.ok){
-          var errText = await resp.text();
-          console.error('PLNA drivers insert failed', resp.status, errText);
-          // Treat any duplicate-key signal as a graceful "already signed up"
-          if(/duplicate key|unique/i.test(errText)){
-            form.style.display = 'none';
-            confirm.querySelector('h3').textContent = "You're already with us.";
-            confirm.querySelector('p').textContent = "Looks like you're already signed up — we'll be in touch.";
-            confirm.classList.add('is-on');
-            confirm.scrollIntoView({behavior:'smooth', block:'center'});
-            return;
-          }
-          showError("We couldn't submit that just now — please try again.");
-          submitBtn.disabled = false; submitBtn.textContent = origLabel;
-          return;
-        }
+      <div class="nav-sep"></div>
+      <div class="nav-label">Account</div>
+      <button class="nav-btn" data-page="comms"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-12 7.6L3 21l1.9-5.6A8.4 8.4 0 1 1 21 11.5Z"/></svg>Communications</button>
+      <button class="nav-btn" data-page="integrations"><svg viewBox="0 0 24 24"><path d="M10 3v6M14 3v6M5 9h14v3a7 7 0 0 1-14 0z M12 19v2"/></svg>Connected Apps</button>
+      <button class="nav-btn" data-page="plans"><svg viewBox="0 0 24 24"><path d="M3 7h18v12H3zM3 11h18M7 15h4"/></svg>Plans &amp; Billing</button>
+    </nav>
 
-        // drivers insert OK — fire shop_leads (best-effort; don't block confirmation)
-        try {
-          await fetch(SB_URL + '/rest/v1/shop_leads', {
-            method: 'POST', headers: sbHeaders(), body: JSON.stringify({
-              source: 'driver_signup',
-              name: name,
-              email: email,
-              phone: phone,
-              lead_type: 'driver',
-              postcode: basePostcode,
-              plna_routed: true,
-              details: { vehicle_code: vehicleCode, plna_plan: plnaPlan }
-            })
-          });
-        } catch(leadErr){ console.error('PLNA shop_leads insert failed (non-fatal)', leadErr); }
+    <div class="side-foot">
+      <div class="foot-row">
+        <div class="foot-toggle"><div class="theme-wrap" id="themeToggle" title="Toggle light / dark"><div class="theme-dot"><svg class="ico-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2 12h2M20 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg><svg class="ico-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg></div></div></div>
+      </div>
+    </div>
+  </aside>
 
-        // success confirmation
-        form.style.display = 'none';
-        confirm.querySelector('h3').textContent = "You're in.";
-        confirm.querySelector('p').textContent = "HAF will be in touch to get you set up on the network. Welcome to the network.";
-        confirm.classList.add('is-on');
-        confirm.scrollIntoView({behavior:'smooth', block:'center'});
+  <main class="workspace">
+    <div class="topbar">
+      <div class="crumb">HAF PLNA &nbsp;/&nbsp; <b id="crumbPage">Today</b></div>
+      <div class="topbar-r">
+        <span class="plan-badge pro" id="planBadge"><span class="pb-dot"></span><span id="planBadgeText">PLNA Pro</span></span>
+        <span class="ver-badge" id="verBadge">HAF X V2.0.0</span>
+        <div class="tb-ctrl">
+          <label for="planSelect">PLNA plan</label>
+          <select id="planSelect">
+            <option value="FREE">Free · £0</option>
+            <option value="PAID" selected>Pro · £19/mo</option>
+          </select>
+        </div>
+        <div class="tb-ctrl">
+          <label for="stateSelect">View as compliance state</label>
+          <select id="stateSelect">
+            <option value="PENDING">Pending</option>
+            <option value="ACTIVE" selected>Active</option>
+            <option value="EXPIRING_SOON">Expiring Soon</option>
+            <option value="EXPIRED">Expired</option>
+            <option value="FAILED">Failed</option>
+            <option value="SUSPENDED">Suspended</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="canvas">
 
-      } catch(err){
-        console.error('PLNA submit error', err);
-        showError("We couldn't submit that just now — please try again.");
-        submitBtn.disabled = false; submitBtn.textContent = origLabel;
+      <section class="page active" id="today" data-gate="plnaPlanner" data-title="Today">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+          <h1>Today's Availability</h1>
+          <p>Set your status for the day so the network knows where you are, where you're heading and how far you'll travel.</p>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-card"><span class="sl">Live status</span><span class="sv"><span class="pill pill-status">Online</span></span></div>
+          <div class="stat-card"><span class="sl">Start time</span><span class="sv">06:30 <small>today</small></span></div>
+          <div class="stat-card"><span class="sl">End time</span><span class="sv">18:00 <small>today</small></span></div>
+          <div class="stat-card"><span class="sl">Current area</span><span class="sv">B1 <small>Birmingham</small></span></div>
+          <div class="stat-card"><span class="sl">Heading toward</span><span class="sv">S1 <small>Sheffield</small></span></div>
+          <div class="stat-card"><span class="sl">Available radius</span><span class="sv">35 <small>miles</small></span></div>
+          <div class="stat-card"><span class="sl">Return-to-base wanted</span><span class="sv">Yes <small>back to B1</small></span></div>
+          <div class="stat-card"><span class="sl">Availability confidence</span><span class="sv">High</span></div>
+        </div>
+        <div class="plna-actions">
+          <span class="crm-ah">Quick actions</span>
+          <span class="pill">Go online</span>
+          <span class="pill">Set empty day</span>
+          <span class="pill">Plan a route</span>
+        </div>
+        <p class="preview-note">Framework preview — static placeholder data, no live integrations yet.</p>
+      </section>
+
+      <section class="page" id="empty-days" data-gate="plnaPlanner" data-title="Empty Days">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M7 3v3M17 3v3M4 8h16M5 5h14v15H5zM9 14h6M9 18h3"/></svg></div>
+          <h1>Empty Days</h1>
+          <p>Flag the days you've nothing booked so the network can fill your diary with collections heading your way.</p>
+        </div>
+        <div class="stat-grid" style="max-width:880px;margin:0 auto 18px">
+          <div class="stat-card"><span class="sl">Empty days this week</span><span class="sv">3 <small>flagged</small></span></div>
+          <div class="stat-card"><span class="sl">Visible to network</span><span class="sv">2 <small>published</small></span></div>
+          <div class="stat-card"><span class="sl">Offers received</span><span class="sv">5 <small>this week</small></span></div>
+          <div class="stat-card"><span class="sl">Filled from flags</span><span class="sv">1 <small>confirmed job</small></span></div>
+        </div>
+        <div class="week-grid">
+          <div class="day-card dc-today dc-booked"><span class="dc-dow">Mon</span><span class="dc-date">22</span><span class="dc-badge">2 jobs</span></div>
+          <div class="day-card dc-empty"><span class="dc-dow">Tue</span><span class="dc-date">23</span><span class="dc-badge">Empty</span></div>
+          <div class="day-card dc-booked"><span class="dc-dow">Wed</span><span class="dc-date">24</span><span class="dc-badge">1 job</span></div>
+          <div class="day-card dc-empty"><span class="dc-dow">Thu</span><span class="dc-date">25</span><span class="dc-badge">Empty</span></div>
+          <div class="day-card dc-empty"><span class="dc-dow">Fri</span><span class="dc-date">26</span><span class="dc-badge">Empty</span></div>
+          <div class="day-card"><span class="dc-dow">Sat</span><span class="dc-date">27</span><span class="dc-badge">Day off</span></div>
+          <div class="day-card"><span class="dc-dow">Sun</span><span class="dc-date">28</span><span class="dc-badge">Day off</span></div>
+        </div>
+        <div class="plna-actions">
+          <span class="crm-ah">Empty day actions</span>
+          <span class="pill">Publish to network</span>
+          <span class="pill">Flag next week</span>
+          <span class="pill">Clear flags</span>
+        </div>
+        <p class="preview-note">Framework preview — static placeholder. Tap a day to toggle empty / available. Flagging empty days is visible to the KNECT network, not guaranteed to fill.</p>
+      </section>
+
+      <section class="page" id="route-direction" data-gate="plnaPlanner" data-title="Route Direction">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M12 2l4 4-4 4M16 6H8a4 4 0 0 0-4 4v8"/></svg></div>
+          <h1>Route Direction</h1>
+          <p>Tell PLNA the way you're already travelling so it only offers jobs that sit along your line, not against it.</p>
+        </div>
+        <div class="stat-grid" style="max-width:880px;margin:0 auto 18px">
+          <div class="stat-card"><span class="sl">Today's direction</span><span class="sv">B1 <small>→ S1 → LS1</small></span></div>
+          <div class="stat-card"><span class="sl">Direction interest</span><span class="sv">Strong <small>northbound</small></span></div>
+          <div class="stat-card"><span class="sl">Jobs along route</span><span class="sv">7 <small>matching</small></span></div>
+          <div class="stat-card"><span class="sl">Jobs filtered out</span><span class="sv">12 <small>against direction</small></span></div>
+        </div>
+        <div class="route-chain">
+          <div class="route-leg">
+            <div class="rl-areas"><span class="rl-from">B1 Birmingham</span><span class="rl-arr">→</span><span class="rl-to">S1 Sheffield</span></div>
+            <span class="rl-tag strong">Strong interest</span>
+          </div>
+          <div class="route-leg">
+            <div class="rl-areas"><span class="rl-from">S1 Sheffield</span><span class="rl-arr">→</span><span class="rl-to">LS1 Leeds</span></div>
+            <span class="rl-tag strong">Strong interest</span>
+          </div>
+          <div class="route-leg">
+            <div class="rl-areas"><span class="rl-from">LS1 Leeds</span><span class="rl-arr">→</span><span class="rl-to">B1 Birmingham</span></div>
+            <span class="rl-tag">Normal · return</span>
+          </div>
+        </div>
+        <div class="plna-actions">
+          <span class="crm-ah">Quick set</span>
+          <span class="pill">B1 → M1</span>
+          <span class="pill">S1 → NE1</span>
+          <span class="pill">LS1 → B1</span>
+          <span class="pill">Edit route</span>
+        </div>
+        <p class="preview-note">Framework preview — static placeholder. Direction preference filters job offers to those on or near your planned line of travel.</p>
+      </section>
+
+      <section class="page" id="home-base" data-gate="plnaPlanner" data-title="Home Base &amp; Radius">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h14V10"/><circle cx="12" cy="13" r="2.5"/></svg></div>
+          <h1>Home Base &amp; Radius</h1>
+          <p>Set where you start and finish each day, and how far from base you're happy to range.</p>
+        </div>
+        <div class="stat-grid" style="max-width:880px;margin:0 auto 18px">
+          <div class="stat-card"><span class="sl">Home area</span><span class="sv">B1 <small>Birmingham</small></span></div>
+          <div class="stat-card"><span class="sl">Max daily radius</span><span class="sv">50 <small>miles</small></span></div>
+          <div class="stat-card"><span class="sl">Main vehicle</span><span class="sv">Luton <small>van</small></span></div>
+          <div class="stat-card"><span class="sl">Return-to-base</span><span class="sv">Yes <small>daily</small></span></div>
+        </div>
+        <div class="settings-card">
+          <div class="sc-row">
+            <div><div class="sc-label">Home postcode area</div><div class="sc-sub">Where you start and return each day</div></div>
+            <div class="sc-ctrl"><select><option selected>B1 Birmingham</option><option>M1 Manchester</option><option>S1 Sheffield</option><option>LS1 Leeds</option><option>BS1 Bristol</option><option>E1 London</option></select></div>
+          </div>
+          <div class="sc-row">
+            <div><div class="sc-label">Maximum daily radius</div><div class="sc-sub">Furthest you'll travel from home in one day</div></div>
+            <div class="sc-ctrl"><select><option>25 miles</option><option selected>50 miles</option><option>75 miles</option><option>100 miles</option><option>No limit</option></select></div>
+          </div>
+          <div class="sc-row">
+            <div><div class="sc-label">Preferred vehicle</div><div class="sc-sub">Used for default job matching</div></div>
+            <div class="sc-ctrl"><select><option selected>Luton van</option><option>LWB van</option><option>MWB van</option><option>SWB van</option><option>Small van</option></select></div>
+          </div>
+          <div class="sc-row">
+            <div><div class="sc-label">Return-to-base daily</div><div class="sc-sub">PLNA flags return-route opportunities for you</div></div>
+            <div class="sc-ctrl"><div class="switch on" id="rtbToggle" onclick="this.classList.toggle('on')"><div class="knob"></div></div></div>
+          </div>
+          <div class="sc-row">
+            <div><div class="sc-label">Away nights</div><div class="sc-sub">Maximum nights you'll stay away from home</div></div>
+            <div class="sc-ctrl"><select><option selected>None — home every night</option><option>1 night max</option><option>2 nights max</option><option>Flexible</option></select></div>
+          </div>
+        </div>
+        <div class="plna-actions">
+          <span class="pill">Save settings</span>
+          <span class="pill">Reset to default</span>
+        </div>
+        <p class="preview-note">Framework preview — static placeholder. Home base and radius filter job offers and rank return-route opportunities.</p>
+      </section>
+
+      <section class="page" id="working-radius" data-gate="plnaPlanner" data-title="Working Radius">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2"/><path d="M12 12l6-3"/></svg></div>
+          <h1>Working Radius</h1>
+          <p>The live travel distance you'll accept right now — widen it for a quiet day, tighten it when you're full.</p>
+        </div>
+        <div class="radius-wrap">
+          <div class="radius-hero"><span class="rh-val" id="radiusVal">35</span><span class="rh-unit">mi</span></div>
+          <div class="radius-sublabel">Current working radius from B1 Birmingham</div>
+          <div class="radius-presets">
+            <button class="rp-btn" onclick="setRadius(10)">10 mi</button>
+            <button class="rp-btn" onclick="setRadius(20)">20 mi</button>
+            <button class="rp-btn active" onclick="setRadius(35)">35 mi</button>
+            <button class="rp-btn" onclick="setRadius(50)">50 mi</button>
+            <button class="rp-btn" onclick="setRadius(75)">75 mi</button>
+            <button class="rp-btn" onclick="setRadius(100)">100 mi</button>
+          </div>
+        </div>
+        <div class="stat-grid" style="max-width:880px;margin:0 auto 18px">
+          <div class="stat-card"><span class="sl">Active lanes in range</span><span class="sv" id="lanesInRange">14 <small>lanes</small></span></div>
+          <div class="stat-card"><span class="sl">Jobs available</span><span class="sv" id="jobsInRange">8 <small>right now</small></span></div>
+          <div class="stat-card"><span class="sl">Avg lane pressure</span><span class="sv">1.3 <small>balanced</small></span></div>
+          <div class="stat-card"><span class="sl">Best nearby lane</span><span class="sv">B1→S1 <small>high demand</small></span></div>
+        </div>
+        <p class="preview-note">Framework preview — static placeholder. Radius changes take effect immediately and update which jobs are surfaced in Planned Jobs.</p>
+      </section>
+
+      <section class="page" id="calendar" data-gate="plnaPlanner" data-title="Calendar">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M7 3v3M17 3v3M4 8h16M5 5h14v15H5z"/><path d="M8 12h3v3H8z"/></svg></div>
+          <h1>Calendar</h1>
+          <p>Your month at a glance — what you've completed, what's booked, and open time you can fill. Sync with Google Calendar to keep it all in one place.</p>
+        </div>
+        <div class="connect-strip">
+          <div class="cs-ic g"><svg viewBox="0 0 24 24"><path d="M7 3v3M17 3v3M4 8h16M5 5h14v15H5z"/></svg></div>
+          <div class="cs-meta">
+            <div class="cs-t">Google Calendar</div>
+            <div class="cs-d">Two-way sync — your booked jobs appear in Google, and your busy times block out here.</div>
+          </div>
+          <span class="cs-status off">Not connected</span>
+          <button class="cs-btn">Connect</button>
+        </div>
+        <div class="cal-month">
+          <div class="cm-head">
+            <span class="cm-title">June 2026</span>
+            <div class="cm-nav"><button>&#8592;</button><button>Today</button><button>&#8594;</button></div>
+          </div>
+          <div class="cm-dow"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+          <div class="cal-grid">
+            <div class="cal-cell"><span class="cc-d">1</span></div>
+            <div class="cal-cell"><span class="cc-d">2</span><span class="cal-ev done">B1→S1</span></div>
+            <div class="cal-cell"><span class="cc-d">3</span></div>
+            <div class="cal-cell"><span class="cc-d">4</span><span class="cal-ev done">S1→M1</span></div>
+            <div class="cal-cell"><span class="cc-d">5</span></div>
+            <div class="cal-cell mute"><span class="cc-d">6</span></div>
+            <div class="cal-cell mute"><span class="cc-d">7</span></div>
+            <div class="cal-cell"><span class="cc-d">8</span><span class="cal-ev done">B1→CV1</span></div>
+            <div class="cal-cell"><span class="cc-d">9</span></div>
+            <div class="cal-cell"><span class="cc-d">10</span><span class="cal-ev done">LS1→B1</span></div>
+            <div class="cal-cell"><span class="cc-d">11</span></div>
+            <div class="cal-cell"><span class="cc-d">12</span><span class="cal-ev done">B1→NE1</span></div>
+            <div class="cal-cell mute"><span class="cc-d">13</span></div>
+            <div class="cal-cell mute"><span class="cc-d">14</span></div>
+            <div class="cal-cell"><span class="cc-d">15</span><span class="cal-ev done">B1→S1</span></div>
+            <div class="cal-cell"><span class="cc-d">16</span><span class="cal-ev done">S1→LS1</span></div>
+            <div class="cal-cell"><span class="cc-d">17</span><span class="cal-ev done">LS1→B1</span></div>
+            <div class="cal-cell"><span class="cc-d">18</span><span class="cal-ev done">B1→M1</span></div>
+            <div class="cal-cell"><span class="cc-d">19</span><span class="cal-ev done">M1→B1</span></div>
+            <div class="cal-cell mute"><span class="cc-d">20</span></div>
+            <div class="cal-cell mute"><span class="cc-d">21</span></div>
+            <div class="cal-cell today"><span class="cc-d">22</span><span class="cal-ev booked">2 jobs</span></div>
+            <div class="cal-cell"><span class="cc-d">23</span><span class="cal-ev empty">Empty</span></div>
+            <div class="cal-cell"><span class="cc-d">24</span><span class="cal-ev booked">LS1→B1</span></div>
+            <div class="cal-cell"><span class="cc-d">25</span><span class="cal-ev empty">Empty</span></div>
+            <div class="cal-cell"><span class="cc-d">26</span><span class="cal-ev empty">Empty</span></div>
+            <div class="cal-cell mute"><span class="cc-d">27</span></div>
+            <div class="cal-cell mute"><span class="cc-d">28</span></div>
+            <div class="cal-cell"><span class="cc-d">29</span></div>
+            <div class="cal-cell"><span class="cc-d">30</span></div>
+            <div class="cal-cell mute"><span class="cc-d">1</span></div>
+            <div class="cal-cell mute"><span class="cc-d">2</span></div>
+            <div class="cal-cell mute"><span class="cc-d">3</span></div>
+            <div class="cal-cell mute"><span class="cc-d">4</span></div>
+            <div class="cal-cell mute"><span class="cc-d">5</span></div>
+          </div>
+        </div>
+        <div class="csub" style="max-width:760px;margin:0 auto 10px;width:100%;text-align:left">What you've done — last 7 days</div>
+        <div class="stat-grid" style="max-width:760px;margin:0 auto 16px">
+          <div class="stat-card"><span class="sl">Jobs completed</span><span class="sv">6 <small>last 7 days</small></span></div>
+          <div class="stat-card"><span class="sl">Miles driven</span><span class="sv">540 <small>loaded</small></span></div>
+          <div class="stat-card"><span class="sl">Earnings</span><span class="sv">&pound;742 <small>after fees</small></span></div>
+          <div class="stat-card"><span class="sl">On-time delivery</span><span class="sv">100% <small>6 of 6</small></span></div>
+        </div>
+        <div class="csub" style="max-width:520px;margin:0 auto 10px;width:100%;text-align:left">Book by time — Tue 23 Jun (your open day)</div>
+        <div class="slot-col">
+          <div class="slot taken"><span class="sl-time">06:30</span><span class="sl-body">PL-10428 · B1 → S1 collection</span><span class="sl-tag">Booked</span></div>
+          <div class="slot free"><span class="sl-time">09:00</span><span class="sl-body">Open — 3 hr window, B1 lanes available</span><span class="sl-tag">Book slot</span></div>
+          <div class="slot free"><span class="sl-time">12:00</span><span class="sl-body">Open — 2 hr window, return-route matches</span><span class="sl-tag">Book slot</span></div>
+          <div class="slot taken"><span class="sl-time">14:30</span><span class="sl-body">PL-10431 · S1 → LS1 delivery</span><span class="sl-tag">Booked</span></div>
+          <div class="slot free"><span class="sl-time">17:00</span><span class="sl-body">Open — late slot, LS1 → B1 home leg</span><span class="sl-tag">Book slot</span></div>
+        </div>
+        <p class="preview-note">Framework preview — static placeholder. Live Google Calendar sync and time-slot booking wire up once the calendar integration is connected (see Connected Apps).</p>
+      </section>
+
+      <section class="page" id="planned-jobs" data-gate="jobBoard" data-title="Planned Jobs">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4zM8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M4 12h16"/></svg></div>
+          <h1>Planned Jobs</h1>
+          <p>Your booked and offered work, in order. Tap a job to see the full collection and delivery brief.</p>
+        </div>
+        <div class="crm-wrap">
+          <table class="crm">
+            <thead><tr><th>Job ID</th><th>Collection area</th><th>Delivery area</th><th>Vehicle</th><th>Service level</th><th>Collection time</th><th>Driver payout</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>PL-10428</td><td>B1 Birmingham</td><td>S1 Sheffield</td><td>Luton van</td><td>Same-day</td><td>Today 09:15</td><td>&pound;142</td><td><span class="pill pill-status">Confirmed</span></td></tr>
+              <tr><td>PL-10431</td><td>S1 Sheffield</td><td>LS1 Leeds</td><td>Luton van</td><td>Economy</td><td>Today 13:40</td><td>&pound;68</td><td><span class="pill pill-status busy">Offered</span></td></tr>
+              <tr><td>PL-10437</td><td>LS1 Leeds</td><td>B1 Birmingham</td><td>Luton van</td><td>Return leg</td><td>Today 16:20</td><td>&pound;96</td><td><span class="pill pill-status busy">Pending</span></td></tr>
+              <tr><td>PL-10502</td><td>B1 Birmingham</td><td>M1 Manchester</td><td>Transit</td><td>Next-day</td><td>Tomorrow 08:00</td><td>&pound;118</td><td><span class="pill pill-status off">Draft</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="preview-note">Framework preview — static placeholder data, no live integrations yet.</p>
+      </section>
+
+      <section class="page" id="route-planner" data-gate="plnaPlanner" data-title="Route Planner">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M6 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM18 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM8 17h6a3 3 0 0 0 3-3V9M6 15V7a2 2 0 0 1 2-2h4"/></svg></div>
+          <h1>Route Planner</h1>
+          <p>Build your own day. Drop in your jobs and your own work, order the stops the way you drive, and PLNA works out the miles, the time and what it's worth.</p>
+        </div>
+        <div data-plan-min="PAID" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
+          <div class="plan-real" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
+            <div class="rp-summary">
+              <div class="rp-stat"><div class="rs-l">Stops</div><div class="rs-v">5</div></div>
+              <div class="rp-stat"><div class="rs-l">Total miles</div><div class="rs-v">186 <span style="font-size:12px;color:var(--muted)">loaded</span></div></div>
+              <div class="rp-stat"><div class="rs-l">Drive time</div><div class="rs-v">4h 35m</div></div>
+              <div class="rp-stat"><div class="rs-l">Est. day pay</div><div class="rs-v good">&pound;306</div></div>
+            </div>
+            <div class="stops">
+              <div class="stop-row terminus"><span class="st-grip">⠿</span><span class="st-num">A</span><div class="st-body"><div class="st-t">B1 Birmingham — home base</div><div class="st-d">Start · 06:30</div></div><span class="st-leg">—</span></div>
+              <div class="stop-row"><span class="st-grip">⠿</span><span class="st-num">1</span><div class="st-body"><div class="st-t">PL-10428 · collect B1 → deliver S1</div><div class="st-d">Same-day · Luton · &pound;142</div></div><span class="st-leg">78 mi · 1h40</span></div>
+              <div class="stop-row"><span class="st-grip">⠿</span><span class="st-num">2</span><div class="st-body"><div class="st-t">Your own job · S1 collection</div><div class="st-d">Added by you · &pound;90 cash</div></div><span class="st-leg">4 mi · 12m</span></div>
+              <div class="stop-row"><span class="st-grip">⠿</span><span class="st-num">3</span><div class="st-body"><div class="st-t">PL-10431 · S1 → LS1 delivery</div><div class="st-d">Economy · Luton · &pound;68</div></div><span class="st-leg">38 mi · 55m</span></div>
+              <div class="stop-row terminus"><span class="st-grip">⠿</span><span class="st-num">B</span><div class="st-body"><div class="st-t">B1 Birmingham — home base</div><div class="st-d">Finish · return leg</div></div><span class="st-leg">66 mi · 1h28</span></div>
+            </div>
+            <div class="rp-add">
+              <input type="text" placeholder="Add a stop — postcode, job ID or your own pickup…">
+              <button class="cs-btn">Add stop</button>
+              <button class="cs-btn ghost">Optimise order</button>
+            </div>
+            <div class="plna-actions">
+              <span class="pill">Save route</span>
+              <span class="pill">Send to Driver Diary</span>
+              <span class="pill">Find a return load</span>
+              <span class="pill">Open in maps</span>
+            </div>
+            <p class="preview-note">Framework preview — static placeholder. Drag to reorder, add your own work alongside HAF jobs; live mileage &amp; pay recalc and map routing wire up with the planner backend.</p>
+          </div>
+          <div class="plan-tease is-locked" style="width:100%">
+            <div class="upsell">
+              <div class="us-ic"><svg viewBox="0 0 24 24"><path d="M6 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM18 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM8 17h6a3 3 0 0 0 3-3V9M6 15V7a2 2 0 0 1 2-2h4"/></svg></div>
+              <span class="us-need">Pro feature</span>
+              <h2>Plan your whole day</h2>
+              <p>The full route planner lets you sequence HAF jobs and your own work into one optimised day, with live miles, drive time and pay. Included with PLNA Pro.</p>
+              <div class="us-feats"><span class="pill">PLNA Pro · £19/mo</span><span class="pill">or £190/year</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="return-route" data-gate="plnaPlanner" data-title="Return-Route">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M9 14l-4-4 4-4M5 10h9a5 5 0 0 1 5 5v3"/></svg></div>
+          <h1>Return-Route</h1>
+          <p>Fill the empty leg home. PLNA looks for collections that point back toward your base around your finish time.</p>
+        </div>
+        <div data-plan-min="PAID" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
+          <div class="plan-real" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
+            <div class="stat-grid">
+              <div class="stat-card"><span class="sl">Return-route alerts</span><span class="sv"><span class="pill pill-status">On</span></span></div>
+              <div class="stat-card"><span class="sl">Watching lane</span><span class="sv">S1 <small>→ B1 home</small></span></div>
+              <div class="stat-card"><span class="sl">Alert window</span><span class="sv">15:00–17:30</span></div>
+              <div class="stat-card"><span class="sl">Matches today</span><span class="sv">3 <small>pointing home</small></span></div>
+            </div>
+            <p class="preview-note">Return-route alerts ping you when a collection appears that points back toward base around your finish time. Eligibility/opportunity only — never a guaranteed return load.</p>
+          </div>
+          <div class="plan-tease is-locked" style="width:100%">
+            <div class="upsell">
+              <div class="us-ic"><svg viewBox="0 0 24 24"><path d="M9 14l-4-4 4-4M5 10h9a5 5 0 0 1 5 5v3"/></svg></div>
+              <span class="us-need">Plus feature</span>
+              <h2>Return-route alerts</h2>
+              <p>Get pinged when a collection appears that points back toward your base around your finish time, so you can chase the empty leg home. Included with PLNA Pro.</p>
+              <div class="us-feats"><span class="pill">PLNA Pro · £19/mo</span><span class="pill">or £190/year</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="driver-diary" data-gate="plnaPlanner" data-title="Driver Diary">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M7 3v3M17 3v3M4 8h16M5 5h14v15H5zM8 12h8M8 16h5"/></svg></div>
+          <h1>Driver Diary</h1>
+          <p>Your week at a glance — booked jobs, empty days and planned routes laid out day by day.</p>
+        </div>
+        <div class="diary-nav">
+          <button>&#8592; Prev week</button>
+          <span class="dn-week">Mon 22 – Sun 28 Jun 2026</span>
+          <button>Next week &#8594;</button>
+        </div>
+        <div class="week-grid" style="margin-bottom:16px">
+          <div class="day-card dc-today dc-booked"><span class="dc-dow">Mon</span><span class="dc-date">22</span><span class="dc-badge">2 jobs</span></div>
+          <div class="day-card dc-empty"><span class="dc-dow">Tue</span><span class="dc-date">23</span><span class="dc-badge">Empty</span></div>
+          <div class="day-card dc-booked"><span class="dc-dow">Wed</span><span class="dc-date">24</span><span class="dc-badge">1 job</span></div>
+          <div class="day-card dc-empty"><span class="dc-dow">Thu</span><span class="dc-date">25</span><span class="dc-badge">Empty</span></div>
+          <div class="day-card dc-empty"><span class="dc-dow">Fri</span><span class="dc-date">26</span><span class="dc-badge">Empty</span></div>
+          <div class="day-card"><span class="dc-dow">Sat</span><span class="dc-date">27</span><span class="dc-badge">Day off</span></div>
+          <div class="day-card"><span class="dc-dow">Sun</span><span class="dc-date">28</span><span class="dc-badge">Day off</span></div>
+        </div>
+        <div class="crm-wrap" style="max-width:880px">
+          <table class="crm">
+            <thead><tr><th>Day</th><th>Job</th><th>Route</th><th>Vehicle</th><th>Pay</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Mon 22</td><td>PL-10428</td><td>B1 → S1</td><td>Luton</td><td>&pound;142</td><td><span class="pill pill-status">Confirmed</span></td></tr>
+              <tr><td>Mon 22</td><td>PL-10431</td><td>S1 → LS1</td><td>Luton</td><td>&pound;68</td><td><span class="pill pill-status busy">Offered</span></td></tr>
+              <tr><td>Wed 24</td><td>PL-10437</td><td>LS1 → B1</td><td>Luton</td><td>&pound;96</td><td><span class="pill pill-status busy">Pending</span></td></tr>
+              <tr><td>Thu 25</td><td colspan="4" style="color:var(--muted);font-style:italic">Empty day — flagged to network</td><td><span class="pill pill-status off">Watching</span></td></tr>
+              <tr><td>Fri 26</td><td colspan="4" style="color:var(--muted);font-style:italic">Empty day — flagged to network</td><td><span class="pill pill-status off">Watching</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="preview-note">Framework preview — static placeholder data, no live integrations yet.</p>
+      </section>
+
+      <section class="page" id="notes" data-gate="plnaPlanner" data-title="Notes">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5zM9 9h6M9 13h6M9 17h3"/></svg></div>
+          <h1>Notes</h1>
+          <p>Quick reminders — access codes, parking, kit and anything worth remembering for a regular route.</p>
+        </div>
+        <div class="plna-actions" style="justify-content:flex-end;max-width:640px;margin:0 auto 14px">
+          <span class="pill">+ Add note</span>
+          <span class="pill">All</span>
+          <span class="pill">Access</span>
+          <span class="pill">Parking</span>
+          <span class="pill">Kit</span>
+          <span class="pill">Route</span>
+        </div>
+        <div class="notes-list">
+          <div class="note-card">
+            <div class="note-head"><span class="note-tag nt-access">Access</span><span class="note-area">B1 Birmingham</span></div>
+            <div class="note-title">Tyseley Industrial — rear gate intercom</div>
+            <div class="note-body">Access via rear gate off Garrison Lane. Intercom #4. Call ahead — security slow to respond. No parking on Garrison, use lay-by on Chequer St.</div>
+          </div>
+          <div class="note-card">
+            <div class="note-head"><span class="note-tag nt-parking">Parking</span><span class="note-area">S1 Sheffield</span></div>
+            <div class="note-title">Kelham Island — loading bay times</div>
+            <div class="note-body">Loading bay on Green Ln free 08:00–09:30 and 14:00–16:00. Outside those windows use Tesco car park (free 90 mins). Narrow access — no Luton after 10am.</div>
+          </div>
+          <div class="note-card">
+            <div class="note-head"><span class="note-tag nt-kit">Kit</span><span class="note-area">All routes</span></div>
+            <div class="note-title">Tail-lift check for Luton jobs</div>
+            <div class="note-body">Always confirm tail-lift availability before accepting a Luton job — the spare van doesn't have one. Request notes should say "tail lift required" if the customer mentioned it.</div>
+          </div>
+          <div class="note-card">
+            <div class="note-head"><span class="note-tag nt-route">Route</span><span class="note-area">B1 → M1</span></div>
+            <div class="note-title">A38/M6 traffic pattern</div>
+            <div class="note-body">M6 northbound past Stafford (J13–J14) slow Mon–Fri 07:00–09:30. Leave B1 by 06:15 or cut via A5 through Cannock. Adds 12 mins but avoids the worst of it.</div>
+          </div>
+        </div>
+        <p class="preview-note">Framework preview — static placeholder data, no live integrations yet.</p>
+      </section>
+
+      <section class="page" id="pod" data-gate="plnaPlanner" data-title="Proof of Delivery">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M9 11l2 2 4-4M5 5h14v14H5z"/></svg></div>
+          <h1>Proof of Delivery</h1>
+          <p>Capture a signature, a photo and a timestamp at drop-off so every job closes clean.</p>
+        </div>
+        <div class="pod-form">
+          <div>
+            <label class="pf-label">Job</label>
+            <select>
+              <option>PL-10428 — B1 Birmingham → S1 Sheffield</option>
+              <option>PL-10431 — S1 Sheffield → LS1 Leeds</option>
+              <option>PL-10437 — LS1 Leeds → B1 Birmingham</option>
+            </select>
+          </div>
+          <div>
+            <label class="pf-label">Recipient name</label>
+            <input type="text" placeholder="Name of person who received the goods">
+          </div>
+          <div>
+            <label class="pf-label">Signature</label>
+            <div class="sig-area">
+              <svg viewBox="0 0 24 24"><path d="M3 17l4-2 10-10a1.4 1.4 0 0 1 2 2L9 17l-4 2M3 17v-4M21 21H3"/></svg>
+              Tap to capture signature
+            </div>
+          </div>
+          <div>
+            <label class="pf-label">Delivery photo</label>
+            <div class="photo-area">
+              <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg>
+              Tap to add photo
+            </div>
+          </div>
+          <div>
+            <label class="pf-label">Delivery timestamp</label>
+            <div class="ts-display">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+              Mon 22 Jun 2026 &nbsp;&middot;&nbsp; auto-stamped on submit
+              <span class="ts-live">Live</span>
+            </div>
+          </div>
+          <div>
+            <label class="pf-label">Notes</label>
+            <textarea placeholder="Any issues, access notes or delivery comments…"></textarea>
+          </div>
+          <button class="btn-cta green">
+            <svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:#fff;stroke-width:2;fill:none"><path d="M9 11l2 2 4-4M5 5h14v14H5z"/></svg>
+            Complete delivery
+          </button>
+        </div>
+        <p class="preview-note">Framework preview — static placeholder data, no live integrations yet.</p>
+      </section>
+
+      <section class="page" id="job-feedback" data-gate="plnaPlanner" data-title="Job Feedback">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M12 3l2.5 5 5.5.8-4 3.9 1 5.5L12 16l-5 2.7 1-5.5-4-3.9 5.5-.8Z"/></svg></div>
+          <h1>Job Feedback</h1>
+          <p>A few quick questions after each job. Your answers shape future rates and which work you're offered.</p>
+        </div>
+        <div class="form-card">
+          <div class="qa-row"><span class="qa-q">Was the price fair?</span><span class="qa-a"><span class="pill">Yes</span><span class="pill">No</span></span></div>
+          <div class="qa-row"><span class="qa-q">Was the route worth it?</span><span class="qa-a"><span class="pill">Yes</span><span class="pill">No</span></span></div>
+          <div class="qa-row"><span class="qa-q">Were there delays?</span><span class="qa-a"><span class="pill">Yes</span><span class="pill">No</span></span></div>
+          <div class="qa-row"><span class="qa-q">Access difficult?</span><span class="qa-a"><span class="pill">Yes</span><span class="pill">No</span></span></div>
+          <div class="qa-row"><span class="qa-q">Would you take it again?</span><span class="qa-a"><span class="pill">Yes</span><span class="pill">No</span></span></div>
+          <div class="qa-row"><span class="qa-q">Suggested future rate?</span><span class="qa-a"><span class="pill">&pound;150</span></span></div>
+        </div>
+        <div class="plna-notes">
+          <label for="fbNotes">Notes</label>
+          <textarea id="fbNotes" placeholder="Anything the network should know about this job…"></textarea>
+        </div>
+        <p class="preview-note">Framework preview — static placeholder data, no live integrations yet.</p>
+      </section>
+
+      <section class="page" id="suggested-rate" data-gate="plnaPlanner" data-title="Suggested Rate">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M12 3v18M16 7a4 4 0 0 0-4-2c-2 0-4 1-4 3s2 3 4 3 4 1 4 3-2 3-4 3a4 4 0 0 1-4-2"/></svg></div>
+          <h1>Suggested Rate</h1>
+          <p>What the route ahead is worth to you — built live from distance, your vehicle, the job and how busy the lane is. The same engine that prices every KNECT quote, shown from your side so you can see exactly how your pay is worked out.</p>
+        </div>
+        <div class="calc">
+          <!-- ===== INPUTS ===== -->
+          <div class="calc-card">
+            <h3>Your route</h3>
+            <p class="ch-sub">Set the lane and the job — the lane's live demand and supply do the rest.</p>
+            <div class="cgrid">
+              <div class="cfield"><label>From</label><input id="sr_pickup" value="Sheffield"></div>
+              <div class="cfield"><label>To</label><input id="sr_delivery" value="Manchester"></div>
+            </div>
+            <div class="cgrid" style="margin-top:10px">
+              <div class="cfield"><label>Loaded miles</label><input id="sr_miles" type="number" min="0" value="80"></div>
+              <div class="cfield"><label>Your vehicle</label><select id="sr_veh"></select></div>
+            </div>
+            <div class="cgrid one" style="margin-top:10px">
+              <div class="cfield"><label>Job type</label><select id="sr_job"></select></div>
+            </div>
+
+            <div class="csub">How busy is this lane right now</div>
+            <div class="cgrid four">
+              <div class="cfield"><label>Urgent jobs</label><input id="sr_d_urg" type="number" min="0" value="2"></div>
+              <div class="cfield"><label>Sameday jobs</label><input id="sr_d_same" type="number" min="0" value="3"></div>
+              <div class="cfield"><label>Flexible jobs</label><input id="sr_d_flex" type="number" min="0" value="4"></div>
+              <div class="cfield"><label>Live quotes</label><input id="sr_d_q" type="number" min="0" value="6"></div>
+            </div>
+            <div class="csub">Drivers covering this lane</div>
+            <div class="cgrid four">
+              <div class="cfield"><label>Available</label><input id="sr_s_av" type="number" min="0" value="5"></div>
+              <div class="cfield"><label>Return-route</label><input id="sr_s_rr" type="number" min="0" value="2"></div>
+              <div class="cfield"><label>Co-load spaces</label><input id="sr_s_co" type="number" min="0" value="3"></div>
+              <div class="cfield"><label>Nearby</label><input id="sr_s_nb" type="number" min="0" value="4"></div>
+            </div>
+            <div class="csub">Lane character</div>
+            <div class="cgrid">
+              <div class="cfield"><label>Onward work at drop-off</label><select id="sr_rec"></select></div>
+              <div class="cfield"><label>Driver interest in direction</label><select id="sr_dir"></select></div>
+            </div>
+          </div>
+
+          <!-- ===== OUTPUT ===== -->
+          <div class="calc-card">
+            <h3>Your suggested pay</h3>
+            <p class="ch-sub">What you'd be paid · what the customer pays · what HAF keeps to run the network.</p>
+            <div id="sr_out"></div>
+          </div>
+        </div>
+        <p class="preview-note">Live engine · recalculates as you type. A guide built from the HAF KNECT Pricing Zone Formula — your real offer can vary with live network conditions.</p>
+      </section>
+
+      <section class="page" id="rewards" data-title="My Rewards">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M5 4h14v4a7 7 0 0 1-14 0V4ZM5 6H3v1a3 3 0 0 0 3 3M19 6h2v1a3 3 0 0 1-3 3"/></svg></div>
+          <h1>My Rewards</h1>
+          <p>Earn points on every completed job and climb the tier ladder for better rates, priority offers and perks.</p>
+        </div>
+        <div class="points-card">
+          <div><div class="pc-big">1,840</div><div class="pc-l">Reward points</div></div>
+          <div><div class="pc-big" style="color:var(--text)">Silver</div><div class="pc-l">Current tier · 160 pts to Gold</div></div>
+        </div>
+        <div class="tier-grid">
+          <div class="tier"><span class="tdot"></span><span class="tn">Bronze</span><span class="tp">0 pts</span></div>
+          <div class="tier cur"><span class="tdot"></span><span class="tn">Silver</span><span class="tp">1,500 pts</span></div>
+          <div class="tier"><span class="tdot"></span><span class="tn">Gold</span><span class="tp">2,000 pts</span></div>
+          <div class="tier"><span class="tdot"></span><span class="tn">Platinum</span><span class="tp">3,500 pts</span></div>
+          <div class="tier"><span class="tdot"></span><span class="tn">Collective</span><span class="tp">Invite only</span></div>
+        </div>
+        <div class="crm-wrap">
+          <table class="crm" style="min-width:520px">
+            <thead><tr><th>Reward</th><th>Cost</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Priority offers — 7 days</td><td>400 pts</td><td><span class="pill pill-status">Available</span></td></tr>
+              <tr><td>&pound;25 fuel credit</td><td>900 pts</td><td><span class="pill pill-status">Available</span></td></tr>
+              <tr><td>Network Pass — 1 month</td><td>1,500 pts</td><td><span class="pill pill-status busy">Redeem soon</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="preview-note">Framework preview — static placeholder data, no live integrations yet.</p>
+      </section>
+
+      <section class="page" id="haffee" data-gate="plnaPlanner" data-title="HAFFEE AI">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M12 3a4 4 0 0 1 4 4c0 1.5-1 2.5-2 3.2V12H10v-1.8C9 9.5 8 8.5 8 7a4 4 0 0 1 4-4ZM9 16h6M10 20h4"/></svg></div>
+          <h1>HAFFEE AI</h1>
+          <p>Your planning co-pilot — reads your week, your lanes and live network demand to suggest where to be, what to price and which empty legs to fill.</p>
+        </div>
+        <div data-plan-min="PAID" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
+          <div class="plan-real" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
+            <div class="stat-grid">
+              <div class="stat-card"><span class="sl">AI status</span><span class="sv"><span class="pill pill-status">Active · Pro</span></span></div>
+              <div class="stat-card"><span class="sl">Suggestions today</span><span class="sv">5 <small>planning tips</small></span></div>
+              <div class="stat-card"><span class="sl">Best lane to chase</span><span class="sv">S1 → M1 <small>high demand</small></span></div>
+              <div class="stat-card"><span class="sl">Empty leg risk</span><span class="sv">Low <small>return likely</small></span></div>
+            </div>
+            <div class="form-card">
+              <div class="qa-row"><span class="qa-q">“Where should I head after my Sheffield drop?”</span></div>
+              <div class="qa-row"><span class="qa-q" style="font-weight:500;color:var(--muted)">M1 Manchester is running hot this afternoon and points back toward your base — worth lining up a return collection there. Opportunity only, not a guaranteed load.</span></div>
+            </div>
+            <p class="preview-note">Framework preview — HAFFEE AI guidance is advisory. Suggestions are eligibility/opportunity, never guaranteed work or returns.</p>
+          </div>
+          <div class="plan-tease is-locked" style="width:100%">
+            <div class="upsell">
+              <div class="us-ic"><svg viewBox="0 0 24 24"><path d="M12 3a4 4 0 0 1 4 4c0 1.5-1 2.5-2 3.2V12H10v-1.8C9 9.5 8 8.5 8 7a4 4 0 0 1 4-4ZM9 16h6M10 20h4"/></svg></div>
+              <span class="us-need">Pro feature</span>
+              <h2>Unlock HAFFEE AI</h2>
+              <p>Full HAFFEE AI planning support — live lane reads, pricing prompts and empty-leg guidance — comes with PLNA Pro.</p>
+              <div class="us-feats"><span class="pill">PLNA Pro · £19/mo</span><span class="pill">or £190/year</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="landing-page" data-gate="plnaPlanner" data-title="Driver Landing Page">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 9h18M7 7h.01M9.5 7h.01"/></svg></div>
+          <h1>Driver Landing Page</h1>
+          <p>Your own local courier brand, with HAF behind the funnel. You own the domain, HAF supports the page, and work you can't take overflows to KNECT.</p>
+        </div>
+        <div data-plan-min="PAID" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
+          <div class="plan-real" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
+            <div class="lp-status">
+              <span class="lps-dot"></span>
+              <div><div class="lps-t">okafor-couriers.co.uk</div><div class="lps-d">Domain connected · you own this domain · HAF supports the funnel</div></div>
+              <span class="pill pill-status lps-pill">Live</span>
+            </div>
+            <div class="stat-grid">
+              <div class="stat-card"><span class="sl">Enquiries received</span><span class="sv">28 <small>this month</small></span></div>
+              <div class="stat-card"><span class="sl">Jobs accepted by you</span><span class="sv">17 <small>kept direct</small></span></div>
+              <div class="stat-card"><span class="sl">Passed to KNECT</span><span class="sv">11 <small>overflow</small></span></div>
+              <div class="stat-card"><span class="sl">Overflow conversion</span><span class="sv">9 <small>covered by network</small></span></div>
+            </div>
+            <div class="crm-wrap">
+              <table class="crm" style="min-width:560px">
+                <thead><tr><th>Enquiry</th><th>Lane</th><th>Outcome</th><th>Routed to</th></tr></thead>
+                <tbody>
+                  <tr><td>ENQ-2207</td><td>B1 → S1</td><td><span class="pill pill-status">Accepted</span></td><td>You</td></tr>
+                  <tr><td>ENQ-2206</td><td>B1 → M1</td><td><span class="pill pill-status">Accepted</span></td><td>You</td></tr>
+                  <tr><td>ENQ-2204</td><td>LS1 → NE1</td><td><span class="pill pill-status busy">Passed</span></td><td>HAF KNECT</td></tr>
+                  <tr><td>ENQ-2201</td><td>B1 → BS1</td><td><span class="pill pill-status busy">Passed</span></td><td>HAF KNECT</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="funnel-note">
+              <span class="fn-ic">i</span>
+              <span><b>You own the domain. HAF supports the funnel. KNECT receives overflow.</b> Enquiries land on your branded page first — you accept the work you want, and anything you can't take (§11 overflow rule) is passed to the HAF KNECT network so the customer is still covered. Overflow routing is an opportunity for the network — never a guaranteed job for any driver.</span>
+            </div>
+            <p class="preview-note">Framework preview — static placeholder data, no live integrations yet.</p>
+          </div>
+          <div class="plan-tease is-locked" style="width:100%">
+            <div class="upsell">
+              <div class="us-ic"><svg viewBox="0 0 24 24"><path d="M3 5h18v14H3zM3 9h18M7 7h.01M9.5 7h.01"/></svg></div>
+              <span class="us-need">Pro feature</span>
+              <h2>Build your local courier brand</h2>
+              <p>The PLNA Pro Driver Landing Page gives you a branded page on your own domain, with HAF behind the funnel and overflow you can't cover passed to KNECT. Pro only — and you'll need to own your own domain (§11).</p>
+              <div class="us-feats"><span class="pill">PLNA Pro · £19/mo</span><span class="pill">or £190/year</span><span class="pill">Requires your own domain</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="page" id="network-pass" data-title="Network Pass">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M3 6h18v12H3z"/><path d="M3 10h18M7 15h4"/></svg></div>
+          <h1>Network Pass</h1>
+          <p>Your HAF network membership — the foundation of your job board access, rates and perks across KNECT and PLNA.</p>
+        </div>
+        <div class="pass-card">
+          <div class="pc-eyebrow">HAF Driver Network Pass</div>
+          <div class="pc-name">HAF Driver</div>
+          <div class="pc-row">
+            <span class="pc-badge">KNECT Activated</span>
+            <span class="pc-expiry">Renews 22 Dec 2026</span>
+          </div>
+          <div class="pc-num">DRIV &middot; B1 &middot; 0042 &middot; 8834</div>
+        </div>
+        <div class="stat-grid" style="max-width:560px;margin:0 auto 18px">
+          <div class="stat-card"><span class="sl">Member since</span><span class="sv">Mar 2025</span></div>
+          <div class="stat-card"><span class="sl">Jobs completed</span><span class="sv">142 <small>all time</small></span></div>
+          <div class="stat-card"><span class="sl">Network score</span><span class="sv">4.8 <small>/ 5</small></span></div>
+          <div class="stat-card"><span class="sl">Reward points</span><span class="sv">1,840 <small>Silver tier</small></span></div>
+        </div>
+        <div class="benefit-table">
+          <div class="bt-head"><span>Benefit</span><span>Free</span><span>Activated</span></div>
+          <div class="bt-row"><span>Rate uplift on jobs</span><span class="bt-no">—</span><span class="bt-yes">+3%</span></div>
+          <div class="bt-row"><span>Network fee reduction</span><span class="bt-no">—</span><span class="bt-yes">&minus;3 pts</span></div>
+          <div class="bt-row"><span>Relay jobs eligible</span><span class="bt-no">No</span><span class="bt-yes">Yes</span></div>
+          <div class="bt-row"><span>Profit share pool</span><span class="bt-no">No</span><span class="bt-yes">Yes</span></div>
+          <div class="bt-row"><span>Container collective</span><span class="bt-no">No</span><span class="bt-yes">Yes</span></div>
+          <div class="bt-row"><span>Priority job visibility</span><span class="bt-no">No</span><span class="bt-yes">Yes</span></div>
+          <div class="bt-row"><span>KNECT job board access</span><span class="bt-yes">Yes</span><span class="bt-yes">Yes</span></div>
+        </div>
+        <p class="preview-note">Framework preview — static placeholder data, no live integrations yet. Network Pass status is determined by your KNECT membership.</p>
+      </section>
+
+      <section class="page" id="comms" data-title="Communications">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-12 7.6L3 21l1.9-5.6A8.4 8.4 0 1 1 21 11.5Z"/></svg></div>
+          <h1>Communications</h1>
+          <p>Choose the WhatsApp account all your job alerts, offers and reminders run through — so everything reaches you where you already are.</p>
+        </div>
+        <div class="connect-strip">
+          <div class="cs-ic wa"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-12 7.6L3 21l1.9-5.6A8.4 8.4 0 1 1 21 11.5Z"/></svg></div>
+          <div class="cs-meta">
+            <div class="cs-t">WhatsApp</div>
+            <div class="cs-d">Pair the WhatsApp number you want HAF to message you on. Scan once to connect.</div>
+          </div>
+          <span class="cs-status off">Not connected</span>
+          <button class="cs-btn">Connect</button>
+        </div>
+        <div class="settings-card">
+          <div class="sc-row">
+            <div><div class="sc-label">Your WhatsApp number</div><div class="sc-sub">The account all communications route through</div></div>
+            <div class="sc-ctrl" style="color:var(--text)"><input type="tel" placeholder="+44 7…" style="font-family:inherit;font-size:13.5px;color:var(--text);background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:8px 11px;width:150px"></div>
+          </div>
+          <div class="sc-row">
+            <div><div class="sc-label">Preferred channel</div><div class="sc-sub">Where new offers and alerts are sent first</div></div>
+            <div class="sc-ctrl"><select><option selected>WhatsApp</option><option>SMS</option><option>Email</option><option>In-app only</option></select></div>
+          </div>
+        </div>
+        <div class="csub" style="max-width:560px;margin:0 auto 10px;width:100%;text-align:left">What you get notified about</div>
+        <div class="pref-card">
+          <div class="pref-row"><div><div class="pr-t">New job offers</div><div class="pr-s">When a job matching your lane &amp; vehicle appears</div></div><div class="switch on" onclick="this.classList.toggle('on')"><div class="knob"></div></div></div>
+          <div class="pref-row"><div><div class="pr-t">Return-route alerts</div><div class="pr-s">Collections pointing back toward your base</div></div><div class="switch on" onclick="this.classList.toggle('on')"><div class="knob"></div></div></div>
+          <div class="pref-row"><div><div class="pr-t">Booking confirmations</div><div class="pr-s">When a job is confirmed or changes time</div></div><div class="switch on" onclick="this.classList.toggle('on')"><div class="knob"></div></div></div>
+          <div class="pref-row"><div><div class="pr-t">Proof-of-delivery reminders</div><div class="pr-s">A nudge to capture POD after each drop</div></div><div class="switch" onclick="this.classList.toggle('on')"><div class="knob"></div></div></div>
+          <div class="pref-row"><div><div class="pr-t">Weekly summary</div><div class="pr-s">Your earnings &amp; jobs recap every Sunday</div></div><div class="switch on" onclick="this.classList.toggle('on')"><div class="knob"></div></div></div>
+        </div>
+        <p class="preview-note">Framework preview — static placeholder. Live WhatsApp delivery connects in Connected Apps; each driver pairs their own number.</p>
+      </section>
+
+      <section class="page" id="integrations" data-title="Connected Apps">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M10 3v6M14 3v6M5 9h14v3a7 7 0 0 1-14 0z M12 19v2"/></svg></div>
+          <h1>Connected Apps</h1>
+          <p>Link the tools you already use. Each driver connects their own accounts — HAF never sees your passwords.</p>
+        </div>
+        <div class="connect-strip">
+          <div class="cs-ic g"><svg viewBox="0 0 24 24"><path d="M7 3v3M17 3v3M4 8h16M5 5h14v15H5z"/></svg></div>
+          <div class="cs-meta">
+            <div class="cs-t">Google Calendar</div>
+            <div class="cs-d">See your availability and let jobs book straight into your day.</div>
+          </div>
+          <span class="cs-status off">Not connected</span>
+          <button class="cs-btn">Connect</button>
+        </div>
+        <div class="connect-strip">
+          <div class="cs-ic wa"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-12 7.6L3 21l1.9-5.6A8.4 8.4 0 1 1 21 11.5Z"/></svg></div>
+          <div class="cs-meta">
+            <div class="cs-t">WhatsApp</div>
+            <div class="cs-d">Get offers, alerts and reminders on the number you choose.</div>
+          </div>
+          <span class="cs-status off">Not connected</span>
+          <button class="cs-btn">Connect</button>
+        </div>
+        <div class="connect-strip">
+          <div class="cs-ic"><svg viewBox="0 0 24 24" style="color:var(--brand-orange)"><path d="M4 6h16v12H4zM4 7l8 6 8-6"/></svg></div>
+          <div class="cs-meta">
+            <div class="cs-t">Email</div>
+            <div class="cs-d">A backup channel for confirmations and your weekly summary.</div>
+          </div>
+          <span class="cs-status on">Connected</span>
+          <button class="cs-btn ghost">Manage</button>
+        </div>
+        <p class="preview-note">Framework preview — static placeholder. Google Calendar booking links and WhatsApp pairing wire up per driver; programmatic calendar writes are pending platform calendar access.</p>
+      </section>
+
+      <section class="page" id="plans" data-title="Plans &amp; Billing">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M3 7h18v12H3zM3 11h18M7 15h4"/></svg></div>
+          <h1>Plans &amp; Billing</h1>
+          <p>Two ways to use PLNA — Free, or Pro for the full planning toolkit. Pay monthly or save with a year up front.</p>
+        </div>
+        <div class="bill-toggle">
+          <button class="active" id="billMonthly" onclick="setBilling('monthly')">Monthly</button>
+          <button id="billAnnual" onclick="setBilling('annual')">Annual <span class="bill-save">save £38</span></button>
+        </div>
+        <div class="plan-cards">
+          <div class="plan-card">
+            <div class="pc-name">PLNA Free</div>
+            <div class="pc-price"><span class="pc-amt">£0</span><span class="pc-per">forever</span></div>
+            <div class="pc-tag">Plan your own courier work.</div>
+            <ul>
+              <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>Driver &amp; vehicle profile</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>Availability &amp; calendar</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>See the job board</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>Basic area preferences</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>KNECT network connection</li>
+            </ul>
+            <button class="pc-cta ghost">Choose Free</button>
+          </div>
+          <div class="plan-card feat">
+            <span class="pc-current">Current plan</span>
+            <div class="pc-name">PLNA Pro</div>
+            <div class="pc-price"><span class="pc-amt" id="proAmt">£19</span><span class="pc-per" id="proPer">per month</span></div>
+            <div class="pc-tag" id="proTag">Plan smarter. Earn better.</div>
+            <ul>
+              <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>Everything in Free</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>Full route planner</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>Return-route alerts</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>Full HAFFEE AI support</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>Higher base-rate % + lower fee</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>Driver landing page</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>Priority KNECT visibility</li>
+            </ul>
+            <button class="pc-cta primary">Manage billing</button>
+          </div>
+        </div>
+        <p class="preview-note">Framework preview — prices are placeholders pending confirmation. Live checkout (Stripe monthly/annual) wires up with billing.</p>
+      </section>
+
+    </div>
+    <footer style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:16px 30px;border-top:1px solid var(--line);font-size:11px;letter-spacing:.04em;color:var(--muted);font-weight:600">
+      <span>HAF PLNA — driver planning</span>
+      <span id="verFooter">HAF X V2.0.0</span>
+    </footer>
+  </main>
+</div>
+
+<script src="haf-model.js"></script>
+<script src="pricing-engine.js"></script>
+<script>
+var navButtons=document.querySelectorAll('.nav-btn[data-page]');
+var pages=document.querySelectorAll('.page');
+var crumb=document.getElementById('crumbPage');
+var groups=document.querySelectorAll('.group');
+function goToPage(id){
+  navButtons.forEach(function(b){b.classList.remove('active');});
+  var navBtn=document.querySelector('.nav-btn[data-page="'+id+'"]');
+  if(navBtn){navBtn.classList.add('active');}
+  pages.forEach(function(p){p.classList.remove('active');});
+  var pg=document.getElementById(id);
+  if(pg){pg.classList.add('active'); crumb.textContent=pg.dataset.title||'';}
+  if(navBtn && !navBtn.classList.contains('group-btn')){
+    var grp=navBtn.closest('.group');
+    if(grp){ grp.classList.add('open'); }
+  }
+  window.scrollTo(0,0);
+}
+navButtons.forEach(function(btn){
+  btn.addEventListener('click',function(){ goToPage(btn.dataset.page); });
+});
+groups.forEach(function(grp){
+  var gb=grp.querySelector('.group-btn');
+  if(gb){ gb.addEventListener('click',function(){ grp.classList.toggle('open'); }); }
+});
+document.querySelectorAll('.haf-tile[data-page]').forEach(function(t){
+  t.addEventListener('click',function(){ goToPage(t.dataset.page); });
+});
+document.getElementById('themeToggle').addEventListener('click',function(){
+  document.body.classList.toggle('dark');
+  localStorage.setItem('otis-theme',document.body.classList.contains('dark')?'dark':'light');
+});
+if(localStorage.getItem('otis-theme')==='dark') document.body.classList.add('dark');
+
+// ===== Suggested Rate calculator (shared HAFPricing engine — driver lens) =====
+(function(){
+  var P=window.HAFPricing;
+  if(!P || !document.getElementById('sr_out')) return;
+  var $=function(id){return document.getElementById(id);};
+  var v=function(id){var e=$(id);return e?e.value:'';};
+  var opt=function(sel,list,labeller){ if(sel){sel.innerHTML=list.map(function(x){return '<option value="'+x.code+'">'+labeller(x)+'</option>';}).join('');} };
+  opt($('sr_veh'),P.config.vehicles,function(x){return x.name+' · £'+x.baseRate.toFixed(2)+'/mi'+(x.manual?' (manual)':'');});
+  opt($('sr_job'),P.config.jobTypes,function(x){return x.name;});
+  opt($('sr_rec'),P.config.recovery,function(x){return x.name;});
+  opt($('sr_dir'),P.config.direction,function(x){return x.name;});
+  if($('sr_job')) $('sr_job').value='SAMEDAY_FLEX';
+  if($('sr_rec')) $('sr_rec').value='NORMAL';
+  if($('sr_dir')) $('sr_dir').value='NORMAL';
+
+  function row(op,label,val,cls){
+    return '<div class="price-row'+(cls?' '+cls:'')+'"><span class="pr-l"><span class="pr-op">'+op+'</span>'+label+'</span><span class="pr-v">'+val+'</span></div>';
+  }
+  function render(){
+    var drv=(window.HAFDriver||{});
+    var q=P.quote({
+      pickup:v('sr_pickup'), delivery:v('sr_delivery'),
+      loadedMiles:v('sr_miles'), vehicleCode:v('sr_veh'), jobTypeCode:v('sr_job'),
+      demand:{urgent:v('sr_d_urg'),sameday:v('sr_d_same'),flexible:v('sr_d_flex'),liveQuotes:v('sr_d_q')},
+      supply:{available:v('sr_s_av'),returnRoute:v('sr_s_rr'),coload:v('sr_s_co'),nearby:v('sr_s_nb')},
+      recoveryCode:v('sr_rec'), directionCode:v('sr_dir'),
+      membership: drv.membership || 'FREE',
+      plnaPlan: drv.plnaPlan || 'FREE'
+    });
+    var m=P.money;
+    // Tier benefit line — paid plan keeps more on base pay + reduced network fee.
+    var tierStrip='';
+    if(q.tierRateUpliftPct>0 || q.tierFeeReductionPts>0){
+      var bits=[];
+      if(q.tierRateUpliftPct>0) bits.push('<span class="lane-chip">Tier uplift <b>+'+q.tierRateUpliftPct+'%</b> kept on base pay</span>');
+      if(q.tierFeeReductionPts>0) bits.push('<span class="lane-chip">Network fee <b>-'+q.tierFeeReductionPts+' pts</b> → '+q.networkFeePct+'%</span>');
+      tierStrip='<div class="lane-mini" style="margin-top:-4px">'+bits.join('')+'</div>';
+    } else {
+      tierStrip='<div class="lane-mini" style="margin-top:-4px"><span class="lane-chip">Lite plan · standard base pay &amp; fee — <b>upgrade</b> to keep more</span></div>';
+    }
+    var score=(q.lanePressureScore===Infinity?'∞':q.lanePressureScore);
+    var mileSub=m(q.loadedMiles*q.vehicle.baseRate);
+    var perMile=q.loadedMiles>0?m(q.driverTargetPay/q.loadedMiles):m(0);
+    var pills=q.reasonCodes.map(function(c){
+      var warn=(c==='MANUAL_SURGE'||c==='LANE_CAPPED'||c==='DEAD_ZONE'||c==='LOW_SUPPLY');
+      return '<span class="pill'+(warn?' warn':'')+'">'+(P.REASON_LABELS[c]||c)+'</span>';
+    }).join('');
+    var mf=q.manualApprovalRequired
+      ? '<div class="manual-flag on"><span class="mf-dot"></span>This lane needs a human to confirm before it’s offered</div>'
+      : '<div class="manual-flag off"><span class="mf-dot"></span>Auto-priced — ready to offer</div>';
+    $('sr_out').innerHTML=
+      '<div class="cheads">'+
+        '<div class="chead drv"><div class="ch-n">'+m(q.driverTargetPay)+'</div><div class="ch-l">You’d be paid</div></div>'+
+        '<div class="chead cust"><div class="ch-n">'+m(q.customerPriceIncVat)+'</div><div class="ch-l">Customer pays · inc VAT</div></div>'+
+        '<div class="chead"><div class="ch-n">'+m(q.hafGrossFee)+'</div><div class="ch-l">HAF network fee · '+q.hafMarginPct+'%</div></div>'+
+      '</div>'+
+      '<div class="lane-mini">'+
+        '<span class="lane-chip">Your rate <b>'+perMile+'/mi</b></span>'+
+        '<span class="lane-chip">Pressure <b>'+score+'</b> · '+q.lanePressureStatus+'</span>'+
+        '<span class="lane-chip">Lane ×<b>'+q.laneMultiplier+'</b>'+(q.laneCapped?' (capped)':'')+'</span>'+
+      '</div>'+
+      tierStrip+
+      '<div class="price-stack">'+
+        row('=','Loaded miles × base rate',q.loadedMiles+' mi × '+m(q.vehicle.baseRate)+' = '+mileSub)+
+        row('×','Job type · '+q.jobType.name,'×'+q.jobTypeFactor)+
+        row('×','Lane · pressure × recovery × direction','×'+q.laneMultiplier)+
+        row('=','Your target pay',m(q.driverTargetPay),'total')+
+      '</div>'+
+      '<div class="reason-wrap">'+pills+'</div>'+
+      mf;
+  }
+  ['sr_pickup','sr_delivery','sr_miles','sr_veh','sr_job','sr_d_urg','sr_d_same','sr_d_flex','sr_d_q',
+   'sr_s_av','sr_s_rr','sr_s_co','sr_s_nb','sr_rec','sr_dir'].forEach(function(id){
+    var e=$(id); if(e){e.addEventListener('input',render); e.addEventListener('change',render);}
+  });
+  // Expose so the plan switcher can re-price live when the tier changes.
+  window.HAFRenderRate=render;
+  render();
+})();
+
+// =============================================================================
+// PLNA SPINE — version badge, compliance gate (§3) + plan tiers (§10).
+// Everything is driven by window.HAFModel — nothing is hard-coded here.
+// =============================================================================
+(function(){
+  var M=window.HAFModel;
+  if(!M) return;
+  var $=function(id){return document.getElementById(id);};
+
+  // ---- Shared driver identity (one account across KNECT + PLNA) -------------
+  // membership comes from the KNECT side; plnaPlan + complianceState are demoable.
+  window.HAFDriver=window.HAFDriver||{ membership:'FREE', plnaPlan:'PAID', complianceState:'ACTIVE' };
+  var driver=window.HAFDriver;
+
+  // ---- P1: version badge + footer, rendered from HAFModel.VERSION ----------
+  var ver=M.VERSION||'HAF X V2.0.0';
+  if($('verBadge')) $('verBadge').textContent=ver;
+  if($('verFooter')) $('verFooter').textContent=ver;
+
+  // ---- P2: COMPLIANCE GATE --------------------------------------------------
+  // Inject a renewal-only lock panel into every gated section; show/hide it
+  // and the section's real content purely from gate.allow[area].
+  function lockPanelHTML(g){
+    var stateCls=g.tone==='s-warn'?'s-warn':'s-bad';
+    return '<div class="lock-panel">'+
+      '<div class="lp-ic"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>'+
+      '<span class="lp-state '+stateCls+'">'+g.label+'</span>'+
+      '<h2>Planning tools locked</h2>'+
+      '<p>'+g.message+'</p>'+
+      '<button class="lp-cta" data-go-compliance>Go to compliance</button>'+
+    '</div>';
+  }
+  var gatedSections=[].slice.call(document.querySelectorAll('.page[data-gate]'));
+  gatedSections.forEach(function(sec){
+    // wrap existing children so we can hide them as one unit
+    var inner=document.createElement('div');
+    inner.className='gate-inner';
+    inner.style.width='100%';
+    inner.style.display='flex';
+    inner.style.flexDirection='column';
+    inner.style.alignItems='center';
+    inner.style.gap='14px';
+    while(sec.firstChild){ inner.appendChild(sec.firstChild); }
+    sec.appendChild(inner);
+    var lock=document.createElement('div');
+    lock.className='gate-lock';
+    lock.style.width='100%';
+    sec.appendChild(lock);
+  });
+
+  function applyGate(){
+    var g=M.gate(driver.complianceState);
+    gatedSections.forEach(function(sec){
+      var area=sec.getAttribute('data-gate');
+      var allowed=!!g.allow[area];
+      var inner=sec.querySelector('.gate-inner');
+      var lock=sec.querySelector('.gate-lock');
+      if(allowed){
+        if(inner) inner.classList.remove('is-locked');
+        if(lock){ lock.classList.add('is-locked'); lock.innerHTML=''; }
+      } else {
+        if(inner) inner.classList.add('is-locked');
+        if(lock){ lock.classList.remove('is-locked'); lock.innerHTML=lockPanelHTML(g); }
       }
     });
+    // EXPIRING_SOON (or any warn state that still allows work) = warning banner
+    // injected at the top of each still-usable gated section.
+    document.querySelectorAll('.gate-warn-banner').forEach(function(b){b.remove();});
+    if(g.warn){
+      gatedSections.forEach(function(sec){
+        var inner=sec.querySelector('.gate-inner');
+        if(inner && !inner.classList.contains('is-locked')){
+          var b=document.createElement('div');
+          b.className='gate-banner warn gate-warn-banner';
+          b.innerHTML='<span class="gb-ic">!</span><span>'+g.message+'</span>'+
+            '<button class="gb-cta" data-go-compliance>Renew</button>';
+          inner.insertBefore(b,inner.firstChild);
+        }
+      });
+    }
+    applyPlan(); // plan teasers live inside still-unlocked sections
   }
 
-  // ===== Plan buttons -> scroll to sign-up =====
-  Array.prototype.forEach.call(document.querySelectorAll('[data-scroll-signup]'), function(b){
-    b.addEventListener('click', function(){
-      var s = document.getElementById('signup');
-      if(s) s.scrollIntoView({behavior:'smooth', block:'start'});
-      var fn = document.getElementById('full-name');
-      if(fn) setTimeout(function(){ fn.focus(); }, 420);
+  // ---- P3: PLAN TIERS -------------------------------------------------------
+  // HAFFEE AI + Driver Landing Page = Pro only. Return-route alerts = Plus+.
+  var PLAN=M.PLAN;
+  // Two-tier: Free vs Paid. Old codes tolerated so nothing breaks (LITE→free, PLUS/PRO→paid).
+  function planRank(code){return {FREE:0,LITE:0,PLUS:1,PRO:1,PAID:1}[code]||0;}
+  function applyPlan(){
+    var plan=driver.plnaPlan;
+    var p=PLAN[plan]||PLAN.FREE;
+    // plan badge in header
+    var badge=$('planBadge'), badgeTxt=$('planBadgeText');
+    if(badge){
+      badge.classList.remove('lite','plus','pro','free','paid');
+      badge.classList.add(plan.toLowerCase());
+    }
+    if(badgeTxt) badgeTxt.textContent=p.name;
+    if($('planSelect') && $('planSelect').value!==plan) $('planSelect').value=plan;
+
+    // Each plan-gated section has a real block + a teaser block; toggle by rank.
+    document.querySelectorAll('[data-plan-min]').forEach(function(el){
+      var min=el.getAttribute('data-plan-min');
+      var real=el.querySelector('.plan-real');
+      var tease=el.querySelector('.plan-tease');
+      var meets=planRank(plan)>=planRank(min);
+      // only meaningful when the section itself is not compliance-locked
+      if(real) real.classList.toggle('is-locked',!meets);
+      if(tease) tease.classList.toggle('is-locked',meets);
     });
+
+    // Re-price the Suggested Rate with the new tier.
+    if(typeof window.HAFRenderRate==='function') window.HAFRenderRate();
+  }
+
+  // ---- Wiring: switchers + compliance CTA ----------------------------------
+  if($('stateSelect')){
+    $('stateSelect').value=driver.complianceState;
+    $('stateSelect').addEventListener('change',function(){
+      driver.complianceState=this.value; applyGate();
+    });
+  }
+  if($('planSelect')){
+    $('planSelect').value=driver.plnaPlan;
+    $('planSelect').addEventListener('change',function(){
+      driver.plnaPlan=this.value; applyPlan();
+    });
+  }
+  // "Go to compliance" CTAs jump to the compliance/profile area.
+  document.addEventListener('click',function(e){
+    var t=e.target.closest('[data-go-compliance]');
+    if(t){ if(typeof goToPage==='function') goToPage('network-pass'); }
   });
+
+  applyGate();
 })();
+
+// Working radius preset toggle
+window.setRadius = function(r){
+  var el = document.getElementById('radiusVal');
+  if(el) el.textContent = r;
+  document.querySelectorAll('.rp-btn').forEach(function(b){
+    b.classList.toggle('active', b.textContent.trim() === r + ' mi');
+  });
+};
+
+// Plans & Billing — monthly / annual toggle (placeholder prices)
+window.setBilling = function(cycle){
+  var amt=document.getElementById('proAmt'), per=document.getElementById('proPer'), tag=document.getElementById('proTag');
+  var m=document.getElementById('billMonthly'), a=document.getElementById('billAnnual');
+  var annual = cycle==='annual';
+  if(amt) amt.textContent = annual ? '£190' : '£19';
+  if(per) per.textContent = annual ? 'per year' : 'per month';
+  if(tag) tag.textContent = annual ? 'Two months free vs paying monthly.' : 'Plan smarter. Earn better.';
+  if(m) m.classList.toggle('active', !annual);
+  if(a) a.classList.toggle('active', annual);
+};
 </script>
 </body>
 </html>

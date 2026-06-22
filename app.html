@@ -196,10 +196,10 @@ body.dark .theme-dot .ico-moon{display:block}
 .tb-ctrl select:focus{outline:2px solid rgba(241,142,0,.35);outline-offset:1px;border-color:var(--brand-orange)}
 .plan-badge{display:inline-flex;align-items:center;gap:6px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:var(--text);background:var(--panel-2);border:1px solid var(--line);border-radius:999px;padding:5px 11px;white-space:nowrap}
 .plan-badge .pb-dot{width:8px;height:8px;border-radius:99px;background:var(--muted);flex:none}
-.plan-badge.lite .pb-dot{background:var(--muted)}
+.plan-badge.lite .pb-dot,.plan-badge.free .pb-dot{background:var(--muted)}
 .plan-badge.plus .pb-dot{background:var(--amber)}
-.plan-badge.pro .pb-dot{background:var(--brand-orange)}
-.plan-badge.pro{border-color:rgba(241,142,0,.34);color:var(--brand-orange)}
+.plan-badge.pro .pb-dot,.plan-badge.paid .pb-dot{background:var(--brand-orange)}
+.plan-badge.pro,.plan-badge.paid{border-color:rgba(241,142,0,.34);color:var(--brand-orange)}
 @media (max-width:920px){.topbar{flex-direction:column;align-items:stretch;gap:12px}.topbar-r{justify-content:flex-start}}
 
 /* ===== Compliance warning + lock panels (driven by HAFModel.gate) ===== */
@@ -389,6 +389,47 @@ body.dark .theme-dot .ico-moon{display:block}
 .pref-row .pr-t{font-weight:600;font-size:14px}
 .pref-row .pr-s{font-size:12px;color:var(--muted);margin-top:2px}
 
+/* ===== Route planner ===== */
+.rp-summary{width:100%;max-width:760px;margin:0 auto 14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;text-align:left}
+.rp-stat{border:1px solid var(--line);border-radius:14px;background:var(--panel-2);box-shadow:var(--soft-shadow);padding:13px 16px}
+.rp-stat .rs-l{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:800}
+.rp-stat .rs-v{font-family:'Montserrat','Inter',sans-serif;font-size:20px;font-weight:800;letter-spacing:-.02em;margin-top:4px}
+.rp-stat .rs-v.good{color:var(--green)}
+.stops{width:100%;max-width:760px;margin:0 auto 12px;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--panel-2);box-shadow:var(--soft-shadow);overflow:hidden;text-align:left}
+.stop-row{display:flex;align-items:center;gap:12px;padding:14px 16px;border-top:1px solid var(--line)}
+.stop-row:first-child{border-top:none}
+.stop-row .st-grip{color:var(--muted);cursor:grab;font-size:15px;flex:none;line-height:1}
+.stop-row .st-num{width:24px;height:24px;border-radius:99px;background:rgba(241,142,0,.12);color:var(--brand-orange);font-weight:800;font-size:12px;display:grid;place-items:center;flex:none}
+.stop-row .st-body{flex:1;min-width:0}
+.stop-row .st-t{font-weight:700;font-size:14px}
+.stop-row .st-d{font-size:12px;color:var(--muted);margin-top:2px}
+.stop-row .st-leg{font-size:11px;font-weight:700;color:var(--muted);flex:none;text-align:right;white-space:nowrap}
+.stop-row.terminus .st-num{background:rgba(79,127,88,.14);color:var(--green)}
+.rp-add{width:100%;max-width:760px;margin:0 auto 14px;display:flex;gap:8px;flex-wrap:wrap}
+.rp-add input{flex:1;min-width:160px;font-family:inherit;font-size:14px;color:var(--text);background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:11px 14px}
+.rp-add input:focus{outline:2px solid rgba(241,142,0,.35);border-color:var(--brand-orange)}
+/* ===== Plans & billing ===== */
+.bill-toggle{display:inline-flex;border:1px solid var(--line);border-radius:999px;background:var(--panel-2);padding:4px;margin:0 auto 20px;box-shadow:var(--soft-shadow)}
+.bill-toggle button{border:0;background:transparent;font-family:inherit;font-size:13px;font-weight:800;color:var(--muted);padding:9px 18px;border-radius:999px;cursor:pointer;transition:.18s ease}
+.bill-toggle button.active{background:var(--brand-orange);color:#fff}
+.bill-save{font-size:10px;font-weight:800;color:var(--green);margin-left:6px}
+.plan-cards{width:100%;max-width:720px;margin:0 auto 16px;display:grid;grid-template-columns:1fr 1fr;gap:16px;text-align:left}
+@media(max-width:620px){.plan-cards{grid-template-columns:1fr}}
+.plan-card{border:1px solid var(--line);border-radius:var(--radius);background:var(--panel-2);box-shadow:var(--soft-shadow);padding:24px 24px 26px;display:flex;flex-direction:column;gap:14px}
+.plan-card.feat{border-color:rgba(241,142,0,.45);box-shadow:0 20px 50px rgba(241,142,0,.12)}
+.plan-card .pc-name{font-family:'Montserrat','Inter',sans-serif;font-weight:800;font-size:18px}
+.plan-card .pc-price{display:flex;align-items:baseline;gap:6px;min-height:42px}
+.plan-card .pc-amt{font-family:'Montserrat','Inter',sans-serif;font-weight:900;font-size:38px;letter-spacing:-.03em;color:var(--brand-orange);line-height:1}
+.plan-card .pc-per{font-size:13px;color:var(--muted);font-weight:600}
+.plan-card .pc-tag{font-size:12.5px;color:var(--muted)}
+.plan-card ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}
+.plan-card li{display:flex;align-items:flex-start;gap:9px;font-size:13.5px;color:var(--text)}
+.plan-card li svg{width:16px;height:16px;stroke:var(--green);stroke-width:2.2;fill:none;flex:none;margin-top:2px}
+.plan-card .pc-cta{margin-top:auto;font-family:inherit;font-weight:800;font-size:14px;border-radius:13px;padding:13px;cursor:pointer;border:0;text-align:center}
+.plan-card .pc-cta.primary{background:var(--brand-orange);color:#fff;box-shadow:var(--soft-shadow)}
+.plan-card .pc-cta.ghost{background:var(--panel);color:var(--text);border:1px solid var(--line)}
+.plan-card .pc-current{font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;color:var(--green);border:1px solid rgba(79,127,88,.5);background:rgba(79,127,88,.08);border-radius:999px;padding:5px 11px;align-self:flex-start}
+
 /* ===== Login gate ===== */
 body.plna-locked .app{display:none !important}
 body.plna-locked{overflow:hidden}
@@ -474,6 +515,7 @@ body.plna-locked .plna-gate{
       <div class="nav-sep"></div>
       <div class="nav-label">Jobs &amp; routes</div>
       <button class="nav-btn" data-page="planned-jobs"><svg viewBox="0 0 24 24"><path d="M4 7h16v13H4zM8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M4 12h16"/></svg>Planned Jobs</button>
+      <button class="nav-btn" data-page="route-planner"><svg viewBox="0 0 24 24"><path d="M6 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM18 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM8 17h6a3 3 0 0 0 3-3V9M6 15V7a2 2 0 0 1 2-2h4"/></svg>Route Planner</button>
       <button class="nav-btn" data-page="return-route"><svg viewBox="0 0 24 24"><path d="M9 14l-4-4 4-4M5 10h9a5 5 0 0 1 5 5v3"/></svg>Return-Route</button>
       <button class="nav-btn" data-page="driver-diary"><svg viewBox="0 0 24 24"><path d="M7 3v3M17 3v3M4 8h16M5 5h14v15H5zM8 12h8M8 16h5"/></svg>Driver Diary</button>
       <button class="nav-btn" data-page="notes"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5zM9 9h6M9 13h6M9 17h3"/></svg>Notes</button>
@@ -498,6 +540,7 @@ body.plna-locked .plna-gate{
       <div class="nav-label">Account</div>
       <button class="nav-btn" data-page="comms"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-12 7.6L3 21l1.9-5.6A8.4 8.4 0 1 1 21 11.5Z"/></svg>Communications</button>
       <button class="nav-btn" data-page="integrations"><svg viewBox="0 0 24 24"><path d="M10 3v6M14 3v6M5 9h14v3a7 7 0 0 1-14 0z M12 19v2"/></svg>Connected Apps</button>
+      <button class="nav-btn" data-page="plans"><svg viewBox="0 0 24 24"><path d="M3 7h18v12H3zM3 11h18M7 15h4"/></svg>Plans &amp; Billing</button>
     </nav>
 
     <div class="side-foot">
@@ -516,9 +559,8 @@ body.plna-locked .plna-gate{
         <div class="tb-ctrl">
           <label for="planSelect">PLNA plan</label>
           <select id="planSelect">
-            <option value="LITE">Lite · £0/mo</option>
-            <option value="PLUS">Plus · £10/mo</option>
-            <option value="PRO" selected>Pro · £50/mo</option>
+            <option value="FREE">Free · £0</option>
+            <option value="PAID" selected>Pro · £19/mo</option>
           </select>
         </div>
         <div class="tb-ctrl">
@@ -792,13 +834,59 @@ body.plna-locked .plna-gate{
         <p class="preview-note">Framework preview — static placeholder data, no live integrations yet.</p>
       </section>
 
+      <section class="page" id="route-planner" data-gate="plnaPlanner" data-title="Route Planner">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M6 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM18 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM8 17h6a3 3 0 0 0 3-3V9M6 15V7a2 2 0 0 1 2-2h4"/></svg></div>
+          <h1>Route Planner</h1>
+          <p>Build your own day. Drop in your jobs and your own work, order the stops the way you drive, and PLNA works out the miles, the time and what it's worth.</p>
+        </div>
+        <div data-plan-min="PAID" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
+          <div class="plan-real" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
+            <div class="rp-summary">
+              <div class="rp-stat"><div class="rs-l">Stops</div><div class="rs-v">5</div></div>
+              <div class="rp-stat"><div class="rs-l">Total miles</div><div class="rs-v">186 <span style="font-size:12px;color:var(--muted)">loaded</span></div></div>
+              <div class="rp-stat"><div class="rs-l">Drive time</div><div class="rs-v">4h 35m</div></div>
+              <div class="rp-stat"><div class="rs-l">Est. day pay</div><div class="rs-v good">&pound;306</div></div>
+            </div>
+            <div class="stops">
+              <div class="stop-row terminus"><span class="st-grip">⠿</span><span class="st-num">A</span><div class="st-body"><div class="st-t">B1 Birmingham — home base</div><div class="st-d">Start · 06:30</div></div><span class="st-leg">—</span></div>
+              <div class="stop-row"><span class="st-grip">⠿</span><span class="st-num">1</span><div class="st-body"><div class="st-t">PL-10428 · collect B1 → deliver S1</div><div class="st-d">Same-day · Luton · &pound;142</div></div><span class="st-leg">78 mi · 1h40</span></div>
+              <div class="stop-row"><span class="st-grip">⠿</span><span class="st-num">2</span><div class="st-body"><div class="st-t">Your own job · S1 collection</div><div class="st-d">Added by you · &pound;90 cash</div></div><span class="st-leg">4 mi · 12m</span></div>
+              <div class="stop-row"><span class="st-grip">⠿</span><span class="st-num">3</span><div class="st-body"><div class="st-t">PL-10431 · S1 → LS1 delivery</div><div class="st-d">Economy · Luton · &pound;68</div></div><span class="st-leg">38 mi · 55m</span></div>
+              <div class="stop-row terminus"><span class="st-grip">⠿</span><span class="st-num">B</span><div class="st-body"><div class="st-t">B1 Birmingham — home base</div><div class="st-d">Finish · return leg</div></div><span class="st-leg">66 mi · 1h28</span></div>
+            </div>
+            <div class="rp-add">
+              <input type="text" placeholder="Add a stop — postcode, job ID or your own pickup…">
+              <button class="cs-btn">Add stop</button>
+              <button class="cs-btn ghost">Optimise order</button>
+            </div>
+            <div class="plna-actions">
+              <span class="pill">Save route</span>
+              <span class="pill">Send to Driver Diary</span>
+              <span class="pill">Find a return load</span>
+              <span class="pill">Open in maps</span>
+            </div>
+            <p class="preview-note">Framework preview — static placeholder. Drag to reorder, add your own work alongside HAF jobs; live mileage &amp; pay recalc and map routing wire up with the planner backend.</p>
+          </div>
+          <div class="plan-tease is-locked" style="width:100%">
+            <div class="upsell">
+              <div class="us-ic"><svg viewBox="0 0 24 24"><path d="M6 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM18 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM8 17h6a3 3 0 0 0 3-3V9M6 15V7a2 2 0 0 1 2-2h4"/></svg></div>
+              <span class="us-need">Pro feature</span>
+              <h2>Plan your whole day</h2>
+              <p>The full route planner lets you sequence HAF jobs and your own work into one optimised day, with live miles, drive time and pay. Included with PLNA Pro.</p>
+              <div class="us-feats"><span class="pill">PLNA Pro · £19/mo</span><span class="pill">or £190/year</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section class="page" id="return-route" data-gate="plnaPlanner" data-title="Return-Route">
         <div class="plna-head">
           <div class="glyph"><svg viewBox="0 0 24 24"><path d="M9 14l-4-4 4-4M5 10h9a5 5 0 0 1 5 5v3"/></svg></div>
           <h1>Return-Route</h1>
           <p>Fill the empty leg home. PLNA looks for collections that point back toward your base around your finish time.</p>
         </div>
-        <div data-plan-min="PLUS" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
+        <div data-plan-min="PAID" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
           <div class="plan-real" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
             <div class="stat-grid">
               <div class="stat-card"><span class="sl">Return-route alerts</span><span class="sv"><span class="pill pill-status">On</span></span></div>
@@ -813,8 +901,8 @@ body.plna-locked .plna-gate{
               <div class="us-ic"><svg viewBox="0 0 24 24"><path d="M9 14l-4-4 4-4M5 10h9a5 5 0 0 1 5 5v3"/></svg></div>
               <span class="us-need">Plus feature</span>
               <h2>Return-route alerts</h2>
-              <p>Get pinged when a collection appears that points back toward your base around your finish time, so you can chase the empty leg home. Available on PLNA Plus and Pro.</p>
-              <div class="us-feats"><span class="pill">PLNA Plus · £10/mo</span><span class="pill">PLNA Pro · £50/mo</span></div>
+              <p>Get pinged when a collection appears that points back toward your base around your finish time, so you can chase the empty leg home. Included with PLNA Pro.</p>
+              <div class="us-feats"><span class="pill">PLNA Pro · £19/mo</span><span class="pill">or £190/year</span></div>
             </div>
           </div>
         </div>
@@ -1058,7 +1146,7 @@ body.plna-locked .plna-gate{
           <h1>HAFFEE AI</h1>
           <p>Your planning co-pilot — reads your week, your lanes and live network demand to suggest where to be, what to price and which empty legs to fill.</p>
         </div>
-        <div data-plan-min="PRO" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
+        <div data-plan-min="PAID" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
           <div class="plan-real" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
             <div class="stat-grid">
               <div class="stat-card"><span class="sl">AI status</span><span class="sv"><span class="pill pill-status">Active · Pro</span></span></div>
@@ -1077,8 +1165,8 @@ body.plna-locked .plna-gate{
               <div class="us-ic"><svg viewBox="0 0 24 24"><path d="M12 3a4 4 0 0 1 4 4c0 1.5-1 2.5-2 3.2V12H10v-1.8C9 9.5 8 8.5 8 7a4 4 0 0 1 4-4ZM9 16h6M10 20h4"/></svg></div>
               <span class="us-need">Pro feature</span>
               <h2>Unlock HAFFEE AI</h2>
-              <p>Full HAFFEE AI planning support — live lane reads, pricing prompts and empty-leg guidance — comes with PLNA Pro. Plus members get a basic AI teaser; Pro gets the full assistant.</p>
-              <div class="us-feats"><span class="pill">PLNA Pro · £50/mo</span><span class="pill">Requires your own domain</span></div>
+              <p>Full HAFFEE AI planning support — live lane reads, pricing prompts and empty-leg guidance — comes with PLNA Pro.</p>
+              <div class="us-feats"><span class="pill">PLNA Pro · £19/mo</span><span class="pill">or £190/year</span></div>
             </div>
           </div>
         </div>
@@ -1090,7 +1178,7 @@ body.plna-locked .plna-gate{
           <h1>Driver Landing Page</h1>
           <p>Your own local courier brand, with HAF behind the funnel. You own the domain, HAF supports the page, and work you can't take overflows to KNECT.</p>
         </div>
-        <div data-plan-min="PRO" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
+        <div data-plan-min="PAID" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
           <div class="plan-real" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:14px">
             <div class="lp-status">
               <span class="lps-dot"></span>
@@ -1126,7 +1214,7 @@ body.plna-locked .plna-gate{
               <span class="us-need">Pro feature</span>
               <h2>Build your local courier brand</h2>
               <p>The PLNA Pro Driver Landing Page gives you a branded page on your own domain, with HAF behind the funnel and overflow you can't cover passed to KNECT. Pro only — and you'll need to own your own domain (§11).</p>
-              <div class="us-feats"><span class="pill">PLNA Pro · £50/mo</span><span class="pill">Requires your own domain</span><span class="pill">KNECT overflow funnel</span></div>
+              <div class="us-feats"><span class="pill">PLNA Pro · £19/mo</span><span class="pill">or £190/year</span><span class="pill">Requires your own domain</span></div>
             </div>
           </div>
         </div>
@@ -1238,6 +1326,50 @@ body.plna-locked .plna-gate{
         <p class="preview-note">Framework preview — static placeholder. Google Calendar booking links and WhatsApp pairing wire up per driver; programmatic calendar writes are pending platform calendar access.</p>
       </section>
 
+      <section class="page" id="plans" data-title="Plans &amp; Billing">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M3 7h18v12H3zM3 11h18M7 15h4"/></svg></div>
+          <h1>Plans &amp; Billing</h1>
+          <p>Two ways to use PLNA — Free, or Pro for the full planning toolkit. Pay monthly or save with a year up front.</p>
+        </div>
+        <div class="bill-toggle">
+          <button class="active" id="billMonthly" onclick="setBilling('monthly')">Monthly</button>
+          <button id="billAnnual" onclick="setBilling('annual')">Annual <span class="bill-save">save £38</span></button>
+        </div>
+        <div class="plan-cards">
+          <div class="plan-card">
+            <div class="pc-name">PLNA Free</div>
+            <div class="pc-price"><span class="pc-amt">£0</span><span class="pc-per">forever</span></div>
+            <div class="pc-tag">Plan your own courier work.</div>
+            <ul>
+              <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>Driver &amp; vehicle profile</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>Availability &amp; calendar</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>See the job board</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>Basic area preferences</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>KNECT network connection</li>
+            </ul>
+            <button class="pc-cta ghost">Choose Free</button>
+          </div>
+          <div class="plan-card feat">
+            <span class="pc-current">Current plan</span>
+            <div class="pc-name">PLNA Pro</div>
+            <div class="pc-price"><span class="pc-amt" id="proAmt">£19</span><span class="pc-per" id="proPer">per month</span></div>
+            <div class="pc-tag" id="proTag">Plan smarter. Earn better.</div>
+            <ul>
+              <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>Everything in Free</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>Full route planner</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>Return-route alerts</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>Full HAFFEE AI support</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>Higher base-rate % + lower fee</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>Driver landing page</li>
+              <li><svg viewBox="0 0 24 24"><path d="M5 12l5 5 9-11"/></svg>Priority KNECT visibility</li>
+            </ul>
+            <button class="pc-cta primary">Manage billing</button>
+          </div>
+        </div>
+        <p class="preview-note">Framework preview — prices are placeholders pending confirmation. Live checkout (Stripe monthly/annual) wires up with billing.</p>
+      </section>
+
     </div>
     <footer style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:16px 30px;border-top:1px solid var(--line);font-size:11px;letter-spacing:.04em;color:var(--muted);font-weight:600">
       <span>HAF PLNA — driver planning</span>
@@ -1309,7 +1441,7 @@ if(localStorage.getItem('otis-theme')==='dark') document.body.classList.add('dar
       supply:{available:v('sr_s_av'),returnRoute:v('sr_s_rr'),coload:v('sr_s_co'),nearby:v('sr_s_nb')},
       recoveryCode:v('sr_rec'), directionCode:v('sr_dir'),
       membership: drv.membership || 'FREE',
-      plnaPlan: drv.plnaPlan || 'LITE'
+      plnaPlan: drv.plnaPlan || 'FREE'
     });
     var m=P.money;
     // Tier benefit line — paid plan keeps more on base pay + reduced network fee.
@@ -1373,7 +1505,7 @@ if(localStorage.getItem('otis-theme')==='dark') document.body.classList.add('dar
 
   // ---- Shared driver identity (one account across KNECT + PLNA) -------------
   // membership comes from the KNECT side; plnaPlan + complianceState are demoable.
-  window.HAFDriver=window.HAFDriver||{ membership:'FREE', plnaPlan:'PRO', complianceState:'ACTIVE' };
+  window.HAFDriver=window.HAFDriver||{ membership:'FREE', plnaPlan:'PAID', complianceState:'ACTIVE' };
   var driver=window.HAFDriver;
 
   // ---- P1: version badge + footer, rendered from HAFModel.VERSION ----------
@@ -1448,14 +1580,15 @@ if(localStorage.getItem('otis-theme')==='dark') document.body.classList.add('dar
   // ---- P3: PLAN TIERS -------------------------------------------------------
   // HAFFEE AI + Driver Landing Page = Pro only. Return-route alerts = Plus+.
   var PLAN=M.PLAN;
-  function planRank(code){return {LITE:0,PLUS:1,PRO:2}[code]||0;}
+  // Two-tier: Free vs Paid. Old codes tolerated so nothing breaks (LITE→free, PLUS/PRO→paid).
+  function planRank(code){return {FREE:0,LITE:0,PLUS:1,PRO:1,PAID:1}[code]||0;}
   function applyPlan(){
     var plan=driver.plnaPlan;
-    var p=PLAN[plan]||PLAN.LITE;
+    var p=PLAN[plan]||PLAN.FREE;
     // plan badge in header
     var badge=$('planBadge'), badgeTxt=$('planBadgeText');
     if(badge){
-      badge.classList.remove('lite','plus','pro');
+      badge.classList.remove('lite','plus','pro','free','paid');
       badge.classList.add(plan.toLowerCase());
     }
     if(badgeTxt) badgeTxt.textContent=p.name;
@@ -1505,6 +1638,18 @@ window.setRadius = function(r){
   document.querySelectorAll('.rp-btn').forEach(function(b){
     b.classList.toggle('active', b.textContent.trim() === r + ' mi');
   });
+};
+
+// Plans & Billing — monthly / annual toggle (placeholder prices)
+window.setBilling = function(cycle){
+  var amt=document.getElementById('proAmt'), per=document.getElementById('proPer'), tag=document.getElementById('proTag');
+  var m=document.getElementById('billMonthly'), a=document.getElementById('billAnnual');
+  var annual = cycle==='annual';
+  if(amt) amt.textContent = annual ? '£190' : '£19';
+  if(per) per.textContent = annual ? 'per year' : 'per month';
+  if(tag) tag.textContent = annual ? 'Two months free vs paying monthly.' : 'Plan smarter. Earn better.';
+  if(m) m.classList.toggle('active', !annual);
+  if(a) a.classList.toggle('active', annual);
 };
 </script>
 </body>
