@@ -23,6 +23,13 @@ body.dark{
 *{box-sizing:border-box} body{margin:0;font-family:"Gotham Book","Inter","Avenir Next",Arial,sans-serif;background:radial-gradient(circle at top left,rgba(241,142,0,.12),transparent 32%),var(--bg);color:var(--text);transition:.25s ease}
 button{font-family:inherit}
 .app{min-height:100vh;display:grid;grid-template-columns:268px 1fr;gap:22px;padding:22px}
+/* mobile top bar + drawer backdrop — hidden on desktop, switched on under 920px */
+.mobile-bar{display:none;align-items:center;gap:12px;padding:11px 14px;position:sticky;top:0;z-index:50;background:var(--panel);border-bottom:1px solid var(--line)}
+.mobile-bar .mb-burger{width:42px;height:42px;flex:none;border:1px solid var(--line);border-radius:12px;background:var(--panel-2);display:grid;place-items:center;cursor:pointer;color:var(--text)}
+.mobile-bar .mb-burger svg{width:22px;height:22px;stroke:currentColor;stroke-width:2;fill:none}
+.mobile-bar .mb-word{font-family:"Montserrat","Inter",sans-serif;font-weight:800;font-size:16px;letter-spacing:-.01em;color:var(--text)}
+.mobile-bar .mb-title{margin-left:auto;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--brand-orange)}
+.nav-backdrop{display:none}
 .sidebar,.workspace{background:linear-gradient(180deg,var(--panel),var(--panel-2));border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
 .sidebar{padding:22px 16px;display:flex;flex-direction:column;gap:18px;position:sticky;top:22px;height:calc(100vh - 44px)}
 .brand{display:flex;align-items:center;gap:12px;padding:4px 6px 16px;border-bottom:1px solid var(--line)}
@@ -84,25 +91,24 @@ body.dark .theme-dot .ico-moon{display:block}
 .haf-tile .ht-tt{font-weight:700;font-size:13.5px;letter-spacing:-.01em}
 .haf-tile .ht-sub{display:none}
 @media (max-width:920px){
-  .app{grid-template-columns:1fr;padding:14px}
-  .topbar{padding:18px 20px}
-  .sidebar{position:relative;top:0;height:auto;padding:12px 14px;gap:12px}
-  .brand{display:none}
-  .nav{flex-direction:row;flex-wrap:wrap;justify-content:center;gap:8px;overflow:visible;margin:0;padding:0}
-  .nav-sep,.nav-label{display:none}
-  .nav-btn{flex-direction:column;width:auto;min-width:52px;max-width:72px;height:auto;padding:7px 6px;gap:4px;justify-content:center;font-size:8px;font-weight:700;letter-spacing:.02em;line-height:1.15;text-align:center;border-radius:13px}
-  .nav-btn svg{width:21px;height:21px}
-  .sub .nav-btn{font-size:8px;height:auto}
-  .group{display:contents}
-  .group-btn{flex-direction:column;width:auto;min-width:52px;max-width:72px;height:auto;padding:7px 6px;gap:4px;justify-content:center;font-size:8px;font-weight:700;letter-spacing:.02em;line-height:1.15;text-align:center;border-radius:13px}
-  .group-btn .gb-left{flex-direction:column;gap:4px}
-  .group-btn .chev{display:none}
-  .group .sub{display:none!important}
-  .side-foot{margin-top:0;padding-top:12px;flex-direction:row;flex-wrap:wrap;align-items:flex-start;justify-content:center;gap:12px}
-  .foot-toggle{flex:none;background:none;padding:0;border-radius:0;align-items:flex-start}
-  .theme-row{padding:0;flex-direction:row;align-items:center;justify-content:center;gap:8px}
-  .theme-row span{font-size:8px;font-weight:700;letter-spacing:.02em;flex-direction:column;align-items:center;gap:4px;text-align:center}
-  .theme-row span svg{width:21px;height:21px}
+  /* phone layout: full-width content, sidebar becomes an off-canvas drawer */
+  .app{display:block;padding:0;gap:0}
+  .mobile-bar{display:flex}
+  .sidebar{position:fixed;top:0;left:0;bottom:0;width:284px;max-width:86vw;height:100vh;z-index:70;border-radius:0;border:0;border-right:1px solid var(--line);transform:translateX(-100%);transition:transform .26s ease;overflow-y:auto;box-shadow:none}
+  body.nav-open .sidebar{transform:none;box-shadow:0 0 60px rgba(0,0,0,.45)}
+  .nav-backdrop{display:block;position:fixed;inset:0;background:rgba(10,12,14,.5);z-index:60;opacity:0;pointer-events:none;transition:opacity .26s ease}
+  body.nav-open .nav-backdrop{opacity:1;pointer-events:auto}
+  .brand{display:flex}
+  /* nav stays vertical & touch-friendly inside the drawer */
+  .nav{flex-direction:column;flex-wrap:nowrap;gap:4px;overflow-y:visible;margin:0 -4px;padding:2px 4px}
+  .nav-sep,.nav-label{display:block}
+  .nav-btn{flex-direction:row;width:100%;max-width:none;min-width:0;height:48px;padding:0 16px;gap:14px;justify-content:flex-start;font-size:14.5px;font-weight:600;letter-spacing:0;line-height:1.2;text-align:left;border-radius:13px}
+  .nav-btn svg{width:20px;height:20px}
+  .workspace{border-radius:0;box-shadow:none;border:0}
+  .topbar{padding:14px 16px}
+  .crumb{display:none}
+  .canvas{padding:20px 14px}
+  .side-foot{margin-top:24px;flex-direction:column;gap:10px}
 }
 .crm-wrap{width:100%;max-width:1000px;margin:0 auto 14px;overflow-x:auto;border:1px solid var(--line);border-radius:14px;box-shadow:var(--soft-shadow)}
 .crm{width:100%;border-collapse:collapse;font-size:12.5px;min-width:760px}
@@ -491,6 +497,12 @@ body.plna-locked .plna-gate{
 </script>
 
 <div class="app">
+  <header class="mobile-bar">
+    <button class="mb-burger" id="navToggle" aria-label="Open menu"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <span class="mb-word">PLNA</span>
+    <span class="mb-title" id="mTitle">Today</span>
+  </header>
+  <div class="nav-backdrop" id="navBackdrop"></div>
   <aside class="sidebar">
     <!-- TODO: swap in HAF PLNA logo/branding when supplied -->
     <div class="brand">
@@ -1391,11 +1403,12 @@ function goToPage(id){
   if(navBtn){navBtn.classList.add('active');}
   pages.forEach(function(p){p.classList.remove('active');});
   var pg=document.getElementById(id);
-  if(pg){pg.classList.add('active'); crumb.textContent=pg.dataset.title||'';}
+  if(pg){pg.classList.add('active'); crumb.textContent=pg.dataset.title||''; var mt=document.getElementById('mTitle'); if(mt) mt.textContent=pg.dataset.title||'';}
   if(navBtn && !navBtn.classList.contains('group-btn')){
     var grp=navBtn.closest('.group');
     if(grp){ grp.classList.add('open'); }
   }
+  document.body.classList.remove('nav-open');
   window.scrollTo(0,0);
 }
 navButtons.forEach(function(btn){
@@ -1413,6 +1426,13 @@ document.getElementById('themeToggle').addEventListener('click',function(){
   localStorage.setItem('otis-theme',document.body.classList.contains('dark')?'dark':'light');
 });
 if(localStorage.getItem('otis-theme')==='dark') document.body.classList.add('dark');
+
+// Mobile drawer nav: hamburger toggles, backdrop / nav choice closes it.
+(function(){
+  var t=document.getElementById('navToggle'), bd=document.getElementById('navBackdrop');
+  if(t) t.addEventListener('click',function(){ document.body.classList.toggle('nav-open'); });
+  if(bd) bd.addEventListener('click',function(){ document.body.classList.remove('nav-open'); });
+})();
 
 // ===== Suggested Rate calculator (shared HAFPricing engine — driver lens) =====
 (function(){
