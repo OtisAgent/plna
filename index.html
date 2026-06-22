@@ -521,12 +521,16 @@ input[type=text]:focus,input[type=email]:focus,input[type=tel]:focus,input[type=
   // ===== Supabase (anon key — RLS allows anon INSERT on drivers + shop_leads) =====
   var SB_URL = 'https://jsdwvogsxlnczzbefwgp.supabase.co';
   var SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzZHd2b2dzeGxuY3p6YmVmd2dwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzODgyMzYsImV4cCI6MjA5Njk2NDIzNn0.pxqM-Oh4f_3PlqCbKIKvcKZnNRUZ1ASKqqdNg78M_4M';
+  // NOTE: use Prefer: return=minimal. The drivers/shop_leads SELECT policies are
+  // authenticated-only, so anon CAN insert but CANNOT read the row back — asking for
+  // return=representation forces a readback that RLS blocks (42501). We don't need the
+  // returned row, so minimal both works under RLS and is lighter.
   function sbHeaders(){
     return {
       'apikey': SB_ANON,
       'Authorization': 'Bearer ' + SB_ANON,
       'Content-Type': 'application/json',
-      'Prefer': 'return=representation'
+      'Prefer': 'return=minimal'
     };
   }
   // Map the form's vehicle <select> values to the canonical vehicle_code used across HAF X.
