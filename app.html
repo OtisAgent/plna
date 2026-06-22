@@ -240,6 +240,100 @@ body.dark .theme-dot .ico-moon{display:block}
 .funnel-note b{color:var(--brand-orange)}
 .funnel-note .fn-ic{width:26px;height:26px;border-radius:8px;background:rgba(241,142,0,.12);color:var(--brand-orange);display:grid;place-items:center;flex:none;font-weight:900}
 
+/* ===== Week grid (shared by empty-days and driver-diary) ===== */
+.week-grid{width:100%;max-width:880px;margin:0 auto 18px;display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
+@media(max-width:720px){.week-grid{grid-template-columns:repeat(4,1fr)}}
+.day-card{border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--panel-2);box-shadow:var(--soft-shadow);padding:14px 10px;text-align:center;cursor:pointer;transition:.18s ease;display:flex;flex-direction:column;gap:8px;align-items:center}
+.day-card .dc-dow{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:800}
+.day-card .dc-date{font-size:20px;font-weight:800;letter-spacing:-.02em}
+.day-card .dc-badge{font-size:10px;font-weight:700;border-radius:999px;padding:5px 10px;border:1px solid var(--line);background:var(--panel);color:var(--muted)}
+.day-card.dc-empty .dc-badge{color:var(--amber);border-color:rgba(185,133,48,.5);background:rgba(185,133,48,.08)}
+.day-card.dc-booked .dc-badge{color:var(--green);border-color:rgba(79,127,88,.5);background:rgba(79,127,88,.08)}
+.day-card.dc-today .dc-date{color:var(--brand-orange)}
+.day-card.dc-today{border-color:rgba(241,142,0,.4)}
+.day-card:hover{border-color:rgba(241,142,0,.35);transform:translateY(-2px)}
+/* ===== Route chain ===== */
+.route-chain{width:100%;max-width:640px;margin:0 auto 18px;display:flex;flex-direction:column;gap:8px}
+.route-leg{display:flex;align-items:center;gap:12px;padding:14px 18px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--panel-2);box-shadow:var(--soft-shadow);text-align:left}
+.route-leg .rl-areas{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.route-leg .rl-from,.route-leg .rl-to{font-weight:800;font-size:14px}
+.route-leg .rl-arr{color:var(--brand-orange);font-weight:900;font-size:16px}
+.route-leg .rl-tag{font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;border-radius:999px;padding:5px 11px;border:1px solid var(--line);background:var(--panel);color:var(--muted);flex:none}
+.route-leg .rl-tag.strong{color:var(--green);border-color:rgba(79,127,88,.5);background:rgba(79,127,88,.08)}
+.route-leg .rl-tag.weak{color:var(--amber);border-color:rgba(185,133,48,.5);background:rgba(185,133,48,.08)}
+/* ===== Notes ===== */
+.notes-list{width:100%;max-width:640px;margin:0 auto 14px;display:flex;flex-direction:column;gap:10px}
+.note-card{border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--panel-2);box-shadow:var(--soft-shadow);padding:15px 18px;text-align:left;display:flex;flex-direction:column;gap:7px}
+.note-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.note-tag{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;border-radius:999px;padding:5px 11px;border:1px solid var(--line)}
+.note-tag.nt-access{color:var(--amber);border-color:rgba(185,133,48,.5);background:rgba(185,133,48,.08)}
+.note-tag.nt-parking{color:var(--green);border-color:rgba(79,127,88,.5);background:rgba(79,127,88,.08)}
+.note-tag.nt-kit{color:var(--brand-orange);border-color:rgba(241,142,0,.4);background:rgba(241,142,0,.07)}
+.note-tag.nt-route{color:var(--muted);border-color:var(--line);background:var(--panel)}
+.note-area{font-size:11px;font-weight:700;color:var(--muted);margin-left:auto}
+.note-title{font-weight:700;font-size:14px}
+.note-body{font-size:13px;color:var(--muted);line-height:1.55}
+/* ===== POD ===== */
+.pod-form{width:100%;max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:14px;text-align:left}
+.pod-form .pf-label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:800;margin-bottom:5px;display:block}
+.pod-form input,.pod-form select,.pod-form textarea{font-family:inherit;font-size:14px;color:var(--text);background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:11px 14px;width:100%;-webkit-appearance:none;appearance:none;outline:none}
+.pod-form input:focus,.pod-form select:focus,.pod-form textarea:focus{outline:2px solid rgba(241,142,0,.35);outline-offset:1px;border-color:var(--brand-orange)}
+.pod-form textarea{min-height:80px;resize:vertical}
+.sig-area{width:100%;min-height:112px;border:2px dashed var(--line);border-radius:var(--radius-sm);background:var(--panel);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;transition:.18s ease}
+.sig-area svg{width:28px;height:28px;stroke:currentColor;stroke-width:1.6;fill:none;opacity:.55}
+.sig-area:hover{border-color:rgba(241,142,0,.4);color:var(--brand-orange)}
+.photo-area{width:100%;min-height:90px;border:2px dashed var(--line);border-radius:var(--radius-sm);background:var(--panel);display:flex;align-items:center;justify-content:center;gap:12px;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;transition:.18s ease}
+.photo-area svg{width:26px;height:26px;stroke:currentColor;stroke-width:1.6;fill:none;opacity:.55}
+.photo-area:hover{border-color:rgba(241,142,0,.4);color:var(--brand-orange)}
+.ts-display{display:flex;align-items:center;gap:10px;padding:12px 16px;border:1px solid var(--line);border-radius:12px;background:var(--panel-2);font-size:13.5px;font-weight:600}
+.ts-display svg{width:18px;height:18px;stroke:var(--muted);stroke-width:1.8;fill:none;flex:none}
+.ts-live{margin-left:auto;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--green);font-weight:800;border:1px solid rgba(79,127,88,.4);border-radius:999px;padding:4px 10px;background:rgba(79,127,88,.08)}
+/* ===== Network Pass ===== */
+.pass-card{width:100%;max-width:480px;margin:0 auto 22px;background:linear-gradient(135deg,#2f373e 0%,#1a2127 100%);border-radius:var(--radius);padding:28px 30px 24px;color:#fff;box-shadow:var(--shadow);position:relative;overflow:hidden;text-align:left}
+.pass-card::before{content:"HAF";position:absolute;right:12px;top:50%;transform:translateY(-50%);font-family:'Montserrat',sans-serif;font-weight:900;font-size:88px;color:rgba(255,255,255,.05);letter-spacing:-.04em;pointer-events:none;line-height:1;user-select:none}
+.pass-card .pc-eyebrow{font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;font-weight:800;opacity:.6;margin-bottom:10px}
+.pass-card .pc-name{font-family:'Montserrat',sans-serif;font-weight:900;font-size:24px;letter-spacing:-.02em;line-height:1.1}
+.pass-card .pc-row{display:flex;align-items:center;gap:10px;margin-top:16px}
+.pass-card .pc-badge{font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;background:rgba(241,142,0,.2);color:var(--brand-orange);border:1px solid rgba(241,142,0,.35);border-radius:999px;padding:6px 13px}
+.pass-card .pc-expiry{font-size:12px;opacity:.6;margin-left:auto}
+.pass-card .pc-num{font-size:12px;opacity:.45;margin-top:14px;letter-spacing:.12em}
+.benefit-table{width:100%;max-width:560px;margin:0 auto 18px;border:1px solid var(--line);border-radius:var(--radius-sm);overflow:hidden;box-shadow:var(--soft-shadow)}
+.bt-head{display:grid;grid-template-columns:1fr auto auto;background:var(--panel-2);border-bottom:2px solid var(--line)}
+.bt-head span{padding:11px 14px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.bt-row{display:grid;grid-template-columns:1fr auto auto;border-bottom:1px solid var(--line)}
+.bt-row:last-child{border-bottom:none}
+.bt-row span{padding:12px 14px;font-size:13px;font-weight:600;color:var(--muted)}
+.bt-row span:first-child{color:var(--text)}
+.bt-yes{color:var(--green)!important;font-weight:800!important}
+.bt-no{opacity:.45!important}
+.btn-cta{display:inline-flex;align-items:center;gap:9px;font-family:inherit;font-size:13.5px;font-weight:800;color:#fff;background:var(--brand-orange);border:0;border-radius:14px;padding:13px 24px;cursor:pointer;box-shadow:var(--soft-shadow);transition:.15s ease}
+.btn-cta:hover{filter:brightness(1.07)}
+.btn-cta.green{background:var(--green)}
+/* ===== Working radius ===== */
+.radius-wrap{width:100%;max-width:600px;margin:0 auto 20px;display:flex;flex-direction:column;align-items:center;gap:16px;padding:28px 28px 24px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--panel-2);box-shadow:var(--soft-shadow)}
+.radius-hero{display:flex;align-items:baseline;gap:6px}
+.radius-hero .rh-val{font-family:'Montserrat','Inter',sans-serif;font-weight:900;font-size:76px;letter-spacing:-.04em;color:var(--brand-orange);line-height:1}
+.radius-hero .rh-unit{font-size:22px;font-weight:700;color:var(--muted)}
+.radius-sublabel{font-size:11px;color:var(--muted);font-weight:600}
+.radius-presets{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.rp-btn{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;color:var(--text);transition:.18s ease;font-family:inherit}
+.rp-btn:hover{border-color:rgba(241,142,0,.45);color:var(--brand-orange)}
+.rp-btn.active{border-color:rgba(241,142,0,.55);background:rgba(241,142,0,.1);color:var(--brand-orange)}
+/* ===== Home base settings ===== */
+.settings-card{width:100%;max-width:560px;margin:0 auto 16px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--panel-2);box-shadow:var(--soft-shadow);overflow:hidden;text-align:left}
+.sc-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 18px;border-top:1px solid var(--line)}
+.sc-row:first-child{border-top:none}
+.sc-label{font-weight:600;font-size:14px}
+.sc-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.sc-ctrl{font-size:14px;font-weight:700;color:var(--brand-orange);flex:none}
+.sc-ctrl select{font-family:inherit;font-size:13.5px;color:var(--text);background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:7px 10px;-webkit-appearance:none;appearance:none;cursor:pointer}
+.sc-ctrl select:focus{outline:2px solid rgba(241,142,0,.35);border-color:var(--brand-orange)}
+/* ===== Driver diary nav ===== */
+.diary-nav{width:100%;max-width:880px;margin:0 auto 14px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.diary-nav .dn-week{font-weight:700;font-size:15px}
+.diary-nav button{border:1px solid var(--line);background:var(--panel-2);border-radius:11px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;color:var(--text);font-family:inherit;transition:.18s ease}
+.diary-nav button:hover{border-color:rgba(241,142,0,.45);color:var(--brand-orange)}
+
 /* ===== Login gate ===== */
 body.plna-locked .app{display:none !important}
 body.plna-locked{overflow:hidden}
@@ -406,13 +500,139 @@ body.plna-locked .plna-gate{
         <p class="preview-note">Framework preview — static placeholder data, no live integrations yet.</p>
       </section>
 
-      <section class="page" id="empty-days" data-gate="plnaPlanner" data-title="Empty Days"><div class="glyph"><svg viewBox="0 0 24 24"><path d="M7 3v3M17 3v3M4 8h16M5 5h14v15H5zM9 14h6M9 18h3"/></svg></div><h1>Empty Days</h1><p>Flag the days you've nothing booked so the network can fill your diary with collections heading your way.</p><span class="tag">Framework preview · placeholder</span></section>
+      <section class="page" id="empty-days" data-gate="plnaPlanner" data-title="Empty Days">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M7 3v3M17 3v3M4 8h16M5 5h14v15H5zM9 14h6M9 18h3"/></svg></div>
+          <h1>Empty Days</h1>
+          <p>Flag the days you've nothing booked so the network can fill your diary with collections heading your way.</p>
+        </div>
+        <div class="stat-grid" style="max-width:880px;margin:0 auto 18px">
+          <div class="stat-card"><span class="sl">Empty days this week</span><span class="sv">3 <small>flagged</small></span></div>
+          <div class="stat-card"><span class="sl">Visible to network</span><span class="sv">2 <small>published</small></span></div>
+          <div class="stat-card"><span class="sl">Offers received</span><span class="sv">5 <small>this week</small></span></div>
+          <div class="stat-card"><span class="sl">Filled from flags</span><span class="sv">1 <small>confirmed job</small></span></div>
+        </div>
+        <div class="week-grid">
+          <div class="day-card dc-today dc-booked"><span class="dc-dow">Mon</span><span class="dc-date">22</span><span class="dc-badge">2 jobs</span></div>
+          <div class="day-card dc-empty"><span class="dc-dow">Tue</span><span class="dc-date">23</span><span class="dc-badge">Empty</span></div>
+          <div class="day-card dc-booked"><span class="dc-dow">Wed</span><span class="dc-date">24</span><span class="dc-badge">1 job</span></div>
+          <div class="day-card dc-empty"><span class="dc-dow">Thu</span><span class="dc-date">25</span><span class="dc-badge">Empty</span></div>
+          <div class="day-card dc-empty"><span class="dc-dow">Fri</span><span class="dc-date">26</span><span class="dc-badge">Empty</span></div>
+          <div class="day-card"><span class="dc-dow">Sat</span><span class="dc-date">27</span><span class="dc-badge">Day off</span></div>
+          <div class="day-card"><span class="dc-dow">Sun</span><span class="dc-date">28</span><span class="dc-badge">Day off</span></div>
+        </div>
+        <div class="plna-actions">
+          <span class="crm-ah">Empty day actions</span>
+          <span class="pill">Publish to network</span>
+          <span class="pill">Flag next week</span>
+          <span class="pill">Clear flags</span>
+        </div>
+        <p class="preview-note">Framework preview — static placeholder. Tap a day to toggle empty / available. Flagging empty days is visible to the KNECT network, not guaranteed to fill.</p>
+      </section>
 
-      <section class="page" id="route-direction" data-gate="plnaPlanner" data-title="Route Direction"><div class="glyph"><svg viewBox="0 0 24 24"><path d="M12 2l4 4-4 4M16 6H8a4 4 0 0 0-4 4v8"/></svg></div><h1>Route Direction</h1><p>Tell PLNA the way you're already travelling so it only offers jobs that sit along your line, not against it.</p><span class="tag">Framework preview · placeholder</span></section>
+      <section class="page" id="route-direction" data-gate="plnaPlanner" data-title="Route Direction">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M12 2l4 4-4 4M16 6H8a4 4 0 0 0-4 4v8"/></svg></div>
+          <h1>Route Direction</h1>
+          <p>Tell PLNA the way you're already travelling so it only offers jobs that sit along your line, not against it.</p>
+        </div>
+        <div class="stat-grid" style="max-width:880px;margin:0 auto 18px">
+          <div class="stat-card"><span class="sl">Today's direction</span><span class="sv">B1 <small>→ S1 → LS1</small></span></div>
+          <div class="stat-card"><span class="sl">Direction interest</span><span class="sv">Strong <small>northbound</small></span></div>
+          <div class="stat-card"><span class="sl">Jobs along route</span><span class="sv">7 <small>matching</small></span></div>
+          <div class="stat-card"><span class="sl">Jobs filtered out</span><span class="sv">12 <small>against direction</small></span></div>
+        </div>
+        <div class="route-chain">
+          <div class="route-leg">
+            <div class="rl-areas"><span class="rl-from">B1 Birmingham</span><span class="rl-arr">→</span><span class="rl-to">S1 Sheffield</span></div>
+            <span class="rl-tag strong">Strong interest</span>
+          </div>
+          <div class="route-leg">
+            <div class="rl-areas"><span class="rl-from">S1 Sheffield</span><span class="rl-arr">→</span><span class="rl-to">LS1 Leeds</span></div>
+            <span class="rl-tag strong">Strong interest</span>
+          </div>
+          <div class="route-leg">
+            <div class="rl-areas"><span class="rl-from">LS1 Leeds</span><span class="rl-arr">→</span><span class="rl-to">B1 Birmingham</span></div>
+            <span class="rl-tag">Normal · return</span>
+          </div>
+        </div>
+        <div class="plna-actions">
+          <span class="crm-ah">Quick set</span>
+          <span class="pill">B1 → M1</span>
+          <span class="pill">S1 → NE1</span>
+          <span class="pill">LS1 → B1</span>
+          <span class="pill">Edit route</span>
+        </div>
+        <p class="preview-note">Framework preview — static placeholder. Direction preference filters job offers to those on or near your planned line of travel.</p>
+      </section>
 
-      <section class="page" id="home-base" data-gate="plnaPlanner" data-title="Home Base &amp; Radius"><div class="glyph"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h14V10"/><circle cx="12" cy="13" r="2.5"/></svg></div><h1>Home Base &amp; Radius</h1><p>Set where you start and finish each day, and how far from base you're happy to range.</p><span class="tag">Framework preview · placeholder</span></section>
+      <section class="page" id="home-base" data-gate="plnaPlanner" data-title="Home Base &amp; Radius">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h14V10"/><circle cx="12" cy="13" r="2.5"/></svg></div>
+          <h1>Home Base &amp; Radius</h1>
+          <p>Set where you start and finish each day, and how far from base you're happy to range.</p>
+        </div>
+        <div class="stat-grid" style="max-width:880px;margin:0 auto 18px">
+          <div class="stat-card"><span class="sl">Home area</span><span class="sv">B1 <small>Birmingham</small></span></div>
+          <div class="stat-card"><span class="sl">Max daily radius</span><span class="sv">50 <small>miles</small></span></div>
+          <div class="stat-card"><span class="sl">Main vehicle</span><span class="sv">Luton <small>van</small></span></div>
+          <div class="stat-card"><span class="sl">Return-to-base</span><span class="sv">Yes <small>daily</small></span></div>
+        </div>
+        <div class="settings-card">
+          <div class="sc-row">
+            <div><div class="sc-label">Home postcode area</div><div class="sc-sub">Where you start and return each day</div></div>
+            <div class="sc-ctrl"><select><option selected>B1 Birmingham</option><option>M1 Manchester</option><option>S1 Sheffield</option><option>LS1 Leeds</option><option>BS1 Bristol</option><option>E1 London</option></select></div>
+          </div>
+          <div class="sc-row">
+            <div><div class="sc-label">Maximum daily radius</div><div class="sc-sub">Furthest you'll travel from home in one day</div></div>
+            <div class="sc-ctrl"><select><option>25 miles</option><option selected>50 miles</option><option>75 miles</option><option>100 miles</option><option>No limit</option></select></div>
+          </div>
+          <div class="sc-row">
+            <div><div class="sc-label">Preferred vehicle</div><div class="sc-sub">Used for default job matching</div></div>
+            <div class="sc-ctrl"><select><option selected>Luton van</option><option>LWB van</option><option>MWB van</option><option>SWB van</option><option>Small van</option></select></div>
+          </div>
+          <div class="sc-row">
+            <div><div class="sc-label">Return-to-base daily</div><div class="sc-sub">PLNA flags return-route opportunities for you</div></div>
+            <div class="sc-ctrl"><div class="switch on" id="rtbToggle" onclick="this.classList.toggle('on')"><div class="knob"></div></div></div>
+          </div>
+          <div class="sc-row">
+            <div><div class="sc-label">Away nights</div><div class="sc-sub">Maximum nights you'll stay away from home</div></div>
+            <div class="sc-ctrl"><select><option selected>None — home every night</option><option>1 night max</option><option>2 nights max</option><option>Flexible</option></select></div>
+          </div>
+        </div>
+        <div class="plna-actions">
+          <span class="pill">Save settings</span>
+          <span class="pill">Reset to default</span>
+        </div>
+        <p class="preview-note">Framework preview — static placeholder. Home base and radius filter job offers and rank return-route opportunities.</p>
+      </section>
 
-      <section class="page" id="working-radius" data-gate="plnaPlanner" data-title="Working Radius"><div class="glyph"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2"/><path d="M12 12l6-3"/></svg></div><h1>Working Radius</h1><p>The live travel distance you'll accept right now — widen it for a quiet day, tighten it when you're full.</p><span class="tag">Framework preview · placeholder</span></section>
+      <section class="page" id="working-radius" data-gate="plnaPlanner" data-title="Working Radius">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2"/><path d="M12 12l6-3"/></svg></div>
+          <h1>Working Radius</h1>
+          <p>The live travel distance you'll accept right now — widen it for a quiet day, tighten it when you're full.</p>
+        </div>
+        <div class="radius-wrap">
+          <div class="radius-hero"><span class="rh-val" id="radiusVal">35</span><span class="rh-unit">mi</span></div>
+          <div class="radius-sublabel">Current working radius from B1 Birmingham</div>
+          <div class="radius-presets">
+            <button class="rp-btn" onclick="setRadius(10)">10 mi</button>
+            <button class="rp-btn" onclick="setRadius(20)">20 mi</button>
+            <button class="rp-btn active" onclick="setRadius(35)">35 mi</button>
+            <button class="rp-btn" onclick="setRadius(50)">50 mi</button>
+            <button class="rp-btn" onclick="setRadius(75)">75 mi</button>
+            <button class="rp-btn" onclick="setRadius(100)">100 mi</button>
+          </div>
+        </div>
+        <div class="stat-grid" style="max-width:880px;margin:0 auto 18px">
+          <div class="stat-card"><span class="sl">Active lanes in range</span><span class="sv" id="lanesInRange">14 <small>lanes</small></span></div>
+          <div class="stat-card"><span class="sl">Jobs available</span><span class="sv" id="jobsInRange">8 <small>right now</small></span></div>
+          <div class="stat-card"><span class="sl">Avg lane pressure</span><span class="sv">1.3 <small>balanced</small></span></div>
+          <div class="stat-card"><span class="sl">Best nearby lane</span><span class="sv">B1→S1 <small>high demand</small></span></div>
+        </div>
+        <p class="preview-note">Framework preview — static placeholder. Radius changes take effect immediately and update which jobs are surfaced in Planned Jobs.</p>
+      </section>
 
       <section class="page" id="planned-jobs" data-gate="jobBoard" data-title="Planned Jobs">
         <div class="plna-head">
@@ -462,11 +682,132 @@ body.plna-locked .plna-gate{
         </div>
       </section>
 
-      <section class="page" id="driver-diary" data-gate="plnaPlanner" data-title="Driver Diary"><div class="glyph"><svg viewBox="0 0 24 24"><path d="M7 3v3M17 3v3M4 8h16M5 5h14v15H5zM8 12h8M8 16h5"/></svg></div><h1>Driver Diary</h1><p>Your week at a glance — booked jobs, empty days and planned routes laid out day by day.</p><span class="tag">Framework preview · placeholder</span></section>
+      <section class="page" id="driver-diary" data-gate="plnaPlanner" data-title="Driver Diary">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M7 3v3M17 3v3M4 8h16M5 5h14v15H5zM8 12h8M8 16h5"/></svg></div>
+          <h1>Driver Diary</h1>
+          <p>Your week at a glance — booked jobs, empty days and planned routes laid out day by day.</p>
+        </div>
+        <div class="diary-nav">
+          <button>&#8592; Prev week</button>
+          <span class="dn-week">Mon 22 – Sun 28 Jun 2026</span>
+          <button>Next week &#8594;</button>
+        </div>
+        <div class="week-grid" style="margin-bottom:16px">
+          <div class="day-card dc-today dc-booked"><span class="dc-dow">Mon</span><span class="dc-date">22</span><span class="dc-badge">2 jobs</span></div>
+          <div class="day-card dc-empty"><span class="dc-dow">Tue</span><span class="dc-date">23</span><span class="dc-badge">Empty</span></div>
+          <div class="day-card dc-booked"><span class="dc-dow">Wed</span><span class="dc-date">24</span><span class="dc-badge">1 job</span></div>
+          <div class="day-card dc-empty"><span class="dc-dow">Thu</span><span class="dc-date">25</span><span class="dc-badge">Empty</span></div>
+          <div class="day-card dc-empty"><span class="dc-dow">Fri</span><span class="dc-date">26</span><span class="dc-badge">Empty</span></div>
+          <div class="day-card"><span class="dc-dow">Sat</span><span class="dc-date">27</span><span class="dc-badge">Day off</span></div>
+          <div class="day-card"><span class="dc-dow">Sun</span><span class="dc-date">28</span><span class="dc-badge">Day off</span></div>
+        </div>
+        <div class="crm-wrap" style="max-width:880px">
+          <table class="crm">
+            <thead><tr><th>Day</th><th>Job</th><th>Route</th><th>Vehicle</th><th>Pay</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Mon 22</td><td>PL-10428</td><td>B1 → S1</td><td>Luton</td><td>&pound;142</td><td><span class="pill pill-status">Confirmed</span></td></tr>
+              <tr><td>Mon 22</td><td>PL-10431</td><td>S1 → LS1</td><td>Luton</td><td>&pound;68</td><td><span class="pill pill-status busy">Offered</span></td></tr>
+              <tr><td>Wed 24</td><td>PL-10437</td><td>LS1 → B1</td><td>Luton</td><td>&pound;96</td><td><span class="pill pill-status busy">Pending</span></td></tr>
+              <tr><td>Thu 25</td><td colspan="4" style="color:var(--muted);font-style:italic">Empty day — flagged to network</td><td><span class="pill pill-status off">Watching</span></td></tr>
+              <tr><td>Fri 26</td><td colspan="4" style="color:var(--muted);font-style:italic">Empty day — flagged to network</td><td><span class="pill pill-status off">Watching</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="preview-note">Framework preview — static placeholder data, no live integrations yet.</p>
+      </section>
 
-      <section class="page" id="notes" data-gate="plnaPlanner" data-title="Notes"><div class="glyph"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5zM9 9h6M9 13h6M9 17h3"/></svg></div><h1>Notes</h1><p>Quick reminders for yourself — access codes, parking, kit and anything worth remembering for a regular route.</p><span class="tag">Framework preview · placeholder</span></section>
+      <section class="page" id="notes" data-gate="plnaPlanner" data-title="Notes">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5zM9 9h6M9 13h6M9 17h3"/></svg></div>
+          <h1>Notes</h1>
+          <p>Quick reminders — access codes, parking, kit and anything worth remembering for a regular route.</p>
+        </div>
+        <div class="plna-actions" style="justify-content:flex-end;max-width:640px;margin:0 auto 14px">
+          <span class="pill">+ Add note</span>
+          <span class="pill">All</span>
+          <span class="pill">Access</span>
+          <span class="pill">Parking</span>
+          <span class="pill">Kit</span>
+          <span class="pill">Route</span>
+        </div>
+        <div class="notes-list">
+          <div class="note-card">
+            <div class="note-head"><span class="note-tag nt-access">Access</span><span class="note-area">B1 Birmingham</span></div>
+            <div class="note-title">Tyseley Industrial — rear gate intercom</div>
+            <div class="note-body">Access via rear gate off Garrison Lane. Intercom #4. Call ahead — security slow to respond. No parking on Garrison, use lay-by on Chequer St.</div>
+          </div>
+          <div class="note-card">
+            <div class="note-head"><span class="note-tag nt-parking">Parking</span><span class="note-area">S1 Sheffield</span></div>
+            <div class="note-title">Kelham Island — loading bay times</div>
+            <div class="note-body">Loading bay on Green Ln free 08:00–09:30 and 14:00–16:00. Outside those windows use Tesco car park (free 90 mins). Narrow access — no Luton after 10am.</div>
+          </div>
+          <div class="note-card">
+            <div class="note-head"><span class="note-tag nt-kit">Kit</span><span class="note-area">All routes</span></div>
+            <div class="note-title">Tail-lift check for Luton jobs</div>
+            <div class="note-body">Always confirm tail-lift availability before accepting a Luton job — the spare van doesn't have one. Request notes should say "tail lift required" if the customer mentioned it.</div>
+          </div>
+          <div class="note-card">
+            <div class="note-head"><span class="note-tag nt-route">Route</span><span class="note-area">B1 → M1</span></div>
+            <div class="note-title">A38/M6 traffic pattern</div>
+            <div class="note-body">M6 northbound past Stafford (J13–J14) slow Mon–Fri 07:00–09:30. Leave B1 by 06:15 or cut via A5 through Cannock. Adds 12 mins but avoids the worst of it.</div>
+          </div>
+        </div>
+        <p class="preview-note">Framework preview — static placeholder data, no live integrations yet.</p>
+      </section>
 
-      <section class="page" id="pod" data-gate="plnaPlanner" data-title="Proof of Delivery"><div class="glyph"><svg viewBox="0 0 24 24"><path d="M9 11l2 2 4-4M5 5h14v14H5z"/></svg></div><h1>Proof of Delivery</h1><p>Capture a signature, a photo and a timestamp at drop-off so every job closes clean.</p><span class="tag">Framework preview · placeholder</span></section>
+      <section class="page" id="pod" data-gate="plnaPlanner" data-title="Proof of Delivery">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M9 11l2 2 4-4M5 5h14v14H5z"/></svg></div>
+          <h1>Proof of Delivery</h1>
+          <p>Capture a signature, a photo and a timestamp at drop-off so every job closes clean.</p>
+        </div>
+        <div class="pod-form">
+          <div>
+            <label class="pf-label">Job</label>
+            <select>
+              <option>PL-10428 — B1 Birmingham → S1 Sheffield</option>
+              <option>PL-10431 — S1 Sheffield → LS1 Leeds</option>
+              <option>PL-10437 — LS1 Leeds → B1 Birmingham</option>
+            </select>
+          </div>
+          <div>
+            <label class="pf-label">Recipient name</label>
+            <input type="text" placeholder="Name of person who received the goods">
+          </div>
+          <div>
+            <label class="pf-label">Signature</label>
+            <div class="sig-area">
+              <svg viewBox="0 0 24 24"><path d="M3 17l4-2 10-10a1.4 1.4 0 0 1 2 2L9 17l-4 2M3 17v-4M21 21H3"/></svg>
+              Tap to capture signature
+            </div>
+          </div>
+          <div>
+            <label class="pf-label">Delivery photo</label>
+            <div class="photo-area">
+              <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg>
+              Tap to add photo
+            </div>
+          </div>
+          <div>
+            <label class="pf-label">Delivery timestamp</label>
+            <div class="ts-display">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+              Mon 22 Jun 2026 &nbsp;&middot;&nbsp; auto-stamped on submit
+              <span class="ts-live">Live</span>
+            </div>
+          </div>
+          <div>
+            <label class="pf-label">Notes</label>
+            <textarea placeholder="Any issues, access notes or delivery comments…"></textarea>
+          </div>
+          <button class="btn-cta green">
+            <svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:#fff;stroke-width:2;fill:none"><path d="M9 11l2 2 4-4M5 5h14v14H5z"/></svg>
+            Complete delivery
+          </button>
+        </div>
+        <p class="preview-note">Framework preview — static placeholder data, no live integrations yet.</p>
+      </section>
 
       <section class="page" id="job-feedback" data-gate="plnaPlanner" data-title="Job Feedback">
         <div class="plna-head">
@@ -653,7 +994,39 @@ body.plna-locked .plna-gate{
         </div>
       </section>
 
-      <section class="page" id="network-pass" data-title="Network Pass"><div class="glyph"><svg viewBox="0 0 24 24"><path d="M3 6h18v12H3z"/><path d="M3 10h18M7 15h4"/></svg></div><h1>Network Pass</h1><p>Your membership across the HAF driver network — status, benefits and the routes it unlocks.</p><span class="tag">Framework preview · placeholder</span></section>
+      <section class="page" id="network-pass" data-title="Network Pass">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M3 6h18v12H3z"/><path d="M3 10h18M7 15h4"/></svg></div>
+          <h1>Network Pass</h1>
+          <p>Your HAF network membership — the foundation of your job board access, rates and perks across KNECT and PLNA.</p>
+        </div>
+        <div class="pass-card">
+          <div class="pc-eyebrow">HAF Driver Network Pass</div>
+          <div class="pc-name">HAF Driver</div>
+          <div class="pc-row">
+            <span class="pc-badge">KNECT Activated</span>
+            <span class="pc-expiry">Renews 22 Dec 2026</span>
+          </div>
+          <div class="pc-num">DRIV &middot; B1 &middot; 0042 &middot; 8834</div>
+        </div>
+        <div class="stat-grid" style="max-width:560px;margin:0 auto 18px">
+          <div class="stat-card"><span class="sl">Member since</span><span class="sv">Mar 2025</span></div>
+          <div class="stat-card"><span class="sl">Jobs completed</span><span class="sv">142 <small>all time</small></span></div>
+          <div class="stat-card"><span class="sl">Network score</span><span class="sv">4.8 <small>/ 5</small></span></div>
+          <div class="stat-card"><span class="sl">Reward points</span><span class="sv">1,840 <small>Silver tier</small></span></div>
+        </div>
+        <div class="benefit-table">
+          <div class="bt-head"><span>Benefit</span><span>Free</span><span>Activated</span></div>
+          <div class="bt-row"><span>Rate uplift on jobs</span><span class="bt-no">—</span><span class="bt-yes">+3%</span></div>
+          <div class="bt-row"><span>Network fee reduction</span><span class="bt-no">—</span><span class="bt-yes">&minus;3 pts</span></div>
+          <div class="bt-row"><span>Relay jobs eligible</span><span class="bt-no">No</span><span class="bt-yes">Yes</span></div>
+          <div class="bt-row"><span>Profit share pool</span><span class="bt-no">No</span><span class="bt-yes">Yes</span></div>
+          <div class="bt-row"><span>Container collective</span><span class="bt-no">No</span><span class="bt-yes">Yes</span></div>
+          <div class="bt-row"><span>Priority job visibility</span><span class="bt-no">No</span><span class="bt-yes">Yes</span></div>
+          <div class="bt-row"><span>KNECT job board access</span><span class="bt-yes">Yes</span><span class="bt-yes">Yes</span></div>
+        </div>
+        <p class="preview-note">Framework preview — static placeholder data, no live integrations yet. Network Pass status is determined by your KNECT membership.</p>
+      </section>
 
     </div>
     <footer style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:16px 30px;border-top:1px solid var(--line);font-size:11px;letter-spacing:.04em;color:var(--muted);font-weight:600">
@@ -914,6 +1287,15 @@ if(localStorage.getItem('otis-theme')==='dark') document.body.classList.add('dar
 
   applyGate();
 })();
+
+// Working radius preset toggle
+window.setRadius = function(r){
+  var el = document.getElementById('radiusVal');
+  if(el) el.textContent = r;
+  document.querySelectorAll('.rp-btn').forEach(function(b){
+    b.classList.toggle('active', b.textContent.trim() === r + ' mi');
+  });
+};
 </script>
 </body>
 </html>
