@@ -106,6 +106,8 @@ window.HAFPricing = (function () {
     LANE_CAPPED:      "Lane uplift capped at the auto ceiling",
     TIER_RATE_UPLIFT: "Member/plan uplift — driver keeps a better base-rate %",
     TIER_FEE_REDUCTION: "Member/plan benefit — reduced HAF network fee",
+    POSTER_FEE_HIGHER: "Freight-forward poster — higher network fee per live post",
+    POSTER_FEE_DISCOUNT: "Business/Pro poster — discounted network fee",
   };
 
   // ===========================================================================
@@ -221,7 +223,9 @@ window.HAFPricing = (function () {
     }
     const rateUpliftPct   = benefits ? num(benefits.rateUpliftPct, 0)   : 0;
     const feeReductionPts = benefits ? num(benefits.feeReductionPts, 0) : 0;
-    const feeFloorPct     = benefits ? num(benefits.feeFloorPct, 0)     : 0;
+    // Margin floor always applies (even for poster-only quotes with no driver tier).
+    const modelFloor      = (HM && num(HM.FEE_FLOOR_PCT, 0)) || 0;
+    const feeFloorPct     = benefits ? num(benefits.feeFloorPct, modelFloor) : modelFloor;
 
     // --- Driver Target Pay (doc §1.1) ---
     let driverTargetPay = miles * vehicle.baseRate * jobFactor * laneMult;
@@ -236,9 +240,28 @@ window.HAFPricing = (function () {
     if (rateUpliftPct > 0) reasons.push("TIER_RATE_UPLIFT");
 
     // --- Customer price via the CORRECT margin method: ÷ (1 - fee%) (doc §2) ---
-    const baseFeePct = input.networkFeePctOverride != null
+    const jobBaseFeePct = input.networkFeePctOverride != null
       ? num(input.networkFeePctOverride, jobType.feePct)
       : jobType.feePct;
+
+    // POSTER-side network fee (framework §5/§6): freight-forward tier or business
+    // account shifts the job-type base fee BEFORE driver reductions. Free freight
+    // pays more (+pts), Pro/business pay less (-pts). Resolved from HAFModel so the
+    // fee is config-driven, never hard-coded. Floored so HAF margin is protected.
+    let posterAdjPts = 0;
+    let posterFee = input.posterFee || null;
+    if (!posterFee && HM && (input.posterAccountType || input.posterPlan)) {
+      posterFee = HM.resolvePosterFee(input.posterAccountType, input.posterPlan, {
+        internalConfirmed: input.posterInternalConfirmed
+      });
+    }
+    if (posterFee) {
+      posterAdjPts = num(posterFee.feeAdjPts, 0);
+      if (posterAdjPts > 0) reasons.push("POSTER_FEE_HIGHER");
+      else if (posterAdjPts < 0) reasons.push("POSTER_FEE_DISCOUNT");
+    }
+    const baseFeePct = Math.max(feeFloorPct, jobBaseFeePct + posterAdjPts);
+
     // Tier benefit: paid members/plans pay a LOWER network fee (§7.5),
     // never trimmed below the floor.
     let feePct = baseFeePct;
@@ -282,7 +305,10 @@ window.HAFPricing = (function () {
       driverBasePay,                                  // pay before tier uplift
       tierRateUpliftPct: rateUpliftPct,
       tierFeeReductionPts: feeReductionPts,
-      baseNetworkFeePct: baseFeePct,
+      jobBaseNetworkFeePct: jobBaseFeePct,
+      posterFeeAdjPts: posterAdjPts,
+      posterFee: posterFee || null,
+      baseNetworkFeePct: baseFeePct,        // after poster adjustment, before driver reduction
       tierBenefits: benefits || null,
       networkFeePct: feePct,
       customerPriceExVat: customerExVat, minChargeApplied: minApplied,
