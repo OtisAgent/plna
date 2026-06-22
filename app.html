@@ -334,6 +334,61 @@ body.dark .theme-dot .ico-moon{display:block}
 .diary-nav button{border:1px solid var(--line);background:var(--panel-2);border-radius:11px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;color:var(--text);font-family:inherit;transition:.18s ease}
 .diary-nav button:hover{border-color:rgba(241,142,0,.45);color:var(--brand-orange)}
 
+/* ===== Integration connect strips (Calendar / Comms) ===== */
+.connect-strip{width:100%;max-width:640px;margin:0 auto 14px;display:flex;align-items:center;gap:14px;padding:16px 20px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--panel-2);box-shadow:var(--soft-shadow);text-align:left;flex-wrap:wrap}
+.connect-strip .cs-ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;flex:none;background:var(--panel);border:1px solid var(--line)}
+.connect-strip .cs-ic svg{width:24px;height:24px;stroke:currentColor;stroke-width:1.7;fill:none}
+.connect-strip .cs-ic.g{color:#4285F4}
+.connect-strip .cs-ic.wa{color:#25D366}
+.connect-strip .cs-meta{flex:1;min-width:140px}
+.connect-strip .cs-t{font-weight:700;font-size:14.5px}
+.connect-strip .cs-d{font-size:12.5px;color:var(--muted);margin-top:2px}
+.connect-strip .cs-status{display:inline-flex;align-items:center;gap:6px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;border-radius:999px;padding:5px 11px;border:1px solid var(--line);flex:none}
+.connect-strip .cs-status::before{content:"";width:7px;height:7px;border-radius:99px;background:var(--muted);flex:none}
+.connect-strip .cs-status.on{color:var(--green);border-color:rgba(79,127,88,.5);background:rgba(79,127,88,.08)}
+.connect-strip .cs-status.on::before{background:var(--green)}
+.connect-strip .cs-status.off{color:var(--amber);border-color:rgba(185,133,48,.5);background:rgba(185,133,48,.08)}
+.connect-strip .cs-status.off::before{background:var(--amber)}
+.connect-strip .cs-btn{font-family:inherit;font-size:12.5px;font-weight:800;color:#fff;background:var(--brand-orange);border:0;border-radius:11px;padding:10px 16px;cursor:pointer;flex:none;box-shadow:var(--soft-shadow)}
+.connect-strip .cs-btn:hover{filter:brightness(1.06)}
+.connect-strip .cs-btn.ghost{background:var(--panel);color:var(--text);border:1px solid var(--line);box-shadow:none}
+/* ===== Month calendar ===== */
+.cal-month{width:100%;max-width:760px;margin:0 auto 18px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--panel-2);box-shadow:var(--soft-shadow);overflow:hidden}
+.cal-month .cm-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--line)}
+.cal-month .cm-title{font-weight:800;font-size:15px}
+.cal-month .cm-nav{display:flex;gap:8px}
+.cal-month .cm-nav button{border:1px solid var(--line);background:var(--panel);border-radius:9px;padding:6px 11px;font-size:13px;font-weight:700;cursor:pointer;color:var(--text);font-family:inherit}
+.cal-month .cm-nav button:hover{border-color:rgba(241,142,0,.45);color:var(--brand-orange)}
+.cal-month .cm-dow{display:grid;grid-template-columns:repeat(7,1fr);background:var(--panel-2);border-bottom:1px solid var(--line)}
+.cal-month .cm-dow span{padding:9px 0;text-align:center;font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:800}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr)}
+.cal-cell{min-height:74px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:7px 8px;display:flex;flex-direction:column;gap:5px;text-align:left;font-size:12px}
+.cal-cell:nth-child(7n){border-right:none}
+.cal-cell .cc-d{font-weight:700;color:var(--text)}
+.cal-cell.mute .cc-d{color:var(--muted);opacity:.5}
+.cal-cell.today{background:rgba(241,142,0,.07)}
+.cal-cell.today .cc-d{color:var(--brand-orange)}
+.cal-ev{font-size:10px;font-weight:700;border-radius:6px;padding:3px 6px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-ev.done{background:rgba(79,127,88,.12);color:var(--green)}
+.cal-ev.booked{background:rgba(241,142,0,.12);color:var(--brand-orange)}
+.cal-ev.empty{background:rgba(185,133,48,.12);color:var(--amber)}
+/* ===== Book-by-time slots ===== */
+.slot-col{width:100%;max-width:520px;margin:0 auto 16px;display:flex;flex-direction:column;gap:8px;text-align:left}
+.slot{display:flex;align-items:center;gap:14px;padding:13px 18px;border:1px solid var(--line);border-radius:14px;background:var(--panel-2);box-shadow:var(--soft-shadow)}
+.slot .sl-time{font-weight:800;font-size:14px;width:64px;flex:none}
+.slot .sl-body{flex:1;min-width:0;font-size:13px;color:var(--muted)}
+.slot .sl-tag{font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;border-radius:999px;padding:5px 11px;border:1px solid var(--line);flex:none}
+.slot.taken .sl-tag{color:var(--green);border-color:rgba(79,127,88,.5);background:rgba(79,127,88,.08)}
+.slot.free{border-style:dashed;cursor:pointer;transition:.18s ease}
+.slot.free:hover{border-color:rgba(241,142,0,.5);transform:translateY(-1px)}
+.slot.free .sl-tag{color:var(--brand-orange);border-color:rgba(241,142,0,.4);background:rgba(241,142,0,.07)}
+/* ===== Comms preferences ===== */
+.pref-card{width:100%;max-width:560px;margin:0 auto 16px;border:1px solid var(--line);border-radius:var(--radius-sm);background:var(--panel-2);box-shadow:var(--soft-shadow);overflow:hidden;text-align:left}
+.pref-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 18px;border-top:1px solid var(--line)}
+.pref-row:first-child{border-top:none}
+.pref-row .pr-t{font-weight:600;font-size:14px}
+.pref-row .pr-s{font-size:12px;color:var(--muted);margin-top:2px}
+
 /* ===== Login gate ===== */
 body.plna-locked .app{display:none !important}
 body.plna-locked{overflow:hidden}
@@ -414,6 +469,7 @@ body.plna-locked .plna-gate{
       <button class="nav-btn" data-page="route-direction"><svg viewBox="0 0 24 24"><path d="M12 2l4 4-4 4M16 6H8a4 4 0 0 0-4 4v8"/></svg>Route Direction</button>
       <button class="nav-btn" data-page="home-base"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8M5 10v10h14V10"/><circle cx="12" cy="13" r="2.5"/></svg>Home Base &amp; Radius</button>
       <button class="nav-btn" data-page="working-radius"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2"/><path d="M12 12l6-3"/></svg>Working Radius</button>
+      <button class="nav-btn" data-page="calendar"><svg viewBox="0 0 24 24"><path d="M7 3v3M17 3v3M4 8h16M5 5h14v15H5z"/><path d="M8 12h3v3H8z"/></svg>Calendar</button>
 
       <div class="nav-sep"></div>
       <div class="nav-label">Jobs &amp; routes</div>
@@ -437,6 +493,11 @@ body.plna-locked .plna-gate{
       <div class="nav-label">Network</div>
       <button class="nav-btn" data-page="rewards"><svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M5 4h14v4a7 7 0 0 1-14 0V4ZM5 6H3v1a3 3 0 0 0 3 3M19 6h2v1a3 3 0 0 1-3 3"/></svg>My Rewards</button>
       <button class="nav-btn" data-page="network-pass"><svg viewBox="0 0 24 24"><path d="M3 6h18v12H3z"/><path d="M3 10h18M7 15h4"/></svg>Network Pass</button>
+
+      <div class="nav-sep"></div>
+      <div class="nav-label">Account</div>
+      <button class="nav-btn" data-page="comms"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-12 7.6L3 21l1.9-5.6A8.4 8.4 0 1 1 21 11.5Z"/></svg>Communications</button>
+      <button class="nav-btn" data-page="integrations"><svg viewBox="0 0 24 24"><path d="M10 3v6M14 3v6M5 9h14v3a7 7 0 0 1-14 0z M12 19v2"/></svg>Connected Apps</button>
     </nav>
 
     <div class="side-foot">
@@ -632,6 +693,83 @@ body.plna-locked .plna-gate{
           <div class="stat-card"><span class="sl">Best nearby lane</span><span class="sv">B1→S1 <small>high demand</small></span></div>
         </div>
         <p class="preview-note">Framework preview — static placeholder. Radius changes take effect immediately and update which jobs are surfaced in Planned Jobs.</p>
+      </section>
+
+      <section class="page" id="calendar" data-gate="plnaPlanner" data-title="Calendar">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M7 3v3M17 3v3M4 8h16M5 5h14v15H5z"/><path d="M8 12h3v3H8z"/></svg></div>
+          <h1>Calendar</h1>
+          <p>Your month at a glance — what you've completed, what's booked, and open time you can fill. Sync with Google Calendar to keep it all in one place.</p>
+        </div>
+        <div class="connect-strip">
+          <div class="cs-ic g"><svg viewBox="0 0 24 24"><path d="M7 3v3M17 3v3M4 8h16M5 5h14v15H5z"/></svg></div>
+          <div class="cs-meta">
+            <div class="cs-t">Google Calendar</div>
+            <div class="cs-d">Two-way sync — your booked jobs appear in Google, and your busy times block out here.</div>
+          </div>
+          <span class="cs-status off">Not connected</span>
+          <button class="cs-btn">Connect</button>
+        </div>
+        <div class="cal-month">
+          <div class="cm-head">
+            <span class="cm-title">June 2026</span>
+            <div class="cm-nav"><button>&#8592;</button><button>Today</button><button>&#8594;</button></div>
+          </div>
+          <div class="cm-dow"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+          <div class="cal-grid">
+            <div class="cal-cell"><span class="cc-d">1</span></div>
+            <div class="cal-cell"><span class="cc-d">2</span><span class="cal-ev done">B1→S1</span></div>
+            <div class="cal-cell"><span class="cc-d">3</span></div>
+            <div class="cal-cell"><span class="cc-d">4</span><span class="cal-ev done">S1→M1</span></div>
+            <div class="cal-cell"><span class="cc-d">5</span></div>
+            <div class="cal-cell mute"><span class="cc-d">6</span></div>
+            <div class="cal-cell mute"><span class="cc-d">7</span></div>
+            <div class="cal-cell"><span class="cc-d">8</span><span class="cal-ev done">B1→CV1</span></div>
+            <div class="cal-cell"><span class="cc-d">9</span></div>
+            <div class="cal-cell"><span class="cc-d">10</span><span class="cal-ev done">LS1→B1</span></div>
+            <div class="cal-cell"><span class="cc-d">11</span></div>
+            <div class="cal-cell"><span class="cc-d">12</span><span class="cal-ev done">B1→NE1</span></div>
+            <div class="cal-cell mute"><span class="cc-d">13</span></div>
+            <div class="cal-cell mute"><span class="cc-d">14</span></div>
+            <div class="cal-cell"><span class="cc-d">15</span><span class="cal-ev done">B1→S1</span></div>
+            <div class="cal-cell"><span class="cc-d">16</span><span class="cal-ev done">S1→LS1</span></div>
+            <div class="cal-cell"><span class="cc-d">17</span><span class="cal-ev done">LS1→B1</span></div>
+            <div class="cal-cell"><span class="cc-d">18</span><span class="cal-ev done">B1→M1</span></div>
+            <div class="cal-cell"><span class="cc-d">19</span><span class="cal-ev done">M1→B1</span></div>
+            <div class="cal-cell mute"><span class="cc-d">20</span></div>
+            <div class="cal-cell mute"><span class="cc-d">21</span></div>
+            <div class="cal-cell today"><span class="cc-d">22</span><span class="cal-ev booked">2 jobs</span></div>
+            <div class="cal-cell"><span class="cc-d">23</span><span class="cal-ev empty">Empty</span></div>
+            <div class="cal-cell"><span class="cc-d">24</span><span class="cal-ev booked">LS1→B1</span></div>
+            <div class="cal-cell"><span class="cc-d">25</span><span class="cal-ev empty">Empty</span></div>
+            <div class="cal-cell"><span class="cc-d">26</span><span class="cal-ev empty">Empty</span></div>
+            <div class="cal-cell mute"><span class="cc-d">27</span></div>
+            <div class="cal-cell mute"><span class="cc-d">28</span></div>
+            <div class="cal-cell"><span class="cc-d">29</span></div>
+            <div class="cal-cell"><span class="cc-d">30</span></div>
+            <div class="cal-cell mute"><span class="cc-d">1</span></div>
+            <div class="cal-cell mute"><span class="cc-d">2</span></div>
+            <div class="cal-cell mute"><span class="cc-d">3</span></div>
+            <div class="cal-cell mute"><span class="cc-d">4</span></div>
+            <div class="cal-cell mute"><span class="cc-d">5</span></div>
+          </div>
+        </div>
+        <div class="csub" style="max-width:760px;margin:0 auto 10px;width:100%;text-align:left">What you've done — last 7 days</div>
+        <div class="stat-grid" style="max-width:760px;margin:0 auto 16px">
+          <div class="stat-card"><span class="sl">Jobs completed</span><span class="sv">6 <small>last 7 days</small></span></div>
+          <div class="stat-card"><span class="sl">Miles driven</span><span class="sv">540 <small>loaded</small></span></div>
+          <div class="stat-card"><span class="sl">Earnings</span><span class="sv">&pound;742 <small>after fees</small></span></div>
+          <div class="stat-card"><span class="sl">On-time delivery</span><span class="sv">100% <small>6 of 6</small></span></div>
+        </div>
+        <div class="csub" style="max-width:520px;margin:0 auto 10px;width:100%;text-align:left">Book by time — Tue 23 Jun (your open day)</div>
+        <div class="slot-col">
+          <div class="slot taken"><span class="sl-time">06:30</span><span class="sl-body">PL-10428 · B1 → S1 collection</span><span class="sl-tag">Booked</span></div>
+          <div class="slot free"><span class="sl-time">09:00</span><span class="sl-body">Open — 3 hr window, B1 lanes available</span><span class="sl-tag">Book slot</span></div>
+          <div class="slot free"><span class="sl-time">12:00</span><span class="sl-body">Open — 2 hr window, return-route matches</span><span class="sl-tag">Book slot</span></div>
+          <div class="slot taken"><span class="sl-time">14:30</span><span class="sl-body">PL-10431 · S1 → LS1 delivery</span><span class="sl-tag">Booked</span></div>
+          <div class="slot free"><span class="sl-time">17:00</span><span class="sl-body">Open — late slot, LS1 → B1 home leg</span><span class="sl-tag">Book slot</span></div>
+        </div>
+        <p class="preview-note">Framework preview — static placeholder. Live Google Calendar sync and time-slot booking wire up once the calendar integration is connected (see Connected Apps).</p>
       </section>
 
       <section class="page" id="planned-jobs" data-gate="jobBoard" data-title="Planned Jobs">
@@ -1026,6 +1164,78 @@ body.plna-locked .plna-gate{
           <div class="bt-row"><span>KNECT job board access</span><span class="bt-yes">Yes</span><span class="bt-yes">Yes</span></div>
         </div>
         <p class="preview-note">Framework preview — static placeholder data, no live integrations yet. Network Pass status is determined by your KNECT membership.</p>
+      </section>
+
+      <section class="page" id="comms" data-title="Communications">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-12 7.6L3 21l1.9-5.6A8.4 8.4 0 1 1 21 11.5Z"/></svg></div>
+          <h1>Communications</h1>
+          <p>Choose the WhatsApp account all your job alerts, offers and reminders run through — so everything reaches you where you already are.</p>
+        </div>
+        <div class="connect-strip">
+          <div class="cs-ic wa"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-12 7.6L3 21l1.9-5.6A8.4 8.4 0 1 1 21 11.5Z"/></svg></div>
+          <div class="cs-meta">
+            <div class="cs-t">WhatsApp</div>
+            <div class="cs-d">Pair the WhatsApp number you want HAF to message you on. Scan once to connect.</div>
+          </div>
+          <span class="cs-status off">Not connected</span>
+          <button class="cs-btn">Connect</button>
+        </div>
+        <div class="settings-card">
+          <div class="sc-row">
+            <div><div class="sc-label">Your WhatsApp number</div><div class="sc-sub">The account all communications route through</div></div>
+            <div class="sc-ctrl" style="color:var(--text)"><input type="tel" placeholder="+44 7…" style="font-family:inherit;font-size:13.5px;color:var(--text);background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:8px 11px;width:150px"></div>
+          </div>
+          <div class="sc-row">
+            <div><div class="sc-label">Preferred channel</div><div class="sc-sub">Where new offers and alerts are sent first</div></div>
+            <div class="sc-ctrl"><select><option selected>WhatsApp</option><option>SMS</option><option>Email</option><option>In-app only</option></select></div>
+          </div>
+        </div>
+        <div class="csub" style="max-width:560px;margin:0 auto 10px;width:100%;text-align:left">What you get notified about</div>
+        <div class="pref-card">
+          <div class="pref-row"><div><div class="pr-t">New job offers</div><div class="pr-s">When a job matching your lane &amp; vehicle appears</div></div><div class="switch on" onclick="this.classList.toggle('on')"><div class="knob"></div></div></div>
+          <div class="pref-row"><div><div class="pr-t">Return-route alerts</div><div class="pr-s">Collections pointing back toward your base</div></div><div class="switch on" onclick="this.classList.toggle('on')"><div class="knob"></div></div></div>
+          <div class="pref-row"><div><div class="pr-t">Booking confirmations</div><div class="pr-s">When a job is confirmed or changes time</div></div><div class="switch on" onclick="this.classList.toggle('on')"><div class="knob"></div></div></div>
+          <div class="pref-row"><div><div class="pr-t">Proof-of-delivery reminders</div><div class="pr-s">A nudge to capture POD after each drop</div></div><div class="switch" onclick="this.classList.toggle('on')"><div class="knob"></div></div></div>
+          <div class="pref-row"><div><div class="pr-t">Weekly summary</div><div class="pr-s">Your earnings &amp; jobs recap every Sunday</div></div><div class="switch on" onclick="this.classList.toggle('on')"><div class="knob"></div></div></div>
+        </div>
+        <p class="preview-note">Framework preview — static placeholder. Live WhatsApp delivery connects in Connected Apps; each driver pairs their own number.</p>
+      </section>
+
+      <section class="page" id="integrations" data-title="Connected Apps">
+        <div class="plna-head">
+          <div class="glyph"><svg viewBox="0 0 24 24"><path d="M10 3v6M14 3v6M5 9h14v3a7 7 0 0 1-14 0z M12 19v2"/></svg></div>
+          <h1>Connected Apps</h1>
+          <p>Link the tools you already use. Each driver connects their own accounts — HAF never sees your passwords.</p>
+        </div>
+        <div class="connect-strip">
+          <div class="cs-ic g"><svg viewBox="0 0 24 24"><path d="M7 3v3M17 3v3M4 8h16M5 5h14v15H5z"/></svg></div>
+          <div class="cs-meta">
+            <div class="cs-t">Google Calendar</div>
+            <div class="cs-d">See your availability and let jobs book straight into your day.</div>
+          </div>
+          <span class="cs-status off">Not connected</span>
+          <button class="cs-btn">Connect</button>
+        </div>
+        <div class="connect-strip">
+          <div class="cs-ic wa"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-12 7.6L3 21l1.9-5.6A8.4 8.4 0 1 1 21 11.5Z"/></svg></div>
+          <div class="cs-meta">
+            <div class="cs-t">WhatsApp</div>
+            <div class="cs-d">Get offers, alerts and reminders on the number you choose.</div>
+          </div>
+          <span class="cs-status off">Not connected</span>
+          <button class="cs-btn">Connect</button>
+        </div>
+        <div class="connect-strip">
+          <div class="cs-ic"><svg viewBox="0 0 24 24" style="color:var(--brand-orange)"><path d="M4 6h16v12H4zM4 7l8 6 8-6"/></svg></div>
+          <div class="cs-meta">
+            <div class="cs-t">Email</div>
+            <div class="cs-d">A backup channel for confirmations and your weekly summary.</div>
+          </div>
+          <span class="cs-status on">Connected</span>
+          <button class="cs-btn ghost">Manage</button>
+        </div>
+        <p class="preview-note">Framework preview — static placeholder. Google Calendar booking links and WhatsApp pairing wire up per driver; programmatic calendar writes are pending platform calendar access.</p>
       </section>
 
     </div>
