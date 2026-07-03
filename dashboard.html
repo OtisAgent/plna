@@ -107,6 +107,7 @@ body.dark .nv.on{background:var(--brand-orange)}
 .mini-btn svg{width:15px;height:15px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;flex:none}
 .mini-btn.wa{color:#fff;background:var(--wa);border-color:transparent}
 .mini-btn.wa svg{fill:#fff;stroke:none}
+.mini-btn.up{color:#fff;background:var(--brand-orange);border-color:transparent}
 
 /* job cards */
 .job{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);box-shadow:var(--soft-shadow);padding:16px 18px;margin-bottom:12px}
@@ -397,6 +398,8 @@ function money(n){if(n==null||isNaN(n))return'—';return'£'+Number(n).toFixed(
 
 /* KNECT WhatsApp — job flow only (couriers + customers). Never the HAF business line. */
 var WA='447707705331';
+/* Clever Checked upload page — drivers send documents here, the Clever team reviews them */
+var CLEVER='https://cleverpay-dev.pages.dev/upload';
 var DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
 /* Times are stored as wall-clock; read with UTC getters so they show as entered. */
@@ -769,23 +772,37 @@ function renderComp(){
     var ic=state==='ok'?'<path d="M5 13l4 4 10-11"/>':(state==='need'||state==='rev'?'<circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.5"/>':'<path d="M12 3v10M12 17.5v.5"/>');
     return '<div class="doc '+cls+'"><span class="di"><svg viewBox="0 0 24 24">'+ic+'</svg></span>'+name+'<small>'+note+'</small></div>';
   };
-  var docs='';
-  if(dstate==='ok'){
-    docs=doc('Driving licence','ok','On file')+doc('Goods-in-transit insurance','ok','On file')+doc('Public liability','ok','On file')+doc('Vehicle documents','ok','On file');
-  }else if(dstate==='warn'){
-    docs=doc('Driving licence','ok','On file')+doc('Goods-in-transit insurance','warn','Renewal due — send the new certificate')+doc('Public liability','ok','On file')+doc('Vehicle documents','ok','On file');
-  }else if(dstate==='rev'){
-    docs=doc('Driving licence','rev','Under review')+doc('Goods-in-transit insurance','rev','Under review')+doc('Public liability','rev','Under review')+doc('Vehicle documents','rev','Under review');
-  }else if(dstate==='need'){
-    docs=doc('Driving licence','need','Needed')+doc('Goods-in-transit insurance','need','Needed')+doc('Public liability','need','Needed')+doc('Vehicle documents','need','Needed');
-  }else{
-    docs=doc('Account','bad','Paused — message KNECT');
-  }
+  var DOCTYPES=[['licence','Driving licence'],['git_insurance','Goods-in-transit insurance'],['public_liability','Public liability'],['vehicle_docs','Vehicle documents']];
+  var defs=null;
+  if(dstate==='ok'){defs=[['ok','On file'],['ok','On file'],['ok','On file'],['ok','On file']];}
+  else if(dstate==='warn'){defs=[['ok','On file'],['warn','Renewal due — upload the new certificate'],['ok','On file'],['ok','On file']];}
+  else if(dstate==='rev'){defs=[['rev','Under review'],['rev','Under review'],['rev','Under review'],['rev','Under review']];}
+  else if(dstate==='need'){defs=[['need','Needed'],['need','Needed'],['need','Needed'],['need','Needed']];}
+  var docs=defs?DOCTYPES.map(function(t,i){return doc(t[1],defs[i][0],defs[i][1]);}).join(''):doc('Account','bad','Paused — message KNECT');
   document.getElementById('compCard').innerHTML=
     '<h3>Clever Checked</h3>'+
     '<span class="pill '+cm.cls+'" style="margin-bottom:10px">'+cm.chip+'</span>'+
-    '<p class="exp" style="margin:10px 0 6px">'+cm.note+'</p>'+docs+
-    '<div style="margin-top:13px"><a class="mini-btn wa" target="_blank" rel="noopener" href="https://wa.me/'+WA+'?text='+encodeURIComponent('KNECT — '+drv.code+' compliance question: ')+'">'+WASVG+'<span>Message KNECT about compliance</span></a></div>';
+    '<p class="exp" style="margin:10px 0 6px">'+cm.note+'</p>'+
+    '<div id="docList">'+docs+'</div>'+
+    '<div style="margin-top:13px;display:flex;gap:8px;flex-wrap:wrap">'+
+    '<a class="mini-btn up" target="_blank" rel="noopener" href="'+CLEVER+'?driver='+encodeURIComponent(drv.code)+'">'+
+      '<svg viewBox="0 0 24 24"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 001 1h14a1 1 0 001-1v-3"/></svg><span>Upload documents</span></a>'+
+    '<a class="mini-btn wa" target="_blank" rel="noopener" href="https://wa.me/'+WA+'?text='+encodeURIComponent('KNECT — '+drv.code+' compliance question: ')+'">'+WASVG+'<span>Message KNECT about compliance</span></a></div>';
+  /* overlay live per-document truth from the Clever portal (only types actually uploaded) */
+  if(defs){
+    rpc('plna_docs_for_driver',{p_code:drv.code}).then(function(list){
+      if(!Array.isArray(list)||!list.length)return;
+      var el=document.getElementById('docList'); if(!el)return;
+      var latest={}; list.forEach(function(x){if(!latest[x.doc_type])latest[x.doc_type]=x;}); /* list is newest-first */
+      el.innerHTML=DOCTYPES.map(function(t,i){
+        var d=latest[t[0]];
+        if(!d)return doc(t[1],defs[i][0],defs[i][1]);
+        if(d.status==='approved')return doc(t[1],'ok','Verified and on file');
+        if(d.status==='submitted')return doc(t[1],'rev','Received — under review');
+        return doc(t[1],'bad','Not accepted'+(d.review_note?' — '+esc(d.review_note):'')+' — upload a new one');
+      }).join('');
+    });
+  }
   var plans=[
     {k:'LITE',n:'PLNA Lite',pr:'Free',d:'Plan your day, see offers, run jobs.'},
     {k:'PLUS',n:'PLNA Plus',pr:'£10/mo',d:'Keep more on base pay, reduced network fee, priority matching.'},
