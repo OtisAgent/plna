@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex,nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800;900&display=swap" rel="stylesheet" />
+<title>HAF PLNA — Driver</title>
+<style>
+:root{
+  --brand-orange:#f18e00; --brand-grey:#2f373e;
+  --bg:#f4f1eb; --panel:#fbfaf7; --panel-2:#ffffff; --text:#1e252b; --muted:#6f777d;
+  --line:rgba(47,55,62,.12); --shadow:0 28px 80px rgba(22,25,27,.12);
+  --soft-shadow:0 14px 35px rgba(22,25,27,.08); --radius:28px; --radius-sm:18px;
+  --red:#b4483f; --amber:#b98530; --green:#4f7f58;
+  --wa:#1fa855;
+}
+body.dark{
+  --bg:#0e1113; --panel:#171a1d; --panel-2:#202428; --text:#f4f1eb; --muted:#a9b0b4;
+  --line:rgba(244,241,235,.12); --shadow:0 32px 90px rgba(0,0,0,.45); --soft-shadow:0 18px 45px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Inter","Avenir Next",Arial,sans-serif;background:radial-gradient(circle at top left,rgba(241,142,0,.12),transparent 32%),var(--bg);color:var(--text);transition:.25s ease;min-height:100vh}
+button{font-family:inherit}
+h1,h2,h3,.word{font-family:"Montserrat",Inter,sans-serif}
+
+.wrap{max-width:1060px;margin:0 auto;padding:18px 18px 60px}
+header.top{display:flex;align-items:center;gap:12px;padding:6px 2px 16px}
+.hexlogo{width:34px;height:34px;flex:none}
+.word{font-weight:900;font-size:19px;letter-spacing:.04em}
+.word small{font-weight:700;color:var(--muted);font-size:11px;letter-spacing:.14em;display:block;margin-top:1px}
+.top .sp{flex:1}
+.icon-btn{width:40px;height:40px;border:1px solid var(--line);border-radius:12px;background:var(--panel-2);display:grid;place-items:center;cursor:pointer;color:var(--text)}
+.icon-btn svg{width:19px;height:19px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.avatar{width:40px;height:40px;border-radius:12px;background:var(--brand-grey);color:#fff;display:grid;place-items:center;font-weight:800;font-size:14px;flex:none}
+
+/* ---- login ---- */
+#v-login{display:none;min-height:calc(100vh - 120px);display:flex;align-items:center;justify-content:center}
+.login-card{width:min(430px,100%);background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:34px 30px;text-align:center}
+.login-card h1{font-size:24px;font-weight:900;margin:16px 0 6px}
+.login-card p.sub{color:var(--muted);font-size:13.5px;margin:0 0 22px;line-height:1.55}
+.field{position:relative;text-align:left}
+.field label{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.field input{width:100%;margin-top:7px;font:600 16px Inter;letter-spacing:.06em;text-transform:uppercase;padding:14px 15px;border-radius:14px;border:1.5px solid var(--line);background:var(--panel-2);color:var(--text);outline:none;transition:.15s}
+.field input:focus{border-color:var(--brand-orange)}
+.field.ok input{border-color:var(--green)}
+.hint{font-size:12.5px;color:var(--muted);margin:9px 2px 0;text-align:left;min-height:18px}
+.hint.err{color:var(--red)}
+.btn-cta{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-size:13.5px;font-weight:800;color:#fff;background:var(--brand-orange);border:0;border-radius:14px;padding:13px 24px;cursor:pointer;box-shadow:var(--soft-shadow);transition:.15s ease}
+.btn-cta:hover{filter:brightness(1.07)}
+.btn-cta:disabled{opacity:.45;cursor:not-allowed}
+.btn-cta.wide{width:100%;margin-top:16px}
+.btn-cta.green{background:var(--green)}
+.btn-cta.grey{background:var(--brand-grey)}
+
+/* ---- dash ---- */
+#v-dash{display:none}
+.greet-row{display:flex;flex-wrap:wrap;align-items:flex-end;gap:14px;margin:6px 0 18px}
+.greet h1{font-size:clamp(22px,4vw,30px);font-weight:900;margin:0 0 8px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.pill{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:700;background:var(--panel-2);border:1px solid var(--line);border-radius:999px;padding:7px 13px;color:var(--text)}
+.pill::before{content:"";width:8px;height:8px;border-radius:99px;background:var(--muted);flex:none}
+.pill.good::before{background:var(--green)}
+.pill.warn::before{background:var(--amber)}
+.pill.bad::before{background:var(--red)}
+.pill.plain::before{display:none}
+.greet-row .sp{flex:1}
+
+/* availability switch */
+.avail{display:flex;align-items:center;gap:11px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:11px 15px;box-shadow:var(--soft-shadow)}
+.avail b{font-size:13px}
+.avail small{display:block;color:var(--muted);font-size:11px;font-weight:600}
+.switch{position:relative;width:46px;height:26px;flex:none;cursor:pointer}
+.switch input{display:none}
+.switch .tr{position:absolute;inset:0;background:var(--line);border-radius:99px;transition:.18s}
+.switch .th{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:99px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.25);transition:.18s}
+.switch input:checked ~ .tr{background:var(--green)}
+.switch input:checked ~ .th{left:23px}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 20px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px 17px;box-shadow:var(--soft-shadow)}
+.kpi .n{font-family:Montserrat;font-size:24px;font-weight:900}
+.kpi .l{font-size:11.5px;font-weight:700;color:var(--muted);margin-top:3px;letter-spacing:.02em}
+
+.sec-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:26px 0 12px}
+.sec-head h2{font-size:16px;font-weight:900;margin:0}
+.sec-head .sp{flex:1}
+.mini-btn{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:800;border:1px solid var(--line);background:var(--panel-2);color:var(--text);border-radius:12px;padding:9px 14px;cursor:pointer;box-shadow:var(--soft-shadow);text-decoration:none;transition:.15s}
+.mini-btn:hover{border-color:var(--brand-orange)}
+.mini-btn svg{width:15px;height:15px;stroke:currentColor;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.mini-btn.wa{color:#fff;background:var(--wa);border-color:transparent}
+.mini-btn.wa svg{fill:#fff;stroke:none}
+
+/* job cards */
+.job{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);box-shadow:var(--soft-shadow);padding:16px 18px;margin-bottom:12px}
+.job .row1{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.job .time{font-family:Montserrat;font-weight:900;font-size:15px;min-width:52px}
+.job .ref{font-size:11.5px;font-weight:800;color:var(--muted);letter-spacing:.06em}
+.st{font-size:11px;font-weight:800;border-radius:999px;padding:5px 11px;letter-spacing:.03em}
+.st.offer{background:rgba(185,133,48,.14);color:var(--amber)}
+.st.sched{background:rgba(47,55,62,.09);color:var(--text)}
+body.dark .st.sched{background:rgba(244,241,235,.1)}
+.st.live{background:rgba(241,142,0,.15);color:var(--brand-orange)}
+.st.done{background:rgba(79,127,88,.15);color:var(--green)}
+.job .row1 .sp{flex:1}
+.job .pay{font-family:Montserrat;font-weight:900;font-size:16px}
+.route{display:flex;align-items:center;gap:9px;margin:11px 0 3px;font-weight:700;font-size:14.5px;flex-wrap:wrap}
+.route .arr{color:var(--brand-orange);font-weight:900}
+.route small{color:var(--muted);font-weight:600;font-size:12px}
+.steps{display:flex;align-items:center;gap:0;margin:12px 0 13px;max-width:420px}
+.stp{flex:1;display:flex;align-items:center;gap:0}
+.stp .dot{width:10px;height:10px;border-radius:99px;background:var(--line);flex:none}
+.stp .bar{flex:1;height:2.5px;background:var(--line)}
+.stp.on .dot{background:var(--brand-orange)}
+.stp.on .bar{background:var(--brand-orange)}
+.stp.done .dot,.stp.done .bar{background:var(--green)}
+.steps-l{display:flex;justify-content:space-between;max-width:420px;font-size:10.5px;font-weight:700;color:var(--muted);margin-top:-7px;margin-bottom:12px}
+.job .acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.job .acts .sp{flex:1}
+.act-main{font-size:12.5px;font-weight:800;color:#fff;background:var(--brand-orange);border:0;border-radius:12px;padding:11px 18px;cursor:pointer;box-shadow:var(--soft-shadow);transition:.15s}
+.act-main:hover{filter:brightness(1.07)}
+.act-main.green{background:var(--green)}
+.act-main.grey{background:var(--brand-grey)}
+.act-main:disabled{opacity:.5;cursor:not-allowed}
+.done-tick{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:800;color:var(--green)}
+.done-tick svg{width:16px;height:16px;stroke:var(--green);stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+
+.lock-note{display:flex;gap:10px;align-items:flex-start;background:rgba(185,133,48,.1);border:1px solid rgba(185,133,48,.35);border-radius:var(--radius-sm);padding:13px 16px;font-size:12.5px;color:var(--text);margin:0 0 14px;line-height:1.5}
+.lock-note b{color:var(--amber)}
+
+/* coming up */
+.up{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);padding:13px 16px;margin-bottom:9px;box-shadow:var(--soft-shadow);flex-wrap:wrap}
+.up .d{font-size:11px;font-weight:800;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;min-width:66px}
+.up .r{font-weight:700;font-size:13.5px;flex:1;min-width:150px}
+.up .r small{color:var(--muted);font-weight:600}
+.up .p{font-family:Montserrat;font-weight:900;font-size:14px}
+
+.empty{background:var(--panel);border:1px dashed var(--line);border-radius:var(--radius-sm);padding:26px;text-align:center;color:var(--muted);font-size:13.5px;font-weight:600}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(8px);background:var(--brand-grey);color:#fff;font-size:13px;font-weight:700;padding:12px 20px;border-radius:14px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.22s;z-index:99;max-width:90vw;text-align:center}
+.toast.in{opacity:1;transform:translateX(-50%) translateY(0)}
+footer{margin-top:44px;color:var(--muted);font-size:11.5px;font-weight:600;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+footer .vb{border:1px solid var(--line);border-radius:99px;padding:4px 10px;font-weight:800}
+
+@media(max-width:760px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .greet-row{align-items:stretch;flex-direction:column}
+  .avail{justify-content:space-between}
+  .job .acts .mini-btn span{display:none}
+  .job .acts .mini-btn{padding:10px 12px}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <svg class="hexlogo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-label="HAF"><polygon fill="#2E3338" points="96,50 73,10.2 27,10.2 4,50 27,89.8 73,89.8"/><polygon fill="none" stroke="#fff" stroke-width="2" points="92,50 70.5,13.6 29.5,13.6 8,50 29.5,86.4 70.5,86.4"/><rect x="22" y="23" width="13" height="55" fill="#fff" rx="1.5"/><rect x="46" y="40" width="13" height="38" fill="#fff" rx="1.5"/><path d="M35,40C35,24,46,24,46,40Q40.5,44,35,40Z" fill="#fff"/><circle cx="59" cy="25" r="7" fill="#F5A623"/><polygon fill="#F5A623" points="52.5,28.5 65.5,28.5 59,40"/><circle cx="59" cy="24.5" r="2.5" fill="#2E3338"/></svg>
+    <span class="word">PLNA<small>DRIVER DAY</small></span>
+    <span class="sp"></span>
+    <button class="icon-btn" id="themeToggle" title="Light / dark"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+    <button class="icon-btn" id="outBtn" title="Sign out" style="display:none"><svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg></button>
+    <span class="avatar" id="avatar" style="display:none">·</span>
+  </header>
+
+  <!-- ============ SIGN IN ============ -->
+  <section id="v-login">
+    <div class="login-card">
+      <svg class="hexlogo" style="width:46px;height:46px" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><polygon fill="#2E3338" points="96,50 73,10.2 27,10.2 4,50 27,89.8 73,89.8"/><polygon fill="none" stroke="#fff" stroke-width="2" points="92,50 70.5,13.6 29.5,13.6 8,50 29.5,86.4 70.5,86.4"/><rect x="22" y="23" width="13" height="55" fill="#fff" rx="1.5"/><rect x="46" y="40" width="13" height="38" fill="#fff" rx="1.5"/><path d="M35,40C35,24,46,24,46,40Q40.5,44,35,40Z" fill="#fff"/><circle cx="59" cy="25" r="7" fill="#F5A623"/><polygon fill="#F5A623" points="52.5,28.5 65.5,28.5 59,40"/><circle cx="59" cy="24.5" r="2.5" fill="#2E3338"/></svg>
+      <h1>Sign in to PLNA.</h1>
+      <p class="sub">Your day, in one place — jobs, pay, WhatsApp and your calendar, running together.</p>
+      <div class="field" id="codeWrap">
+        <label for="codeIn">Driver ID</label>
+        <input id="codeIn" placeholder="e.g. DF063893" autocomplete="off" spellcheck="false" />
+      </div>
+      <div class="hint" id="codeHint">Your HAF driver ID. Try <b>DF063893</b> for the demo.</div>
+      <button class="btn-cta wide" id="inBtn" disabled>Open my day</button>
+    </div>
+  </section>
+
+  <!-- ============ DASHBOARD ============ -->
+  <section id="v-dash">
+    <div class="greet-row">
+      <div class="greet">
+        <h1 id="greetTitle">Good morning.</h1>
+        <div class="chips" id="chips"></div>
+      </div>
+      <span class="sp"></span>
+      <div class="avail">
+        <div><b>Available for work</b><small id="availSub">Visible to KNECT for new jobs</small></div>
+        <label class="switch"><input type="checkbox" id="availSw"><span class="tr"></span><span class="th"></span></label>
+      </div>
+    </div>
+
+    <div class="kpis" id="kpis"></div>
+
+    <div id="lockNote"></div>
+
+    <div class="sec-head">
+      <h2 id="todayHead">Today's run</h2>
+      <span class="sp"></span>
+      <a class="mini-btn wa" id="waHq" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .6l-.4.6-.5.5c-.2.2-.3.4-.1.7.2.3.9 1.5 2 2.4 1.4 1.2 2.5 1.6 2.8 1.7.3.1.5.1.7-.1l1-1.2c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.6.3 0 .2 0 .8-.2 1.3Z"/></svg>
+        <span>WhatsApp KNECT</span>
+      </a>
+      <button class="mini-btn" id="icsBtn">
+        <svg viewBox="0 0 24 24"><path d="M7 3v3M17 3v3M4 8h16M5 5h14v15H5z"/><path d="M12 11v5M9.5 13.5 12 16l2.5-2.5"/></svg>
+        Add day to calendar
+      </button>
+    </div>
+    <div id="todayList"></div>
+
+    <div class="sec-head"><h2>Coming up</h2></div>
+    <div id="upList"></div>
+
+    <footer><span class="vb" id="verBadge">HAF X</span><span>HAF PLNA · run your day alongside WhatsApp &amp; Google Calendar.</span></footer>
+  </section>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="haf-model.js"></script>
+<script>
+(function(){
+'use strict';
+/* ── data plumbing: same controlled security-definer RPCs pattern as KNECT /app ── */
+var SB='https://jsdwvogsxlnczzbefwgp.supabase.co/rest/v1';
+var SBKEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzZHd2b2dzeGxuY3p6YmVmd2dwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEzODgyMzYsImV4cCI6MjA5Njk2NDIzNn0.pxqM-Oh4f_3PlqCbKIKvcKZnNRUZ1ASKqqdNg78M_4M';
+function rpc(fn,args){
+  return fetch(SB+'/rpc/'+fn,{method:'POST',
+    headers:{apikey:SBKEY,Authorization:'Bearer '+SBKEY,'Content-Type':'application/json'},
+    body:JSON.stringify(args||{})
+  }).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;});
+}
+var STORE='haf_plna_driver';
+function remember(d){try{localStorage.setItem(STORE,JSON.stringify(d));}catch(e){}}
+function recalled(){try{return JSON.parse(localStorage.getItem(STORE)||'null');}catch(e){return null;}}
+function forget(){try{localStorage.removeItem(STORE);}catch(e){}}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function money(n){if(n==null||isNaN(n))return'—';return'£'+Number(n).toFixed(2);}
+
+/* KNECT WhatsApp — job flow only (couriers + customers). Never the HAF business line. */
+var WA='447707705331';
+
+/* Times are stored as wall-clock; read with UTC getters so they show as entered. */
+function dt(s){return s?new Date(s):null;}
+function hhmm(s){var d=dt(s);if(!d)return'—';return String(d.getUTCHours()).padStart(2,'0')+':'+String(d.getUTCMinutes()).padStart(2,'0');}
+function ymd(d){return d.getUTCFullYear()*10000+(d.getUTCMonth()+1)*100+d.getUTCDate();}
+function todayYmd(){var n=new Date();return n.getFullYear()*10000+(n.getMonth()+1)*100+n.getDate();}
+function dayLabel(s){
+  var d=dt(s);if(!d)return'—';
+  var n=new Date();
+  var diff=Math.round((Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate())-Date.UTC(n.getFullYear(),n.getMonth(),n.getDate()))/86400000);
+  if(diff===0)return'Today';
+  if(diff===1)return'Tomorrow';
+  return ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getUTCDay()]+' '+d.getUTCDate();
+}
+function gstamp(s){var d=dt(s);if(!d)return'';return String(d.getUTCFullYear())+String(d.getUTCMonth()+1).padStart(2,'0')+String(d.getUTCDate()).padStart(2,'0')+'T'+String(d.getUTCHours()).padStart(2,'0')+String(d.getUTCMinutes()).padStart(2,'0')+'00';}
+
+/* ── status model (platform jobs vocabulary) ── */
+function stMeta(s){
+  s=String(s||'').toLowerCase();
+  if(s==='matched')                                        return {label:'Offered to you',cls:'offer',step:0,act:'accept', actLabel:'Accept job'};
+  if(s==='accepted')                                       return {label:'Scheduled',     cls:'sched',step:1,act:'collect',actLabel:'Mark collected'};
+  if(s==='collected'||s==='in_progress')                   return {label:'On the road',   cls:'live', step:2,act:'deliver',actLabel:'Mark delivered'};
+  if(s==='delivered'||s==='pod_received'||s==='invoiced'||s==='paid') return {label:'Delivered',cls:'done',step:3,act:null,actLabel:null};
+  return {label:s,cls:'sched',step:1,act:null,actLabel:null};
+}
+function vehName(c){return String(c||'').replace(/_/g,' ').replace('VAN','Van');}
+
+/* ── views ── */
+var drv=null, jobs=[];
+function show(view){
+  document.getElementById('v-login').style.display=(view==='v-login')?'flex':'none';
+  document.getElementById('v-dash').style.display=(view==='v-dash')?'block':'none';
+  document.getElementById('outBtn').style.display=(view==='v-dash')?'grid':'none';
+  document.getElementById('avatar').style.display=(view==='v-dash')?'grid':'none';
+}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('in');clearTimeout(toast._t);toast._t=setTimeout(function(){t.classList.remove('in');},2600);}
+
+/* ── sign in ── */
+var codeIn=document.getElementById('codeIn'), codeWrap=document.getElementById('codeWrap'),
+    codeHint=document.getElementById('codeHint'), inBtn=document.getElementById('inBtn'),
+    found=null, ct;
+codeIn.addEventListener('input',function(){
+  found=null; inBtn.disabled=true; codeWrap.classList.remove('ok');
+  var code=codeIn.value.trim().toUpperCase(); clearTimeout(ct);
+  if(code.length<6){codeHint.classList.remove('err');codeHint.innerHTML='Your HAF driver ID. Try <b>DF063893</b> for the demo.';return;}
+  ct=setTimeout(function(){
+    rpc('plna_get_driver',{p_code:code}).then(function(d){
+      if(d&&d.code){found=d;codeWrap.classList.add('ok');inBtn.disabled=false;
+        codeHint.classList.remove('err');codeHint.innerHTML='Recognised — <b>'+esc(d.name)+'</b>, '+esc(vehName(d.vehicle))+'.';}
+      else{codeHint.classList.add('err');codeHint.textContent='No driver found for '+code+'.';}
+    });
+  },360);
+});
+codeIn.addEventListener('keydown',function(e){if(e.key==='Enter'&&!inBtn.disabled)inBtn.click();});
+inBtn.onclick=function(){if(found)openDash(found);};
+
+/* ── compliance chip + gate ── */
+function compMeta(c){
+  c=String(c||'').toUpperCase();
+  if(c==='ACTIVE')        return {chip:'Clever Checked',cls:'good',ok:true};
+  if(c==='EXPIRING_SOON') return {chip:'Docs expiring soon',cls:'warn',ok:true};
+  if(c==='PENDING_DOCS')  return {chip:'Checks pending',cls:'warn',ok:false};
+  if(c==='DOCS_SUBMITTED')return {chip:'Docs under review',cls:'warn',ok:false};
+  return {chip:'Compliance '+c.toLowerCase(),cls:'bad',ok:false};
+}
+
+/* ── dashboard ── */
+function greet(){var h=new Date().getHours();return h<12?'Good morning':(h<18?'Good afternoon':'Good evening');}
+function openDash(d){
+  drv=d; remember(d);
+  document.getElementById('avatar').textContent=d.initials||'·';
+  document.getElementById('greetTitle').textContent=greet()+', '+(d.name||'driver').split(' ')[0]+'.';
+  var cm=compMeta(d.compliance);
+  document.getElementById('chips').innerHTML=
+    '<span class="pill '+cm.cls+'">'+cm.chip+'</span>'+
+    '<span class="pill plain">PLNA '+esc(String(d.plan||'LITE'))+'</span>'+
+    '<span class="pill plain">'+esc(vehName(d.vehicle))+'</span>'+
+    '<span class="pill plain">Base '+esc(d.base||'—')+'</span>';
+  var sw=document.getElementById('availSw');
+  sw.checked=!!d.available;
+  document.getElementById('availSub').textContent=sw.checked?'Visible to KNECT for new jobs':'Hidden — no new offers today';
+  document.getElementById('waHq').href='https://wa.me/'+WA+'?text='+encodeURIComponent('Hi KNECT — '+d.name+' ('+d.code+') here.');
+  document.getElementById('lockNote').innerHTML=cm.ok?'' :
+    '<div class="lock-note"><span>🔒</span><div><b>'+cm.chip+'.</b> You can plan your day, but live KNECT jobs unlock once you\'re Clever Checked. We\'ll nudge you the moment it clears.</div></div>';
+  show('v-dash');
+  return loadJobs();
+}
+function loadJobs(){
+  return rpc('plna_driver_jobs',{p_code:drv.code}).then(function(list){
+    jobs=Array.isArray(list)?list:[];
+    render();
+  });
+}
+
+function render(){
+  var tk=todayYmd();
+  var today=jobs.filter(function(j){var d=dt(j.collection_time);return d&&ymd(d)===tk;});
+  var later=jobs.filter(function(j){var d=dt(j.collection_time);return d&&ymd(d)>tk;});
+  var doneN=today.filter(function(j){return stMeta(j.status).step===3;}).length;
+  var miles=today.reduce(function(a,j){return a+(Number(j.miles)||0);},0);
+  var pay=today.reduce(function(a,j){return a+(Number(j.pay)||0);},0);
+
+  document.getElementById('kpis').innerHTML=
+    kpi(today.length,'Jobs today')+
+    kpi(doneN+' / '+today.length,'Delivered')+
+    kpi(Math.round(miles)+' mi','Loaded miles today')+
+    kpi(money(pay),'Expected pay today');
+  function kpi(n,l){return '<div class="kpi"><div class="n">'+n+'</div><div class="l">'+l+'</div></div>';}
+
+  var d=new Date();
+  document.getElementById('todayHead').textContent="Today's run · "+['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()]+' '+d.getDate();
+
+  var cm=compMeta(drv.compliance);
+  document.getElementById('todayList').innerHTML = today.length
+    ? today.map(function(j){return jobCard(j,cm.ok);}).join('')
+    : '<div class="empty">No jobs on today — flick yourself available and KNECT offers will land here.</div>';
+
+  document.getElementById('upList').innerHTML = later.length
+    ? later.map(upRow).join('')
+    : '<div class="empty">Nothing booked ahead yet.</div>';
+
+  bindActions();
+}
+
+function stepsHTML(step){
+  var names=['Accepted','Collected','Delivered'];
+  var h='<div class="steps">';
+  for(var i=0;i<3;i++){
+    var cls=step>i?'done':(step===i?'on':'');
+    h+='<div class="stp '+cls+'">'+(i>0?'<span class="bar"></span>':'')+'<span class="dot"></span></div>';
+  }
+  h+='</div><div class="steps-l"><span>'+names[0]+'</span><span>'+names[1]+'</span><span>'+names[2]+'</span></div>';
+  return h;
+}
+function waLink(j){
+  var m=stMeta(j.status), t;
+  if(m.step===0)      t='KNECT '+j.ref+' — about this job '+j.from_pc+' → '+j.to_pc+' at '+hhmm(j.collection_time)+': ';
+  else if(m.step===1) t='KNECT '+j.ref+' — on my way to collect from '+j.from_pc+', there for '+hhmm(j.collection_time)+'.';
+  else if(m.step===2) t='KNECT '+j.ref+' — collected, heading to '+j.to_pc+', ETA '+hhmm(j.delivery_time)+'.';
+  else                t='KNECT '+j.ref+' — delivered at '+j.to_pc+'.';
+  return 'https://wa.me/'+WA+'?text='+encodeURIComponent(t);
+}
+function gcalLink(j){
+  var u='https://calendar.google.com/calendar/render?action=TEMPLATE'
+    +'&text='+encodeURIComponent('KNECT '+j.ref+' · '+j.from_pc+' → '+j.to_pc)
+    +'&dates='+gstamp(j.collection_time)+'/'+(gstamp(j.delivery_time)||gstamp(j.collection_time))
+    +'&ctz=Europe/London'
+    +'&location='+encodeURIComponent(j.from_pc)
+    +'&details='+encodeURIComponent('HAF KNECT job '+j.ref+'\nCollect: '+j.from_pc+'\nDeliver: '+j.to_pc+'\n'+(j.miles||'?')+' loaded miles · you earn '+money(j.pay)+'\n\nRun your day: https://plna.usehaf.co.uk/dashboard.html');
+  return u;
+}
+function jobCard(j,compOk){
+  var m=stMeta(j.status);
+  var act='';
+  if(m.act==='accept') act=compOk
+      ? '<button class="act-main" data-act="accept" data-ref="'+esc(j.ref)+'">Accept job</button>'
+      : '<button class="act-main" disabled title="Clever Checked required">Accept — needs Clever Checked</button>';
+  else if(m.act==='collect') act='<button class="act-main grey" data-act="collect" data-ref="'+esc(j.ref)+'">Mark collected</button>';
+  else if(m.act==='deliver') act='<button class="act-main green" data-act="deliver" data-ref="'+esc(j.ref)+'">Mark delivered</button>';
+  else act='<span class="done-tick"><svg viewBox="0 0 24 24"><path d="M5 13l4 4 10-11"/></svg>Done '+(j.delivered_at?hhmm(j.delivered_at):'')+'</span>';
+  return '<div class="job">'+
+    '<div class="row1"><span class="time">'+hhmm(j.collection_time)+'</span><span class="ref">'+esc(j.ref)+'</span><span class="st '+m.cls+'">'+m.label+'</span><span class="sp"></span><span class="pay">'+money(j.pay)+'</span></div>'+
+    '<div class="route">'+esc(j.from_pc)+' <span class="arr">→</span> '+esc(j.to_pc)+' <small>'+(j.miles||'?')+' mi · '+esc(vehName(j.vehicle))+' · deliver by '+hhmm(j.delivery_time)+'</small></div>'+
+    stepsHTML(m.step)+
+    '<div class="acts">'+act+'<span class="sp"></span>'+
+      '<a class="mini-btn wa" target="_blank" rel="noopener" href="'+waLink(j)+'"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.3 14.2c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .6l-.4.6-.5.5c-.2.2-.3.4-.1.7.2.3.9 1.5 2 2.4 1.4 1.2 2.5 1.6 2.8 1.7.3.1.5.1.7-.1l1-1.2c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.6.3 0 .2 0 .8-.2 1.3Z"/></svg><span>WhatsApp</span></a>'+
+      '<a class="mini-btn" target="_blank" rel="noopener" href="'+gcalLink(j)+'"><svg viewBox="0 0 24 24"><path d="M7 3v3M17 3v3M4 8h16M5 5h14v15H5z"/><path d="M12 11v5M9.5 13.5 12 16l2.5-2.5"/></svg><span>Calendar</span></a>'+
+    '</div></div>';
+}
+function upRow(j){
+  var m=stMeta(j.status);
+  return '<div class="up"><span class="d">'+dayLabel(j.collection_time)+'</span>'+
+    '<span class="r">'+hhmm(j.collection_time)+' · '+esc(j.from_pc)+' → '+esc(j.to_pc)+' <small>· '+(j.miles||'?')+' mi</small></span>'+
+    '<span class="st '+m.cls+'">'+m.label+'</span><span class="p">'+money(j.pay)+'</span>'+
+    '<a class="mini-btn" target="_blank" rel="noopener" href="'+gcalLink(j)+'" title="Add to Google Calendar"><svg viewBox="0 0 24 24"><path d="M7 3v3M17 3v3M4 8h16M5 5h14v15H5z"/><path d="M12 11v5M9.5 13.5 12 16l2.5-2.5"/></svg></a></div>';
+}
+
+function bindActions(){
+  document.querySelectorAll('[data-act]').forEach(function(b){
+    b.onclick=function(){
+      b.disabled=true;
+      rpc('plna_driver_action',{p_code:drv.code,p_ref:b.dataset.ref,p_action:b.dataset.act}).then(function(r){
+        if(r&&r.ok){
+          toast(b.dataset.act==='accept'?'Job accepted — it\'s on your run.':(b.dataset.act==='collect'?'Collected — safe drive.':'Delivered. Nice one.'));
+          loadJobs();
+        }else{
+          b.disabled=false;
+          toast(r&&r.error==='compliance'?'Clever Checked required before accepting live jobs.':'That didn\'t go through — try again.');
+        }
+      });
+    };
+  });
+}
+
+/* ── availability ── */
+document.getElementById('availSw').addEventListener('change',function(){
+  var on=this.checked;
+  document.getElementById('availSub').textContent=on?'Visible to KNECT for new jobs':'Hidden — no new offers today';
+  rpc('plna_set_available',{p_code:drv.code,p_on:on}).then(function(r){
+    if(!r){toast('Couldn\'t update availability — try again.');}
+    else toast(on?'You\'re on — KNECT can offer you jobs.':'You\'re off for now.');
+  });
+});
+
+/* ── whole-day .ics (imports into Google / Apple / Outlook) ── */
+document.getElementById('icsBtn').onclick=function(){
+  var tk=todayYmd();
+  var todays=jobs.filter(function(j){var d=dt(j.collection_time);return d&&ymd(d)===tk;});
+  if(!todays.length){toast('No jobs today to add.');return;}
+  var L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//HAF PLNA//Driver Day//EN'];
+  todays.forEach(function(j){
+    L.push('BEGIN:VEVENT','UID:'+j.ref+'@plna.usehaf.co.uk',
+      'DTSTART:'+gstamp(j.collection_time),'DTEND:'+(gstamp(j.delivery_time)||gstamp(j.collection_time)),
+      'SUMMARY:KNECT '+j.ref+' · '+j.from_pc+' → '+j.to_pc,
+      'LOCATION:'+j.from_pc,
+      'DESCRIPTION:'+(j.miles||'?')+' loaded miles · you earn '+money(j.pay),
+      'END:VEVENT');
+  });
+  L.push('END:VCALENDAR');
+  var a=document.createElement('a');
+  a.href='data:text/calendar;charset=utf-8,'+encodeURIComponent(L.join('\r\n'));
+  a.download='plna-day.ics'; document.body.appendChild(a); a.click(); a.remove();
+  toast('Day exported — open the file to drop it into your calendar.');
+};
+
+/* ── shell ── */
+document.getElementById('themeToggle').addEventListener('click',function(){
+  document.body.classList.toggle('dark');
+  localStorage.setItem('otis-theme',document.body.classList.contains('dark')?'dark':'light');
+});
+if(localStorage.getItem('otis-theme')==='dark')document.body.classList.add('dark');
+document.getElementById('outBtn').onclick=function(){forget();drv=null;jobs=[];codeIn.value='';inBtn.disabled=true;codeWrap.classList.remove('ok');show('v-login');};
+
+var vb=document.getElementById('verBadge');
+if(window.HAFModel&&window.HAFModel.VERSION)vb.textContent=window.HAFModel.VERSION;
+
+/* boot: resume session (re-fetch so compliance/plan are always fresh) */
+var saved=recalled();
+if(saved&&saved.code){
+  rpc('plna_get_driver',{p_code:saved.code}).then(function(d){
+    if(d&&d.code)openDash(d); else {forget();show('v-login');}
+  });
+}else show('v-login');
+})();
+</script>
+</body>
+</html>
