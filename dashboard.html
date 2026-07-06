@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>HAF PLNA — Driver Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+.sidebar{background:#1a1a2e}
+.nav-active{background:rgba(255,107,53,.15);color:#fff;border-left:3px solid #FF6B35}
+.nav-item{border-left:3px solid transparent;transition:all .15s}
+.toggle-on{background:#10b981}.toggle-off{background:#6b7280}
+.job-current{border-left:4px solid #FF6B35}
+</style>
+</head>
+<body class="min-h-screen bg-gray-100">
+<div id="app" class="flex min-h-screen"></div>
+<script defer src="https://cdn.jsdelivr.net/gh/OtisAgent/plna@main/app-core.js"></script>
+<script defer src="https://cdn.jsdelivr.net/gh/OtisAgent/plna@main/app-tabs.js"></script>
+<script defer src="https://cdn.jsdelivr.net/gh/OtisAgent/plna@main/app-actions.js"></script>
+</body>
+</html>
